@@ -201,16 +201,16 @@ export function LiquidationMap({ symbol, marketType = 'hip3_perp', height = 460,
         <span className="tm-px" style={{ fontSize: 11 }}>成本 / 清算价图</span>
         <span className="tm-sc">{view.dispSymbol}</span>
         <span className="tm-sc" style={{ marginLeft: 'auto', color: view.rows.length ? 'var(--tm-up)' : 'var(--tm-muted)' }}>
-          {view.rows.length ? '● live' : isLoading ? '○ sync' : '○ —'}
+          {view.rows.length ? '● 实时' : isLoading ? '○ 同步中' : '○ —'}
         </span>
       </div>
 
       {/* legend */}
       <div className="tm-sc" style={{ display: 'flex', flexWrap: 'wrap', gap: 10, marginBottom: 4, fontSize: 9 }}>
-        <Swatch c={C_LONG_COST} label="Long cost" />
-        <Swatch c={C_SHORT_COST} label="Short cost" />
-        <Swatch c={C_LONG_LIQ} label="Long liq" />
-        <Swatch c={C_SHORT_LIQ} label="Short liq" />
+        <Swatch c={C_LONG_COST} label="多头成本" />
+        <Swatch c={C_SHORT_COST} label="空头成本" />
+        <Swatch c={C_LONG_LIQ} label="多头清算" />
+        <Swatch c={C_SHORT_LIQ} label="空头清算" />
       </div>
 
       {/* hover readout / mark line */}
@@ -221,14 +221,14 @@ export function LiquidationMap({ symbol, marketType = 'hip3_perp', height = 460,
             {' · '}liq <span style={{ color: C_LONG_LIQ }}>{fmtUsd(hv.longLiq)}</span>/<span style={{ color: C_SHORT_LIQ }}>{fmtUsd(hv.shortLiq)}</span>
           </span>
         ) : (
-          <span className="tm-sc">mark <b style={{ color: 'var(--tm-red)' }}>{view.mark ? fmtPx(view.mark) : '—'}</b> · {view.costAddrs.toLocaleString()} positions / {view.liqAddrs.toLocaleString()} liq levels</span>
+          <span className="tm-sc">标记价 <b style={{ color: 'var(--tm-red)' }}>{view.mark ? fmtPx(view.mark) : '—'}</b> · {view.costAddrs.toLocaleString()} 仓位 / {view.liqAddrs.toLocaleString()} 清算位</span>
         )}
       </div>
 
       {error && !view.rows.length ? (
-        <div className="tm-sc" style={{ padding: '16px 0' }}>No cost/liq heatmap for {view.dispSymbol} (crypto / main-dex markets have none).</div>
+        <div className="tm-sc" style={{ padding: '16px 0' }}>{view.dispSymbol} 暂无成本/清算图（加密货币/主 DEX 市场无此图）。</div>
       ) : !view.rows.length ? (
-        <div className="tm-sc" style={{ padding: '16px 0' }}>Loading cost/liquidation map…</div>
+        <div className="tm-sc" style={{ padding: '16px 0' }}>正在加载成本/清算图…</div>
       ) : (
         <div>
           <div ref={scrollRef} style={{ maxHeight: height, overflowY: 'auto' }}>
@@ -273,8 +273,8 @@ export function LiquidationMap({ symbol, marketType = 'hip3_perp', height = 460,
           </div>
           {/* totals footer */}
           <div className="tm-sc" style={{ display: 'flex', gap: 10, marginTop: 4, fontSize: 9, flexWrap: 'wrap' }}>
-            <span>Cost line <span style={{ color: C_LONG_COST }}>{fmtUsd(view.totals.lc)}</span>/<span style={{ color: C_SHORT_COST }}>{fmtUsd(view.totals.sc)}</span></span>
-            <span>liq <span style={{ color: C_LONG_LIQ }}>{fmtUsd(view.totals.ll)}</span>/<span style={{ color: C_SHORT_LIQ }}>{fmtUsd(view.totals.sl)}</span></span>
+            <span>成本线 <span style={{ color: C_LONG_COST }}>{fmtUsd(view.totals.lc)}</span>/<span style={{ color: C_SHORT_COST }}>{fmtUsd(view.totals.sc)}</span></span>
+            <span>清算 <span style={{ color: C_LONG_LIQ }}>{fmtUsd(view.totals.ll)}</span>/<span style={{ color: C_SHORT_LIQ }}>{fmtUsd(view.totals.sl)}</span></span>
           </div>
         </div>
       )}

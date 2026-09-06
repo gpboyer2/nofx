@@ -56,7 +56,7 @@ export function FlowMarkets({ items, window = '1h' }: FlowMarketsProps) {
   }, [items])
 
   if (rows.length === 0) {
-    return <div className="tm-sc" style={{ padding: '12px 0' }}>No net-flow data (claw402 payment required).</div>
+    return <div className="tm-sc" style={{ padding: '12px 0' }}>暂无净流入数据（需 Claw402 付费）。</div>
   }
 
   return (
@@ -74,11 +74,11 @@ export function FlowMarkets({ items, window = '1h' }: FlowMarketsProps) {
           fontSize: 9,
         }}
       >
-        <span>SYMBOL</span>
-        <span style={{ textAlign: 'right' }}>{win} NET</span>
-        <span>BUY/SELL</span>
-        <span style={{ textAlign: 'right' }}>TRADES</span>
-        <span style={{ textAlign: 'right' }}>PRICE</span>
+        <span>交易对</span>
+        <span style={{ textAlign: 'right' }}>{win} 净流入</span>
+        <span>买/卖</span>
+        <span style={{ textAlign: 'right' }}>交易数</span>
+        <span style={{ textAlign: 'right' }}>价格</span>
       </div>
 
       {/* rows */}
@@ -140,8 +140,8 @@ export function FlowMarkets({ items, window = '1h' }: FlowMarketsProps) {
 
       {/* legend — explains every column */}
       <div className="tm-sc" style={{ marginTop: 8, fontSize: 9, lineHeight: 1.6 }}>
-        net inflow = {win} net buying · <span className="tm-up">green</span>/<span className="tm-dn">red</span> = buy/sell split
-        {' · '}trades = count · last price = last traded price
+        净流入 = {win} 净买入 · <span className="tm-up">绿</span>/<span className="tm-dn">红</span> = 买/卖比例
+        {' · '}交易数 = 成交笔数 · last price = 最新成交价
       </div>
     </div>
   )

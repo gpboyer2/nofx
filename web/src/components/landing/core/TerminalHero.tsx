@@ -319,21 +319,21 @@ function CommunityStats() {
 
     const stats = [
         {
-            label: 'GITHUB STARS',
+            label: 'GitHub Stars',
             value: isLoading ? '...' : (error ? '10,500+' : stars.toLocaleString()),
             icon: Star,
             color: 'text-nofx-gold',
             href: OFFICIAL_LINKS.github
         },
         {
-            label: 'FORKS',
+            label: 'Fork',
             value: isLoading ? '...' : (error ? '2,800+' : forks.toLocaleString()),
             icon: GitFork,
             color: 'text-nofx-accent',
             href: `${OFFICIAL_LINKS.github}/fork`
         },
         {
-            label: 'CONTRIBUTORS',
+            label: '贡献者',
             value: isLoading ? '...' : (contributors > 0 ? contributors : '50+'),
             icon: Users,
             color: 'text-nofx-success',

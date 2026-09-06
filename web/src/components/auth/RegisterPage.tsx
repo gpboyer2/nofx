@@ -166,8 +166,9 @@ export function RegisterPage() {
             <span className="text-nofx-gold">{language === 'zh' ? ZH.createAccount : 'CREATE YOUR ACCOUNT'}</span>
           </h1>
           <p className="text-nofx-text-muted text-sm">
-            This account owns your NOFX instance. Next step: a guided launch —
-            about $13 and five minutes to your first AI trade.
+            {language === 'zh'
+              ? '此账户拥有您的 NOFX 实例。下一步：引导式启动——约 13 美元、五分钟完成首笔 AI 交易。'
+              : 'This account owns your NOFX instance. Next step: a guided launch — about $13 and five minutes to your first AI trade.'}
           </p>
         </div>
 

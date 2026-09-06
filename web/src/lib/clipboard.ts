@@ -22,7 +22,7 @@ export async function copyWithToast(text: string, successMsg = 'Copied') {
     return true
   } catch (err) {
     console.error('Clipboard copy failed:', err)
-    notify.error('Copy failed')
+    notify.error('复制失败')
     return false
   }
 }

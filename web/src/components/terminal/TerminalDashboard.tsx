@@ -380,14 +380,14 @@ export function TerminalDashboard({
           <div className="tm-mono" style={{ display: 'flex', gap: 10, alignItems: 'center', margin: '8px 14px 0', padding: '8px 12px', fontSize: 11, border: '1px solid var(--tm-down)', color: 'var(--tm-down)', background: 'rgba(200,60,40,0.06)', flexWrap: 'wrap' }}>
             <span style={{ fontWeight: 600 }}>
               {status.ai_wallet_status === 'empty'
-                ? 'AI fee wallet is out of USDC — decisions are failing.'
+                ? 'AI 手续费钱包已无 USDC——决策无法执行。'
                 : status.ai_wallet_status === 'low'
-                  ? `AI fee wallet is low (${(status.ai_wallet_balance_usdc ?? 0).toFixed(2)} USDC) — top up soon.`
-                  : 'Safe mode: AI failed repeatedly, no new positions are being opened.'}
+                  ? `AI 手续费钱包余额不足（${(status.ai_wallet_balance_usdc ?? 0).toFixed(2)} USDC）——请尽快充值。`
+                  : '安全模式：AI 连续失败，暂停开仓。'}
             </span>
             <span style={{ color: 'var(--tm-ink-2)' }}>
               {status.ai_wallet_status === 'empty' || status.ai_wallet_status === 'low'
-                ? 'Deposit Base USDC to the Claw402 wallet, the trader recovers automatically.'
+                ? '向 Claw402 钱包充值 Base USDC 后，交易员将自动恢复。'
                 : status.safe_mode_reason || ''}
             </span>
           </div>
@@ -398,7 +398,7 @@ export function TerminalDashboard({
           <div className="tm-mono" style={{ display: 'flex', gap: 10, alignItems: 'center', margin: '8px 14px 0', padding: '8px 12px', fontSize: 11, border: '1px solid var(--tm-up)', color: 'var(--tm-ink)', background: 'rgba(40,140,80,0.06)', flexWrap: 'wrap' }}>
             <span style={{ fontWeight: 600, color: 'var(--tm-up)' }}>您的 AI 已启动</span>
             <span style={{ color: 'var(--tm-ink-2)' }}>
-              It reads the whole market before acting — the first decision usually lands within a minute or two and will appear in the Execution Log below. You can stop it anytime from the Config page.
+              AI 会先读取整个市场再行动——通常一两分钟内就会做出第一个决策并显示在执行日志中。你可以随时在配置页面停止它。
             </span>
           </div>
         )}
@@ -563,7 +563,7 @@ export function TerminalDashboard({
             <div style={{ display: 'flex', alignItems: 'baseline', gap: 8, marginBottom: 6 }}>
               <span className="tm-px" style={{ fontSize: 11 }}>持仓</span>
               <span className="tm-sc">当前持仓 · 实时</span>
-              <span className="tm-sc" style={{ marginLeft: 'auto' }}>{positions?.length ?? 0} open</span>
+              <span className="tm-sc" style={{ marginLeft: 'auto' }}>{positions?.length ?? 0} 个持仓</span>
               {traderId && !on && positions && positions.length > 0 && (
                 <button
                   type="button"
@@ -581,7 +581,7 @@ export function TerminalDashboard({
                     opacity: closing ? 0.5 : 1,
                   }}
                 >
-                  {closing === '__all__' ? 'closing…' : 'close all'}
+                  {closing === '__all__' ? '平仓中…' : '全部平仓'}
                 </button>
               )}
             </div>
@@ -630,7 +630,7 @@ export function TerminalDashboard({
                                 opacity: closing ? 0.5 : 1,
                               }}
                             >
-                              {closing === p.symbol ? '…' : 'close'}
+                              {closing === p.symbol ? '…' : '平仓'}
                             </button>
                           </td>
                         )}

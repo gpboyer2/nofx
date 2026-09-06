@@ -117,11 +117,11 @@ export function ExecutionLog({ decisions, height = 440 }: ExecutionLogProps) {
           className="tm-sc"
           style={{ marginLeft: 'auto', color: cycles.length ? 'var(--tm-up)' : 'var(--tm-muted)' }}
         >
-          {cycles.length ? `${cycles.length} cyc` : '—'}
+          {cycles.length ? `${cycles.length} 轮` : '—'}
         </span>
       </div>
       <div className="tm-sc" style={{ fontSize: 9, marginBottom: 5 }}>
-        Execution log · AI decisions & fills per cycle
+        执行日志 · 每轮 AI 决策与成交
       </div>
 
       {/* legend */}
@@ -129,15 +129,15 @@ export function ExecutionLog({ decisions, height = 440 }: ExecutionLogProps) {
         className="tm-sc"
         style={{ display: 'flex', flexWrap: 'wrap', gap: 12, marginBottom: 6, fontSize: 9 }}
       >
-        <Legend glyph="✓" c="var(--tm-up)" label="ok" />
-        <Legend glyph="⚠" c={C_AMBER} label="throttle" />
-        <Legend glyph="❌" c="var(--tm-dn)" label="risk" />
+        <Legend glyph="✓" c="var(--tm-up)" label="成功" />
+        <Legend glyph="⚠" c={C_AMBER} label="节流" />
+        <Legend glyph="❌" c="var(--tm-dn)" label="风控" />
       </div>
 
       <div className="tm-hair" style={{ marginBottom: 0 }} />
 
       {!cycles.length ? (
-        <div className="tm-sc" style={{ padding: '16px 0' }}>No execution events yet.</div>
+        <div className="tm-sc" style={{ padding: '16px 0' }}>暂无执行记录。</div>
       ) : (
         <div
           style={{
