@@ -527,7 +527,7 @@ func (s *Server) handleSymbols(c *gin.Context) {
 		}
 
 	default:
-		c.JSON(http.StatusBadRequest, gin.H{"error": "Unsupported exchange for symbol listing"})
+		c.JSON(http.StatusBadRequest, gin.H{"error": "不支持该交易所的交易对列表"})
 		return
 	}
 

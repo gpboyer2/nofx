@@ -46,7 +46,7 @@ func (s *Server) handleSyncBalance(c *gin.Context) {
 	// Get trader configuration from database (including exchange info)
 	fullConfig, err := s.store.Trader().GetFullConfig(userID, traderID)
 	if err != nil {
-		c.JSON(http.StatusNotFound, gin.H{"error": "Trader does not exist"})
+		c.JSON(http.StatusNotFound, gin.H{"error": "交易员不存在"})
 		return
 	}
 
@@ -54,7 +54,7 @@ func (s *Server) handleSyncBalance(c *gin.Context) {
 	exchangeCfg := fullConfig.Exchange
 
 	if exchangeCfg == nil || !exchangeCfg.Enabled {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "Exchange not configured or not enabled"})
+		c.JSON(http.StatusBadRequest, gin.H{"error": "交易所未配置或未启用"})
 		return
 	}
 
@@ -76,7 +76,7 @@ func (s *Server) handleSyncBalance(c *gin.Context) {
 	// Extract total equity (for P&L calculation, we need total account value, not available balance)
 	actualBalance, found := extractExchangeTotalEquity(balanceInfo)
 	if !found {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "Unable to get total equity"})
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "无法获取总权益"})
 		return
 	}
 
@@ -98,7 +98,7 @@ func (s *Server) handleSyncBalance(c *gin.Context) {
 	err = s.store.Trader().UpdateInitialBalance(userID, traderID, actualBalance)
 	if err != nil {
 		logger.Infof("❌ Failed to update initial_balance: %v", err)
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to update balance"})
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "更新余额失败"})
 		return
 	}
 
@@ -111,7 +111,7 @@ func (s *Server) handleSyncBalance(c *gin.Context) {
 	logger.Infof("✅ Synced balance: %.2f → %.2f USDT (%s %.2f%%)", oldBalance, actualBalance, changeType, changePercent)
 
 	c.JSON(http.StatusOK, gin.H{
-		"message":        "Balance synced successfully",
+		"message":        "余额同步成功",
 		"old_balance":    oldBalance,
 		"new_balance":    actualBalance,
 		"change_percent": changePercent,
@@ -130,7 +130,7 @@ func (s *Server) handleClosePosition(c *gin.Context) {
 	}
 
 	if err := c.ShouldBindJSON(&req); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "Parameter error: symbol and side are required"})
+		c.JSON(http.StatusBadRequest, gin.H{"error": "参数错误：symbol 和 side 为必填项"})
 		return
 	}
 
@@ -139,14 +139,14 @@ func (s *Server) handleClosePosition(c *gin.Context) {
 	// Get trader configuration from database (including exchange info)
 	fullConfig, err := s.store.Trader().GetFullConfig(userID, traderID)
 	if err != nil {
-		c.JSON(http.StatusNotFound, gin.H{"error": "Trader does not exist"})
+		c.JSON(http.StatusNotFound, gin.H{"error": "交易员不存在"})
 		return
 	}
 
 	exchangeCfg := fullConfig.Exchange
 
 	if exchangeCfg == nil || !exchangeCfg.Enabled {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "Exchange not configured or not enabled"})
+		c.JSON(http.StatusBadRequest, gin.H{"error": "交易所未配置或未启用"})
 		return
 	}
 
@@ -213,7 +213,7 @@ func (s *Server) handleClosePosition(c *gin.Context) {
 			createErr = fmt.Errorf("Lighter requires wallet address and API Key private key")
 		}
 	default:
-		c.JSON(http.StatusBadRequest, gin.H{"error": "Unsupported exchange type"})
+		c.JSON(http.StatusBadRequest, gin.H{"error": "不支持的交易所类型"})
 		return
 	}
 
@@ -275,7 +275,7 @@ func (s *Server) handleClosePosition(c *gin.Context) {
 	}
 
 	c.JSON(http.StatusOK, gin.H{
-		"message": "Position closed successfully",
+		"message": "仓位平仓成功",
 		"symbol":  req.Symbol,
 		"side":    req.Side,
 		"result":  result,

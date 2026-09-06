@@ -31,7 +31,7 @@ func (s *Server) handleStatisticsFull(c *gin.Context) {
 
 	store := trader.GetStore()
 	if store == nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "Store not available"})
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "存储不可用"})
 		return
 	}
 

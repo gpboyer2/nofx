@@ -189,7 +189,7 @@ func runResetAccount(args []string) {
 func resolveNewPassword(flagValue string) (string, error) {
 	if flagValue != "" {
 		if len(flagValue) < minResetPasswordLen {
-			return "", fmt.Errorf("password must be at least %d characters", minResetPasswordLen)
+			return "", fmt.Errorf("密码长度至少为 %d 个字符", minResetPasswordLen)
 		}
 		return flagValue, nil
 	}
@@ -208,10 +208,10 @@ func resolveNewPassword(flagValue string) (string, error) {
 			return "", fmt.Errorf("failed to read password: %w", err)
 		}
 		if string(first) != string(second) {
-			return "", errors.New("passwords do not match")
+			return "", errors.New("两次输入的密码不一致")
 		}
 		if len(first) < minResetPasswordLen {
-			return "", fmt.Errorf("password must be at least %d characters", minResetPasswordLen)
+			return "", fmt.Errorf("密码长度至少为 %d 个字符", minResetPasswordLen)
 		}
 		return string(first), nil
 	}

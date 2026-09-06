@@ -91,13 +91,13 @@ func initConfig() error {
 		cfg.JWTSecret = strings.TrimSpace(v)
 	}
 	if cfg.JWTSecret == "" {
-		return fmt.Errorf("JWT_SECRET is required (set a random %d+ byte value in .env)", minJWTSecretLength)
+		return fmt.Errorf("JWT_SECRET 为必填项（请在 .env 中设置一个 %d 字节以上的随机值）", minJWTSecretLength)
 	}
 	if cfg.JWTSecret == insecureDefaultJWTSecret {
-		return fmt.Errorf("JWT_SECRET matches the insecure default; generate a fresh random value (e.g. `openssl rand -base64 48`)")
+		return fmt.Errorf("JWT_SECRET 使用了不安全的默认值；请生成一个新的随机值（例如 `openssl rand -base64 48`）")
 	}
 	if len(cfg.JWTSecret) < minJWTSecretLength {
-		return fmt.Errorf("JWT_SECRET must be at least %d bytes (got %d); generate via `openssl rand -base64 48`", minJWTSecretLength, len(cfg.JWTSecret))
+		return fmt.Errorf("JWT_SECRET 至少需要 %d 字节（当前 %d 字节）；请使用 `openssl rand -base64 48` 生成", minJWTSecretLength, len(cfg.JWTSecret))
 	}
 
 	if v := os.Getenv("API_SERVER_PORT"); v != "" {

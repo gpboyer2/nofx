@@ -155,7 +155,7 @@ func probeExchangeAccountState(exchangeCfg *store.Exchange, userID string) Excha
 	if !exchangeCfg.Enabled {
 		state.Status = exchangeAccountStatusDisabled
 		state.ErrorCode = "EXCHANGE_DISABLED"
-		state.ErrorMessage = "Exchange account is disabled"
+		state.ErrorMessage = "交易所账户已禁用"
 		return state
 	}
 
@@ -203,7 +203,7 @@ func probeExchangeAccountState(exchangeCfg *store.Exchange, userID string) Excha
 	if !totalFound && !availableFound {
 		state.Status = exchangeAccountStatusUnavailable
 		state.ErrorCode = "BALANCE_NOT_FOUND"
-		state.ErrorMessage = "Connected but no balance fields were returned"
+		state.ErrorMessage = "已连接但未返回余额字段"
 		return state
 	}
 
@@ -353,11 +353,11 @@ func classifyExchangeProbeError(err error) (status string, code string, message 
 	case strings.Contains(msg, "unsupported exchange type"):
 		return exchangeAccountStatusUnavailable, "UNSUPPORTED_EXCHANGE", "Unsupported exchange type"
 	case strings.Contains(msg, "requires ") || strings.Contains(msg, "missing") || strings.Contains(msg, "empty"):
-		return exchangeAccountStatusMissingCredentials, "MISSING_REQUIRED_FIELDS", "Exchange credentials are incomplete"
+		return exchangeAccountStatusMissingCredentials, "MISSING_REQUIRED_FIELDS", "交易所凭证不完整"
 	case strings.Contains(msg, "permission") || strings.Contains(msg, "forbidden") || strings.Contains(msg, "no authority") || strings.Contains(msg, "not allowed"):
-		return exchangeAccountStatusPermissionDenied, "PERMISSION_DENIED", "Exchange account has no permission to read balances"
+		return exchangeAccountStatusPermissionDenied, "PERMISSION_DENIED", "交易所账户没有读取余额的权限"
 	case strings.Contains(msg, "invalid") || strings.Contains(msg, "signature") || strings.Contains(msg, "unauthorized") || strings.Contains(msg, "api key") || strings.Contains(msg, "api-key") || strings.Contains(msg, "auth"):
-		return exchangeAccountStatusInvalidCredentials, "INVALID_CREDENTIALS", "Exchange credentials are invalid"
+		return exchangeAccountStatusInvalidCredentials, "INVALID_CREDENTIALS", "交易所凭证无效"
 	default:
 		return exchangeAccountStatusUnavailable, "EXCHANGE_UNAVAILABLE", limitErrorMessage(rawMessage)
 	}
@@ -366,7 +366,7 @@ func classifyExchangeProbeError(err error) (status string, code string, message 
 func limitErrorMessage(message string) string {
 	message = strings.TrimSpace(message)
 	if message == "" {
-		return "Unable to fetch exchange balance right now"
+		return "暂时无法获取交易所余额"
 	}
 	if len(message) <= 160 {
 		return message

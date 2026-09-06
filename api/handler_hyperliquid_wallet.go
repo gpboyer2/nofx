@@ -130,13 +130,13 @@ func (s *Server) handleHyperliquidConnectConfig(c *gin.Context) {
 func (s *Server) handleHyperliquidAccount(c *gin.Context) {
 	address := strings.ToLower(strings.TrimSpace(c.Query("address")))
 	if !isEVMAddress(address) {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "invalid Hyperliquid wallet address"})
+		c.JSON(http.StatusBadRequest, gin.H{"error": "无效的 Hyperliquid 钱包地址"})
 		return
 	}
 
 	var state hyperliquidClearinghouseState
 	if err := postHyperliquidInfo(c, map[string]any{"type": "clearinghouseState", "user": address}, &state); err != nil {
-		c.JSON(http.StatusBadGateway, gin.H{"error": "failed to query Hyperliquid balance", "detail": err.Error()})
+		c.JSON(http.StatusBadGateway, gin.H{"error": "无法查询 Hyperliquid 余额", "detail": err.Error()})
 		return
 	}
 
@@ -204,16 +204,16 @@ func postHyperliquidInfo(c *gin.Context, requestBody map[string]any, out any) er
 	client := &http.Client{Timeout: 20 * time.Second}
 	resp, err := client.Do(req)
 	if err != nil {
-		return fmt.Errorf("reach Hyperliquid: %w", err)
+		return fmt.Errorf("连接 Hyperliquid 失败: %w", err)
 	}
 	defer resp.Body.Close()
 
 	respBody, _ := io.ReadAll(io.LimitReader(resp.Body, 1<<20))
 	if resp.StatusCode < 200 || resp.StatusCode >= 300 {
-		return fmt.Errorf("Hyperliquid returned status %d", resp.StatusCode)
+		return fmt.Errorf("Hyperliquid 返回状态码 %d", resp.StatusCode)
 	}
 	if err := json.Unmarshal(respBody, out); err != nil {
-		return fmt.Errorf("parse response: %w", err)
+		return fmt.Errorf("解析响应失败: %w", err)
 	}
 	return nil
 }
@@ -224,19 +224,19 @@ func postHyperliquidInfo(c *gin.Context, requestBody map[string]any, out any) er
 func (s *Server) handleHyperliquidAgent(c *gin.Context) {
 	address := strings.ToLower(strings.TrimSpace(c.Query("address")))
 	if !isEVMAddress(address) {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "invalid Hyperliquid wallet address"})
+		c.JSON(http.StatusBadRequest, gin.H{"error": "无效的 Hyperliquid 钱包地址"})
 		return
 	}
 
 	body, err := json.Marshal(map[string]any{"type": "extraAgents", "user": address})
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "failed to encode Hyperliquid agent request"})
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "编码 Hyperliquid Agent 请求失败"})
 		return
 	}
 
 	req, err := http.NewRequestWithContext(c.Request.Context(), http.MethodPost, hyperliquidInfoURL, bytes.NewReader(body))
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "failed to create Hyperliquid agent request"})
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "创建 Hyperliquid Agent 请求失败"})
 		return
 	}
 	req.Header.Set("Content-Type", "application/json")
@@ -244,14 +244,14 @@ func (s *Server) handleHyperliquidAgent(c *gin.Context) {
 	client := &http.Client{Timeout: 20 * time.Second}
 	resp, err := client.Do(req)
 	if err != nil {
-		c.JSON(http.StatusBadGateway, gin.H{"error": "failed to reach Hyperliquid", "detail": err.Error()})
+		c.JSON(http.StatusBadGateway, gin.H{"error": "无法连接 Hyperliquid", "detail": err.Error()})
 		return
 	}
 	defer resp.Body.Close()
 
 	respBody, _ := io.ReadAll(io.LimitReader(resp.Body, 1<<20))
 	if resp.StatusCode < 200 || resp.StatusCode >= 300 {
-		c.JSON(http.StatusBadGateway, gin.H{"error": "Hyperliquid rejected the agent request", "status": resp.StatusCode})
+		c.JSON(http.StatusBadGateway, gin.H{"error": "Hyperliquid 拒绝了 Agent 请求", "status": resp.StatusCode})
 		return
 	}
 
@@ -259,7 +259,7 @@ func (s *Server) handleHyperliquidAgent(c *gin.Context) {
 	agents := []hyperliquidAgentInfo{}
 	if len(respBody) > 0 && string(bytes.TrimSpace(respBody)) != "null" {
 		if err := json.Unmarshal(respBody, &agents); err != nil {
-			c.JSON(http.StatusBadGateway, gin.H{"error": "failed to parse Hyperliquid agent response"})
+			c.JSON(http.StatusBadGateway, gin.H{"error": "无法解析 Hyperliquid Agent 响应"})
 			return
 		}
 	}
@@ -286,7 +286,7 @@ func (s *Server) handleHyperliquidAgent(c *gin.Context) {
 func (s *Server) handleHyperliquidSubmitExchange(c *gin.Context) {
 	var req hyperliquidSubmitRequest
 	if err := c.ShouldBindJSON(&req); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "invalid Hyperliquid submit payload"})
+		c.JSON(http.StatusBadRequest, gin.H{"error": "无效的 Hyperliquid 提交载荷"})
 		return
 	}
 
@@ -313,7 +313,7 @@ func (s *Server) handleHyperliquidSubmitExchange(c *gin.Context) {
 			return
 		}
 	default:
-		c.JSON(http.StatusBadRequest, gin.H{"error": "unsupported Hyperliquid action"})
+		c.JSON(http.StatusBadRequest, gin.H{"error": "不支持的 Hyperliquid 操作"})
 		return
 	}
 
@@ -324,21 +324,21 @@ func (s *Server) handleHyperliquidSubmitExchange(c *gin.Context) {
 	}
 	body, err := json.Marshal(payload)
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "failed to encode Hyperliquid payload"})
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "编码 Hyperliquid 载荷失败"})
 		return
 	}
 
 	client := &http.Client{Timeout: 20 * time.Second}
 	hlReq, err := http.NewRequestWithContext(c.Request.Context(), http.MethodPost, hyperliquidExchangeURL, bytes.NewReader(body))
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "failed to create Hyperliquid request"})
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "创建 Hyperliquid 请求失败"})
 		return
 	}
 	hlReq.Header.Set("Content-Type", "application/json")
 
 	resp, err := client.Do(hlReq)
 	if err != nil {
-		c.JSON(http.StatusBadGateway, gin.H{"error": "failed to reach Hyperliquid", "detail": err.Error()})
+		c.JSON(http.StatusBadGateway, gin.H{"error": "无法连接 Hyperliquid", "detail": err.Error()})
 		return
 	}
 	defer resp.Body.Close()
@@ -349,7 +349,7 @@ func (s *Server) handleHyperliquidSubmitExchange(c *gin.Context) {
 		_ = json.Unmarshal(respBody, &decoded)
 	}
 	if resp.StatusCode < 200 || resp.StatusCode >= 300 {
-		c.JSON(http.StatusBadGateway, gin.H{"error": "Hyperliquid rejected the action", "status": resp.StatusCode, "response": decoded})
+		c.JSON(http.StatusBadGateway, gin.H{"error": "Hyperliquid 拒绝了该操作", "status": resp.StatusCode, "response": decoded})
 		return
 	}
 
@@ -364,7 +364,7 @@ func (s *Server) handleHyperliquidSubmitExchange(c *gin.Context) {
 	if err := json.Unmarshal(respBody, &hlResp); err == nil && strings.EqualFold(hlResp.Status, "err") {
 		msg := strings.TrimSpace(strings.Trim(string(hlResp.Response), `"`))
 		if msg == "" {
-			msg = "Hyperliquid rejected the action"
+			msg = "Hyperliquid 拒绝了该操作"
 		}
 		c.JSON(http.StatusBadGateway, gin.H{"error": msg, "response": decoded})
 		return

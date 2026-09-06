@@ -135,20 +135,20 @@ func runBot(token string, cfg *config.Config, st *store.Store) bool {
 			resolveBotUser()
 			if botUserID == "" {
 				sendMsg(bot, chatID,
-					"No account found.\nOpen the web dashboard to register, then send /start.")
+					"未找到账户。\n请打开网页仪表盘注册，然后发送 /start。")
 				continue
 			}
 			if allowedChatID == 0 {
 				username := update.Message.From.UserName
 				if err := st.TelegramConfig().BindUser(chatID, "@"+username); err != nil {
 					logger.Errorf("Failed to bind Telegram user: %v", err)
-					sendMsg(bot, chatID, "Binding failed. Please try again.")
+				sendMsg(bot, chatID, "绑定失败，请重试。")
 					continue
 				}
 				allowedChatID = chatID
 				logger.Infof("Telegram bound to @%s (chatID: %d)", username, chatID)
 			} else if chatID != allowedChatID {
-				sendMsg(bot, chatID, "This bot is already bound to another account.")
+			sendMsg(bot, chatID, "此机器人已绑定到另一个账户。")
 				continue
 			} else {
 				agents.Reset(chatID)
@@ -174,11 +174,11 @@ func runBot(token string, cfg *config.Config, st *store.Store) bool {
 
 		// ── Access control ────────────────────────────────────────────────────
 		if allowedChatID != 0 && chatID != allowedChatID {
-			sendMsg(bot, chatID, "Unauthorized.")
+			sendMsg(bot, chatID, "未授权。")
 			continue
 		}
 		if allowedChatID == 0 {
-			sendMsg(bot, chatID, "Send /start first.")
+			sendMsg(bot, chatID, "请先发送 /start。")
 			continue
 		}
 		if text == "" {
@@ -188,7 +188,7 @@ func runBot(token string, cfg *config.Config, st *store.Store) bool {
 		// ── Refresh user before every AI call ────────────────────────────────
 		resolveBotUser()
 		if botUserID == "" {
-			sendMsg(bot, chatID, "No account found. Open the web dashboard to register.")
+			sendMsg(bot, chatID, "未找到账户。请打开网页仪表盘注册。")
 			continue
 		}
 
@@ -360,46 +360,46 @@ func statusMsg(st *store.Store, userID string, apiPort int, lang string) string 
 			if !hasExchange {
 				missing += "\n❌ Exchange → Settings → Exchanges → Add"
 			}
-			return "⚙️ *Setup required*\n\nOpen the web dashboard to complete setup:\n→ " + webURL + "\n" + missing + "\n\nSend /start when done."
-		}
-		if !hasModel {
-			missing += "\n❌ AI Model → Settings → AI Models → Add"
-		}
-		if !hasExchange {
-			missing += "\n❌ Exchange → Settings → Exchanges → Add"
-		}
-		return "⚙️ *Setup required*\n\nOpen the web dashboard to complete setup:\n→ " + webURL + "\n" + missing + "\n\nSend /start when done."
+		return "⚙️ *需要设置*\n\n请打开网页仪表盘完成设置：\n→ " + webURL + "\n" + missing + "\n\n设置完成后发送 /start。"
+	}
+	if !hasModel {
+		missing += "\n❌ AI Model → Settings → AI Models → Add"
+	}
+	if !hasExchange {
+		missing += "\n❌ Exchange → Settings → Exchanges → Add"
+	}
+	return "⚙️ *需要设置*\n\n请打开网页仪表盘完成设置：\n→ " + webURL + "\n" + missing + "\n\n设置完成后发送 /start。"
 	}
 
 	// All configured — show ready state.
 	if lang == "zh" {
-		return `✅ *NOFX is ready!*
+		return `✅ *NOFX 已就绪！*
 
-Just tell me what you want:
+告诉我你想做什么：
 
-📊 "Show my positions"
-💰 "What's my balance?"
-🤖 "Create a BTC trend strategy and start it"
-⏹ "Stop all traders"
+📊 "显示我的仓位"
+💰 "我的余额是多少？"
+🤖 "创建 BTC 趋势策略并启动"
+⏹ "停止所有交易员"
 
-/help for more · /lang to change language`
+/help 查看更多 · /lang 切换语言`
 	}
-	return `✅ *NOFX is ready!*
+	return `✅ *NOFX 已就绪！*
 
-Just tell me what you want:
+告诉我你想做什么：
 
-📊 "Show my positions"
-💰 "What's my balance?"
-🤖 "Create a BTC trend strategy and start it"
-⏹ "Stop all traders"
+📊 "显示我的仓位"
+💰 "我的余额是多少？"
+🤖 "创建 BTC 趋势策略并启动"
+⏹ "停止所有交易员"
 
-/help for more · /lang to change language`
+/help 查看更多 · /lang 切换语言`
 }
 
 // ── Language ──────────────────────────────────────────────────────────────────
 
 func langMenuMsg() string {
-	return "🌐 *Choose your language*\n\n1 — English\n2 — Chinese\n\nReply with 1 or 2"
+	return "🌐 *选择语言*\n\n1 — English\n2 — 中文\n\n回复 1 或 2"
 }
 
 func parseLangChoice(text string) string {
@@ -416,26 +416,26 @@ func parseLangChoice(text string) string {
 
 func helpMsg(lang string) string {
 	if lang == "zh" {
-		return `*NOFX Help*
+		return `*NOFX 帮助*
 
-*Query*
+*查询*
 • "Show my positions"
 • "What's my balance?"
-• "List my traders"
+• "List my traders"*
 
-*Create & start*
+*创建并启动*
 • "Create a BTC trend strategy and start it"
 • "Conservative strategy, BTC and ETH only"
 
-*Control*
+*控制*
 • "Start trader"
 • "Pause trader"
 • "Stop all trading"
 
-*Commands*
-/start — refresh status
-/lang  — change language
-/help  — show this`
+*命令*
+/start — 刷新状态
+/lang  — 切换语言
+/help  — 显示此帮助`
 	}
 	return `*NOFX Help*
 

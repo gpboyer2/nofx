@@ -38,7 +38,7 @@ func (s *Server) handleUpdateTraderPrompt(c *gin.Context) {
 		logger.Infof("✓ Updated trader %s custom prompt (override base=%v)", trader.GetName(), req.OverrideBasePrompt)
 	}
 
-	c.JSON(http.StatusOK, gin.H{"message": "Custom prompt updated"})
+	c.JSON(http.StatusOK, gin.H{"message": "自定义提示词已更新"})
 }
 
 // handleToggleCompetition Toggle trader competition visibility
@@ -73,7 +73,7 @@ func (s *Server) handleToggleCompetition(c *gin.Context) {
 	}
 	logger.Infof("✓ Trader %s competition visibility updated: %s", traderID, status)
 	c.JSON(http.StatusOK, gin.H{
-		"message":             "Competition visibility updated",
+		"message":             "比赛可见性已更新",
 		"show_in_competition": req.ShowInCompetition,
 	})
 }

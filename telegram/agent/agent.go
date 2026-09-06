@@ -194,7 +194,7 @@ func (a *Agent) buildAccountContext() string {
 func (a *Agent) Run(userMessage string, onChunk func(string)) string {
 	llm := a.getLLM()
 	if llm == nil {
-		return "AI assistant unavailable. Please configure an AI model in the Web UI."
+		return "AI 助手不可用。请在网页界面中配置 AI 模型。"
 	}
 
 	// Build initial user message: prepend account state on first turn, history on subsequent turns.
@@ -224,7 +224,7 @@ func (a *Agent) Run(userMessage string, onChunk func(string)) string {
 		resp, err := llm.CallWithRequestFull(req)
 		if err != nil {
 			logger.Errorf("Agent: LLM call failed (iteration %d): %v", i+1, err)
-			return "AI assistant temporarily unavailable. Please try again."
+			return "AI 助手暂时不可用，请重试。"
 		}
 
 		// No tool calls → LLM returned a final text reply.
@@ -257,7 +257,7 @@ func (a *Agent) Run(userMessage string, onChunk func(string)) string {
 				turnMsgs = append(turnMsgs, mcp.Message{
 					Role:       "tool",
 					ToolCallID: tc.ID,
-					Content:    fmt.Sprintf(`{"error":"invalid arguments: %s"}`, err.Error()),
+					Content:    fmt.Sprintf(`{"error":"参数无效：%s"}`, err.Error()),
 				})
 				continue
 			}
@@ -273,7 +273,7 @@ func (a *Agent) Run(userMessage string, onChunk func(string)) string {
 
 	// Safety: max iterations reached.
 	logger.Warnf("Agent: max iterations (%d) reached for message: %q", maxIterations, userMessage)
-	reply := "Operation completed. Please check your account for the latest status."
+	reply := "操作已完成。请查看你的账户以获取最新状态。"
 	a.memory.Add("user", userMessage)
 	a.memory.Add("assistant", reply)
 	return reply

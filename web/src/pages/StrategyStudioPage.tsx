@@ -313,23 +313,23 @@ function signalBiasInfo(bias: string | undefined) {
   )
   if (bullish) {
     return {
-      label: 'Long Bias',
-      hint: 'Long bias',
+      label: '看涨',
+      hint: '看涨偏向',
       classes: 'border-nofx-success/35 bg-nofx-success/10 text-nofx-success',
       icon: ArrowUpRight,
     }
   }
   if (bearish) {
     return {
-      label: 'Short Bias',
-      hint: 'Short bias',
+      label: '看跌',
+      hint: '看跌偏向',
       classes: 'border-nofx-danger/35 bg-nofx-danger/10 text-nofx-danger',
       icon: ArrowDownRight,
     }
   }
   return {
-    label: 'Neutral',
-    hint: 'Neutral bias',
+    label: '中性',
+    hint: '中性偏向',
     classes:
       'border-[rgba(26,24,19,0.14)] bg-nofx-bg-deeper text-nofx-text-muted',
     icon: Target,
@@ -346,10 +346,10 @@ function formatSignalStrength(item: VergexSignalItem) {
     const confidence =
       item.confidence <= 1 ? item.confidence * 100 : item.confidence
     if (confidence > 0) {
-      parts.push(`${confidence.toFixed(0)}% conf`)
+      parts.push(`置信度 ${confidence.toFixed(0)}%`)
     }
   }
-  return parts.join(' · ') || 'details ready'
+  return parts.join(' · ') || '详情就绪'
 }
 
 function signalSortValue(item: VergexSignalItem) {
@@ -464,7 +464,7 @@ function DirectionChangePanel({
   if (!current && !history) {
     return (
       <div className="rounded-lg border border-[rgba(26,24,19,0.14)] bg-nofx-bg-deeper p-4 text-sm text-nofx-text-muted">
-        Bull/Bear Radar has not loaded yet.
+        多空雷达尚未加载。
       </div>
     )
   }
@@ -474,7 +474,7 @@ function DirectionChangePanel({
     <section className="overflow-hidden rounded-lg border border-[rgba(26,24,19,0.14)] bg-nofx-bg-lighter shadow-lg">
       <div className="border-b border-[rgba(26,24,19,0.14)] px-5 py-4">
         <div className="text-base font-semibold text-nofx-text">
-          Bull/Bear Radar
+          多空雷达
         </div>
         <div
           className={`mt-3 text-3xl font-bold ${directionStyle(direction).text}`}
@@ -502,7 +502,7 @@ function DirectionChangePanel({
       ) : null}
       <div className="border-t border-[rgba(26,24,19,0.14)] p-5">
         <div className="mb-3 text-sm font-semibold text-nofx-text">
-          Direction changes
+          方向变更
         </div>
         <div className="space-y-2">
           {(history?.items || []).slice(0, 10).map((item, index) => (
@@ -523,7 +523,7 @@ function DirectionChangePanel({
           ))}
           {!history?.items?.length ? (
             <div className="text-sm text-nofx-text-muted">
-              No direction-change history returned.
+              暂无方向变更历史。
             </div>
           ) : null}
         </div>
@@ -596,11 +596,11 @@ function HeatmapChartRow({
     <div
       className="relative z-10 grid grid-cols-[78px_minmax(0,1fr)] items-center gap-3"
       title={[
-        `Price ${formatPrice(price)}`,
-        `Long cost ${formatMoney(bin.longCost)}`,
-        `Short cost ${formatMoney(bin.shortCost)}`,
-        `Long liquidation ${formatMoney(bin.longLiq)}`,
-        `Short liquidation ${formatMoney(bin.shortLiq)}`,
+        `价格 ${formatPrice(price)}`,
+        `多头成本 ${formatMoney(bin.longCost)}`,
+        `空头成本 ${formatMoney(bin.shortCost)}`,
+        `多头清算 ${formatMoney(bin.longLiq)}`,
+        `空头清算 ${formatMoney(bin.shortLiq)}`,
       ].join(' · ')}
     >
       <div
@@ -658,7 +658,7 @@ function CostLiquidationHeatmap({
   if (!data || bins.length === 0) {
     return (
       <div className="rounded-lg border border-[rgba(26,24,19,0.14)] bg-nofx-bg-deeper p-4 text-sm text-nofx-text-muted">
-        Cost/liquidation heatmap has not loaded yet.
+        成本/清算热力图尚未加载。
       </div>
     )
   }
@@ -686,14 +686,14 @@ function CostLiquidationHeatmap({
         <div className="flex flex-wrap items-start justify-between gap-4">
           <div>
             <div className="text-base font-semibold text-nofx-text">
-              Cost / Liquidation Heatmap
+              成本 / 清算热力图
               <span className="ml-3 text-sm font-normal text-nofx-text-muted">
-                position cost distribution · liquidation clusters
+                持仓成本分布 · 清算密集区
               </span>
             </div>
             <div className="mt-3 flex flex-wrap gap-3 text-sm text-nofx-text-muted">
-              <span>{includedCost.toLocaleString()} cost positions</span>
-              <span>{includedLiq.toLocaleString()} liquidation prices</span>
+              <span>{includedCost.toLocaleString()} 个成本仓位</span>
+              <span>{includedLiq.toLocaleString()} 个清算价格</span>
               <span>
                 mark{' '}
                 <span className="font-semibold text-nofx-text">
@@ -703,13 +703,12 @@ function CostLiquidationHeatmap({
             </div>
             {data.liquidation?.reason ? (
               <div className="mt-2 text-sm text-nofx-gold">
-                Liquidation prices use latest snapshot; incremental trades can
-                lag.
+                清算价格使用最新快照；增量交易可能滞后。
               </div>
             ) : null}
           </div>
           <div className="rounded-full bg-nofx-success/10 px-3 py-1 text-xs font-semibold text-nofx-success">
-            live
+            实时
           </div>
         </div>
       </div>
@@ -718,19 +717,19 @@ function CostLiquidationHeatmap({
         <div className="mb-4 flex flex-wrap justify-center gap-4 text-sm text-nofx-text-muted">
           <span className="inline-flex items-center gap-1">
             <span className="h-3 w-3 rounded bg-nofx-success/70" />
-            Long cost
+            多头成本
           </span>
           <span className="inline-flex items-center gap-1">
             <span className="h-3 w-3 rounded bg-nofx-danger/70" />
-            Short cost
+            空头成本
           </span>
           <span className="inline-flex items-center gap-1 text-orange-300">
             <span className="h-3 w-3 rounded bg-orange-400" />
-            Long liquidation
+            多头清算
           </span>
           <span className="inline-flex items-center gap-1 text-nofx-gold">
             <span className="h-3 w-3 rounded bg-nofx-gold" />
-            Short liquidation
+            空头清算
           </span>
         </div>
 
@@ -761,21 +760,21 @@ function CostLiquidationHeatmap({
 
         <div className="mt-4 grid gap-3 md:grid-cols-3">
           <DetailMetricCard
-            label="Flush fuel below"
+            label="下方清算燃料"
             value={formatMoney(longLiqTotal)}
-            note="Long liquidations can force sell into downside breaks."
+            note="多头清算可能迫使价格在下跌突破时卖出。"
             tone="red"
           />
           <DetailMetricCard
-            label="Squeeze fuel above"
+            label="上方逼空燃料"
             value={formatMoney(shortLiqTotal)}
-            note="Short liquidations can force buy into upside breaks."
+            note="空头清算可能迫使价格在上涨突破时买入。"
             tone="cyan"
           />
           <DetailMetricCard
-            label="Bin step"
+            label="价格区间步长"
             value={formatNumber(data.binStep, 4)}
-            note={`${bins.length} active price bins returned.`}
+            note={`已返回 ${bins.length} 个活跃价格区间。`}
             tone="neutral"
           />
         </div>
@@ -1090,12 +1089,12 @@ export function StrategyStudioPage() {
       const created = await api.createStrategy({
         name: text(
           language,
-          'NOFX Claw402 Auto Strategy',
+          'NOFX Claw402 自动策略',
           'NOFX Claw402 Auto Strategy'
         ),
         description: text(
           language,
-          'The single built-in strategy: read the Claw402.ai board, fetch per-symbol details, then trade with raw candles.',
+          '内置策略：读取 Claw402.ai 看板，获取每个交易对详情，结合原始 K 线进行交易。',
           'The single built-in strategy: read the Claw402.ai board, fetch per-symbol details, then trade with raw candles.'
         ),
         config: defaultConfig,
@@ -1485,7 +1484,7 @@ export function StrategyStudioPage() {
                       }}
                       placeholder={text(
                         language,
-                        'One-line strategy note',
+                        '一行策略备注',
                         'One-line strategy note'
                       )}
                       className="mt-1 w-full bg-transparent text-sm text-nofx-text-muted outline-none placeholder:text-nofx-text-muted/50"
@@ -1742,7 +1741,7 @@ export function StrategyStudioPage() {
                     >
                       {topNOptions.map((value) => (
                         <option key={value} value={value}>
-                          {text(language, `Top ${value}`, `Top ${value}`)}
+                          {text(language, `前 ${value}`, `Top ${value}`)}
                         </option>
                       ))}
                     </select>
@@ -1894,7 +1893,7 @@ export function StrategyStudioPage() {
                                 <span>·</span>
                                 <span>{text(language, '主网', 'mainnet')}</span>
                                 <span>·</span>
-                                <span>±{detailLiqBand}% band</span>
+                                <span>±{detailLiqBand}% 带宽</span>
                               </div>
                             </div>
                             <div className="flex flex-wrap items-center gap-2 lg:justify-end">
@@ -2045,7 +2044,7 @@ export function StrategyStudioPage() {
                       <Shield className="h-4 w-4 text-nofx-success" />
                       {text(
                         language,
-                        'Trading parameters',
+                        '交易参数',
                         'Trading parameters'
                       )}
                     </div>
@@ -2090,11 +2089,11 @@ export function StrategyStudioPage() {
                       </label>
                       <label className="space-y-2">
                         <span className="text-xs text-nofx-text-muted">
-                          {text(
-                            language,
-                            'Entry confidence',
-                            'Entry confidence'
-                          )}
+                      {text(
+                        language,
+                        '入场信心值',
+                        'Entry confidence'
+                      )}
                         </span>
                         <select
                           value={risk.min_confidence}
@@ -2127,7 +2126,7 @@ export function StrategyStudioPage() {
                     }
                     placeholder={text(
                       language,
-                      'Example: only trade clean trends; skip entries when board signals conflict with candles.',
+                      '示例：只交易清晰趋势；当看板信号与 K 线冲突时跳过入场。',
                       'Example: only trade clean trends; skip entries when board signals conflict with candles.'
                     )}
                     className="h-28 w-full resize-none rounded-lg border border-[rgba(26,24,19,0.14)] bg-nofx-bg px-3 py-2 text-sm text-nofx-text outline-none placeholder:text-nofx-text-muted/50"
