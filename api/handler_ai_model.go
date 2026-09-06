@@ -242,9 +242,13 @@ func (s *Server) handleUpdateModelConfigs(c *gin.Context) {
 
 // handleGetSupportedModels Get list of AI models supported by the system
 func (s *Server) handleGetSupportedModels(c *gin.Context) {
-	// Return static list of supported AI models with default versions
+	// Return static list of supported AI models with default versions.
+	// deepseek/grok support custom_api_url + custom_model_name overrides, so any
+	// OpenAI-compatible relay station (中转站) can be configured from the UI.
 	supportedModels := []map[string]interface{}{
 		{"id": "claw402", "name": "Claw402 (Base USDC)", "provider": "claw402", "defaultModel": "gpt-5.6"},
+		{"id": "deepseek", "name": "DeepSeek / 自定义中转站", "provider": "deepseek", "defaultModel": "deepseek-chat"},
+		{"id": "grok", "name": "Grok (xAI)", "provider": "grok", "defaultModel": "grok-4.6"},
 	}
 
 	c.JSON(http.StatusOK, supportedModels)

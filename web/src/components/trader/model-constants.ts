@@ -129,11 +129,22 @@ export const CLAW402_MODELS: Claw402Model[] = [
 ]
 
 // AI Provider configuration - default models and API links
+// deepseek/grok 均支持在配置弹窗里填 baseUrl（自定义中转站）+ 模型名覆盖默认值
 export const AI_PROVIDER_CONFIG: Record<string, AIProviderConfig> = {
   claw402: {
     defaultModel: DEFAULT_CLAW402_MODEL,
     apiUrl: 'https://claw402.ai',
     apiName: 'Claw402',
+  },
+  deepseek: {
+    defaultModel: 'deepseek-chat',
+    apiUrl: 'https://platform.deepseek.com',
+    apiName: 'DeepSeek',
+  },
+  grok: {
+    defaultModel: 'grok-4.6',
+    apiUrl: 'https://console.x.ai',
+    apiName: 'xAI',
   },
 }
 
