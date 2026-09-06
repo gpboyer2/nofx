@@ -57,8 +57,9 @@ eslint-*.json
 # 本地 Agent QA seed（个人调试用，不纳入版本控制）
 docs/qa/fixtures/agent_self_play_seed.zh-CN.json
 
-# VS code
-.vscode
+# VS code（只放行 launch.json，其余本地配置不入库）
+.vscode/*
+!.vscode/launch.json
 
 # 密钥和敏感文件
 # 注意：crypto目录包含加密服务代码，应该被提交
@@ -142,3 +143,7 @@ skills-lock.json
 img.png
 docs/note
 .workbuddy
+
+# Go 调试临时二进制输出目录（delve 编译产物，不入库）
+.debug-bin/
+__debug_bin*

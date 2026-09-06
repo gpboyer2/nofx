@@ -1,0 +1,35 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Backend (Go, debug)",
+      "type": "go",
+      "request": "launch",
+      "mode": "auto",
+      "program": "${workspaceFolder}",
+      "cwd": "${workspaceFolder}",
+      "output": "${workspaceFolder}/.debug-bin/nofx-debug-bin",
+      "console": "integratedTerminal",
+      "comments": "后端入口 main.go。必须以项目根目录为 cwd，godotenv 才能读到根目录的 .env（密钥/代理/SQLite 路径全在里面）。端口取 .env 的 NOFX_BACKEND_PORT=8080。console=integratedTerminal：程序日志直接输出到内置终端视图（可切换、可随时关），调试控制台仍保留断点/调用栈等调试器信息。"
+    },
+    {
+      "name": "Frontend (Vite dev)",
+      "type": "node-terminal",
+      "request": "launch",
+      "command": "npm run dev",
+      "cwd": "${workspaceFolder}/web",
+      "comments": "前端 Vite 开发服务器，端口 3000，/api 已通过 vite.config.ts 代理到 localhost:8080。依赖已安装好，不需要再 npm install。"
+    }
+  ],
+  "compounds": [
+    {
+      "name": "Full Stack - development",
+      "configurations": [
+        "Backend (Go, debug)",
+        "Frontend (Vite dev)"
+      ],
+      "stopAll": true,
+      "comments": "一键同时启动前后端；停止时一起停。浏览器访问 http://localhost:3000，后端接口 8080。"
+    }
+  ]
+}
