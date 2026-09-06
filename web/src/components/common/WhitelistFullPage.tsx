@@ -38,7 +38,7 @@ export function WhitelistFullPage({ onBack }: WhitelistFullPageProps) {
               <div className="w-2.5 h-2.5 rounded-full bg-[rgba(26,24,19,0.25)]"></div>
             </div>
             <div className="text-[10px] text-[#D6433A] font-mono tracking-widest animate-pulse">
-              ACCESS_DENIED // ERROR_403
+              访问被拒绝 // 错误 403
             </div>
           </div>
 
@@ -52,20 +52,19 @@ export function WhitelistFullPage({ onBack }: WhitelistFullPageProps) {
 
             {/* Title */}
             <h1 className="text-2xl font-bold mb-2 tracking-widest text-nofx-text uppercase">
-              <span className="text-[#D6433A]">RESTRICTED</span> ACCESS
+              <span className="text-[#D6433A]">受限</span>访问
             </h1>
 
             <div className="h-[1px] w-full bg-gradient-to-r from-transparent via-[#D6433A]/40 to-transparent my-4"></div>
 
             {/* Description */}
             <p className="text-xs text-nofx-text-muted mb-8 leading-relaxed font-mono px-4">
-              <span className="text-[#D6433A]">[SYSTEM_MESSAGE]:</span> YOUR
-              IDENTIFIER IS NOT ON THE ACTIVE WHITELIST.
+              <span className="text-[#D6433A]">[系统消息]:</span>你的标识符
+              不在当前白名单内。
               <br />
               <br />
-              Platform capacity limits have been reached for the current beta
-              phase. Prioritized access is currently reserved for authorized
-              operators only.
+              当前测试阶段平台容量已达上限，优先访问权限仅对授权用户开放。
+              如果你认为这是错误，请核实你的凭据或联系管理员。
             </p>
 
             {/* Info Box */}
@@ -74,12 +73,11 @@ export function WhitelistFullPage({ onBack }: WhitelistFullPageProps) {
                 <Lock className="w-4 h-4 text-[#D6433A] mt-0.5" />
                 <div>
                   <h3 className="text-xs font-bold text-[#D6433A] uppercase mb-1">
-                    Authorization Protocol
+                    授权协议
                   </h3>
                   <p className="text-[10px] text-nofx-text-muted leading-tight">
-                    Access is rolled out in batches. If you believe this is an
-                    error, please verify your credentials or contact system
-                    administrators.
+                    访问权限分批开放。如果你认为这是错误，请核实
+                    你的凭据或联系系统管理员。
                   </p>
                 </div>
               </div>
@@ -92,7 +90,7 @@ export function WhitelistFullPage({ onBack }: WhitelistFullPageProps) {
                 className="w-full flex items-center justify-center gap-2 py-3 border border-[rgba(26,24,19,0.14)] bg-nofx-bg hover:bg-nofx-bg-deeper hover:border-[#D6433A] hover:text-[#D6433A] text-nofx-text-muted transition-all text-xs font-bold tracking-widest uppercase group"
               >
                 <ArrowLeft className="w-3 h-3 group-hover:-translate-x-1 transition-transform" />
-                RETURN TO LOGIN
+                返回登录
               </button>
 
               <div className="grid grid-cols-2 gap-3 mt-4">
@@ -103,7 +101,7 @@ export function WhitelistFullPage({ onBack }: WhitelistFullPageProps) {
                   className="flex items-center justify-center gap-2 py-2 border border-[rgba(26,24,19,0.14)] bg-nofx-bg hover:bg-nofx-bg-deeper text-nofx-text-muted hover:text-nofx-text transition-colors text-[10px] uppercase"
                 >
                   <Twitter className="w-3 h-3" />
-                  Updates
+                  更新
                 </a>
                 <a
                   href={OFFICIAL_LINKS.telegram}
@@ -112,7 +110,7 @@ export function WhitelistFullPage({ onBack }: WhitelistFullPageProps) {
                   className="flex items-center justify-center gap-2 py-2 border border-[rgba(26,24,19,0.14)] bg-nofx-bg hover:bg-nofx-bg-deeper text-nofx-text-muted hover:text-nofx-text transition-colors text-[10px] uppercase"
                 >
                   <Send className="w-3 h-3" />
-                  Support
+                  支持
                 </a>
               </div>
             </div>
@@ -120,7 +118,7 @@ export function WhitelistFullPage({ onBack }: WhitelistFullPageProps) {
 
           {/* Footer */}
           <div className="bg-nofx-bg-deeper p-2 text-[9px] text-nofx-text-muted text-center border-t border-[rgba(26,24,19,0.14)] font-mono uppercase">
-            ERR_CODE: WLIST_0x403 // SECURITY_LAYER_ACTIVE
+            错误码: WLIST_0x403 // 安全层已激活
           </div>
         </div>
       </motion.div>

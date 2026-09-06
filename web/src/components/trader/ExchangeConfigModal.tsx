@@ -321,7 +321,7 @@ export function ExchangeConfigModal({
         if (!apiKey.trim() || !secretKey.trim() || !passphrase.trim()) return
         await onSave(exchangeId, exchangeType, trimmedAccountName, apiKey.trim(), secretKey.trim(), passphrase.trim(), testnet)
       } else if (currentExchangeType === 'hyperliquid') {
-        toast.error(language === 'zh' ? 'Use the wallet authorization flow to connect Hyperliquid.' : 'Use the wallet authorization flow to connect Hyperliquid.')
+        toast.error(language === 'zh' ? '使用钱包授权流程连接 Hyperliquid。' : 'Use the wallet authorization flow to connect Hyperliquid.')
         return
       } else if (currentExchangeType === 'aster') {
         if (!asterUser.trim() || !asterSigner.trim() || !asterPrivateKey.trim()) return
@@ -544,13 +544,13 @@ export function ExchangeConfigModal({
                       className="p-3 rounded-xl text-xs"
                       style={{ background: 'rgba(46, 139, 87, 0.08)', border: '1px solid rgba(46, 139, 87, 0.2)', color: '#2E8B57' }}
                     >
-                      Saved credential status:
+                      {language === 'zh' ? '已保存的凭证状态：' : 'Saved credential status:'}
                       {' '}
-                      API Key {selectedExchange.has_api_key ? 'configured' : 'not configured'}
+                      API Key {language === 'zh' ? (selectedExchange.has_api_key ? '已配置' : '未配置') : (selectedExchange.has_api_key ? 'configured' : 'not configured')}
                       {' · '}
-                      Secret {selectedExchange.has_secret_key ? 'configured' : 'not configured'}
+                      Secret {language === 'zh' ? (selectedExchange.has_secret_key ? '已配置' : '未配置') : (selectedExchange.has_secret_key ? 'configured' : 'not configured')}
                       {(currentExchangeType === 'okx' || currentExchangeType === 'bitget' || currentExchangeType === 'kucoin')
-                        ? ` · Passphrase ${selectedExchange.has_passphrase ? 'configured' : 'not configured'}`
+                        ? (language === 'zh' ? ` · Passphrase ${selectedExchange.has_passphrase ? '已配置' : '未配置'}` : ` · Passphrase ${selectedExchange.has_passphrase ? 'configured' : 'not configured'}`)
                         : ''}
                     </div>
                   )}
@@ -566,7 +566,7 @@ export function ExchangeConfigModal({
                       onChange={(e) => setApiKey(e.target.value)}
                       placeholder={
                         editingExchangeId && selectedExchange?.has_api_key
-                          ? 'Saved. Re-enter to replace.'
+                          ? (language === 'zh' ? '已保存，重新输入以替换' : 'Saved. Re-enter to replace.')
                           : t('enterAPIKey', language)
                       }
                       className="w-full px-4 py-3 rounded-xl"
@@ -586,7 +586,7 @@ export function ExchangeConfigModal({
                       onChange={(e) => setSecretKey(e.target.value)}
                       placeholder={
                         editingExchangeId && selectedExchange?.has_secret_key
-                          ? 'Saved. Re-enter to replace.'
+                          ? (language === 'zh' ? '已保存，重新输入以替换' : 'Saved. Re-enter to replace.')
                           : t('enterSecretKey', language)
                       }
                       className="w-full px-4 py-3 rounded-xl"
@@ -607,7 +607,7 @@ export function ExchangeConfigModal({
                         onChange={(e) => setPassphrase(e.target.value)}
                         placeholder={
                           editingExchangeId && selectedExchange?.has_passphrase
-                            ? 'Saved. Re-enter to replace.'
+                            ? (language === 'zh' ? '已保存，重新输入以替换' : 'Saved. Re-enter to replace.')
                             : t('enterPassphrase', language)
                         }
                         className="w-full px-4 py-3 rounded-xl"
@@ -696,11 +696,11 @@ export function ExchangeConfigModal({
                       <span style={{ fontSize: '16px' }}>🔐</span>
                       <div>
                         <div className="text-sm font-semibold mb-1" style={{ color: '#E0483B' }}>
-                          {language === 'zh' ? 'Hyperliquid requires wallet authorization' : 'Hyperliquid requires wallet authorization'}
+                          {language === 'zh' ? 'Hyperliquid 需要钱包授权' : 'Hyperliquid requires wallet authorization'}
                         </div>
                         <div className="text-xs leading-5" style={{ color: '#8A8478' }}>
                           {language === 'zh'
-                            ? 'Manual private-key/API-key entry is disabled. Use MetaMask, Rabby, OKX, Coinbase Wallet or another EVM wallet to connect, authorize the agent, and approve the builder fee.'
+                            ? '此交易所禁用了手动私钥/API Key 输入。请使用 MetaMask、Rabby、OKX、Coinbase Wallet 或其他 EVM 钱包进行连接、授权 agent 并批准构建费用。'
                             : 'Manual private-key/API-key entry is disabled. Use MetaMask, Rabby, OKX, Coinbase Wallet or another EVM wallet to connect, authorize the agent, and approve the builder fee.'}
                         </div>
                       </div>

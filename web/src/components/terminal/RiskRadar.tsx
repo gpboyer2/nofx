@@ -127,7 +127,7 @@ export function RiskRadar({ positions, account, config, fullStats }: RiskRadarPr
 
   const hasData = pos.length > 0 || account != null
   if (!hasData) {
-    return <div className="tm-sc" style={{ padding: '16px 0' }}>No live risk data.</div>
+    return <div className="tm-sc" style={{ padding: '16px 0' }}>暂无实时风险数据。</div>
   }
 
   // ── one-glance verdicts ──────────────────────────────────────────────
@@ -135,54 +135,54 @@ export function RiskRadar({ positions, account, config, fullStats }: RiskRadarPr
   const biasSkew = m.longShare - m.shortShare
   const exposureTag: Verdict =
     m.totalNotional === 0
-      ? { text: 'Flat', tone: 'muted' }
+      ? { text: '空仓', tone: 'muted' }
       : biasSkew > 15
-        ? { text: 'Long-lean', tone: 'up' }
+        ? { text: '偏多', tone: 'up' }
         : biasSkew < -15
-          ? { text: 'Short-lean', tone: 'dn' }
-          : { text: 'Balanced', tone: 'ink' }
+          ? { text: '偏空', tone: 'dn' }
+          : { text: '均衡', tone: 'ink' }
 
   // Leverage: Safe / High / Risky by avg vs cap.
   const levTag: Verdict =
     m.configMax === 0 || m.avgLev === 0
       ? { text: '—', tone: 'muted' }
       : m.levUse > 80
-        ? { text: 'Risky', tone: 'dn' }
+        ? { text: '危险', tone: 'dn' }
         : m.levUse >= 50
-          ? { text: 'High', tone: 'amber' }
-          : { text: 'Safe', tone: 'up' }
+          ? { text: '偏高', tone: 'amber' }
+          : { text: '安全', tone: 'up' }
 
   // Margin used: Ample / Tight / Risky.
   const marginTag: Verdict =
     m.marginPct > 80
-      ? { text: 'Risky', tone: 'dn' }
-      : m.marginPct >= 50
-        ? { text: 'Tight', tone: 'amber' }
-        : { text: 'Ample', tone: 'up' }
+      ? { text: '危险', tone: 'dn' }
+    : m.marginPct >= 50
+      ? { text: '偏紧', tone: 'amber' }
+      : { text: '充裕', tone: 'up' }
 
   // Concentration: Spread / Concentrated.
   const concTag: Verdict =
     m.totalNotional === 0
       ? { text: '—', tone: 'muted' }
       : m.concentration >= 35
-        ? { text: 'Concentrated', tone: 'amber' }
-        : { text: 'Spread', tone: 'up' }
+        ? { text: '集中', tone: 'amber' }
+      : { text: '分散', tone: 'up' }
 
   // Drawdown: Calm / Caution / Deep by depth.
   const ddTag: Verdict =
     m.drawdown <= 0
-      ? { text: 'Calm', tone: 'up' }
-      : m.drawdown >= 20
-        ? { text: 'Deep', tone: 'dn' }
-        : { text: 'Caution', tone: 'amber' }
+      ? { text: '平静', tone: 'up' }
+    : m.drawdown >= 20
+      ? { text: '深度', tone: 'dn' }
+      : { text: '谨慎', tone: 'amber' }
 
   // Positions: Room / Full.
   const countTag: Verdict =
     m.maxPositions === 0
       ? { text: `${m.count}`, tone: 'muted' }
       : m.count >= m.maxPositions
-        ? { text: 'Full', tone: 'amber' }
-        : { text: 'Room', tone: 'up' }
+        ? { text: '已满', tone: 'amber' }
+        : { text: '空间', tone: 'up' }
 
   return (
     <div style={{ fontFamily: 'var(--tm-mono)' }}>
@@ -197,7 +197,7 @@ export function RiskRadar({ positions, account, config, fullStats }: RiskRadarPr
         </span>
       </div>
       <div className="tm-sc" style={{ fontSize: 9, marginBottom: 8 }}>
-        Risk radar · live position-risk check
+        风险雷达 · 实时仓位风险检查
       </div>
 
       {/* Net exposure — diverging long/short split, the visual centerpiece */}
@@ -238,7 +238,7 @@ export function RiskRadar({ positions, account, config, fullStats }: RiskRadarPr
         zh="Margin used"
         en="MARGIN USED"
         value={pct(m.marginPct)}
-        sub="of equity"
+        sub="占权益"
         fill={Math.min(100, Math.max(0, m.marginPct))}
         color={utilColor(m.marginPct)}
         verdict={marginTag}
@@ -247,7 +247,7 @@ export function RiskRadar({ positions, account, config, fullStats }: RiskRadarPr
         zh="Concentration"
         en="CONCENTRATION"
         value={pct(m.concentration)}
-        sub="top-position share"
+        sub="最大仓位占比"
         fill={m.concentration}
         color={concTag.tone === 'amber' ? C_AMBER : 'var(--tm-up)'}
         verdict={concTag}
@@ -256,7 +256,7 @@ export function RiskRadar({ positions, account, config, fullStats }: RiskRadarPr
         zh="Drawdown"
         en="MAX DRAWDOWN"
         value={`-${pct(m.drawdown)}`}
-        sub="peak drawdown"
+        sub="峰值回撤"
         fill={Math.min(100, m.drawdown)}
         color="var(--tm-red)"
         verdict={ddTag}
@@ -266,7 +266,7 @@ export function RiskRadar({ positions, account, config, fullStats }: RiskRadarPr
         zh="Positions"
         en="POSITIONS"
         value={m.maxPositions > 0 ? `${m.count} / ${m.maxPositions}` : `${m.count}`}
-        sub="held / cap"
+        sub="已开仓 / 上限"
         fill={m.maxPositions > 0 ? m.countUse : 0}
         color={countTag.tone === 'amber' ? C_AMBER : 'var(--tm-up)'}
         verdict={countTag}

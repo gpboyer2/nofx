@@ -8,7 +8,7 @@ const traderPresets = [
     name: 'ALPHA-1',
     // ... (rest of agents array remains, but I can't skip lines in replacement content easily without context. Wait, let's just replace the top section)
     // Actually, I'll use multi_replace for targeted cleanup.
-    class: 'US_STOCKS',
+    class: '美国股票',
     desc: "大盘股动量突破交易策略。",
     apy: '142%',
     winRate: '68%',
@@ -20,7 +20,7 @@ const traderPresets = [
   },
   {
     name: 'BETA-X',
-    class: 'MACRO_FX',
+    class: '宏观外汇',
     desc: "外汇趋势与宏观市场配置策略。",
     apy: '89%',
     winRate: '55%',
@@ -109,7 +109,7 @@ export default function AgentGrid() {
                     </div>
                     <div className="text-right">
                       <div className="text-[10px] font-mono text-nofx-text-muted uppercase">
-                        Class
+                        类别
                       </div>
                       <div
                         className={`font-bold font-mono tracking-wider ${preset.color}`}

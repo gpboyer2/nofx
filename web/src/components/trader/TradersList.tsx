@@ -241,7 +241,7 @@ function TraderRow({
             {getModelDisplayName(
               trader.ai_model.split('_').pop() || trader.ai_model
             )}{' '}
-            Model • {getExchangeDisplayName(trader.exchange_id, allExchanges)}
+            模型 • {getExchangeDisplayName(trader.exchange_id, allExchanges)}
           </div>
         </div>
       </div>
@@ -266,7 +266,7 @@ function TraderRow({
                 onToggleTraderAddress(trader.trader_id)
               }}
               className="p-0.5 rounded hover:bg-nofx-bg-deeper transition-colors"
-              title={isVisible ? (language === 'zh' ? 'Hide' : 'Hide') : (language === 'zh' ? 'Show' : 'Show')}
+              title={isVisible ? '隐藏' : '显示'}
             >
               {isVisible ? (
                 <EyeOff className="w-3 h-3" style={{ color: '#8A8478' }} />
@@ -281,7 +281,7 @@ function TraderRow({
                 onCopyAddress(trader.trader_id, walletAddr)
               }}
               className="p-0.5 rounded hover:bg-nofx-bg-deeper transition-colors"
-              title={language === 'zh' ? 'Copy' : 'Copy'}
+              title={'复制'}
             >
               {isCopied ? (
                 <Check className="w-3 h-3" style={{ color: '#2E8B57' }} />
@@ -391,7 +391,7 @@ function TraderRow({
                   color: '#8A8478',
                 }
             }
-            title={trader.show_in_competition !== false ? 'Shown in arena' : 'Hidden from arena'}
+            title={trader.show_in_competition !== false ? '显示在竞技场中' : '从竞技场中隐藏'}
           >
             {trader.show_in_competition !== false ? (
               <Eye className="w-3 h-3 md:w-4 md:h-4" />
