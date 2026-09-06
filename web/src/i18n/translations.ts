@@ -975,6 +975,68 @@ export const translations = {
       abort: 'ABORT',
     },
 
+    // Landing Page - Hero Section
+    heroMarquee: 'NOFX AI TRADING • AUTOMATED WEALTH • DECENTRALIZED INTELLIGENCE • PUNK ETHOS •',
+    heroSubtitle:
+      'Autonomous trading agents. High-frequency execution. Institutional-grade strategies for the DEGENERATES.',
+    heroStartBtn: 'Start Trading',
+    heroSourceBtn: 'Source',
+    heroSystemOnline: 'SYSTEM ONLINE',
+
+    // Landing Page - Brand Features
+    brandFeatureTitle: 'Core Protocol',
+    brandFeatureSubtitle: 'Specs',
+    brandFeatureDesc: 'Next generation infrastructure for algorithmic dominance.',
+    featureAiDrivenTitle: 'AI DRIVEN',
+    featureAiDrivenDesc:
+      'Powered by advanced LLMs (Claude, GPT-4, DeepSeek) to analyze market sentiment and technicals in real-time.',
+    featureAutonomousTitle: 'AUTONOMOUS',
+    featureAutonomousDesc:
+      'Fully automated trading loops. From data ingestion to order execution without human intervention.',
+    featureSocialTitle: 'PUNK SOCIAL',
+    featureSocialDesc:
+      'Follow and copy AI traders. A social layer built for the post-human economy.',
+    featureNonCustodialTitle: 'NON-CUSTODIAL',
+    featureNonCustodialDesc:
+      'Your funds, your keys. Connect via API keys or decentralized wallets. We never touch your assets.',
+    featureHighFreqTitle: 'HIGH FREQUENCY',
+    featureHighFreqDesc:
+      'Event-driven architecture capable of processing thousands of market signals per second.',
+    featureOpenSourceTitle: 'OPEN SOURCE',
+    featureOpenSourceDesc:
+      'Auditable codebase. Community driven strategies. Build your own trader upon our core.',
+
+    // Landing Page - Deployment Hub
+    deploySectionTitle: 'System Deployment',
+    deployTitle: 'DEPLOY',
+    deployInstantly: 'INSTANTLY',
+    deployDesc:
+      'One command on your laptop or any server installs everything. Open the address it prints, create your account, and the guided launch takes you to your first AI trade in about five minutes — around $13 is enough to start.',
+    deployStep1: 'Register — the first account owns this instance.',
+    deployStep2:
+      'Fund two small wallets: $1+ for AI fees, $12+ to trade with (guided, with QR codes).',
+    deployStep3: 'Press Start — the AI trades on its own; stop it anytime.',
+    deployFeature1Label: 'One-Line Install',
+    deployFeature1Desc: 'Docker handles every dependency',
+    deployFeature2Label: 'Your Keys Stay Home',
+    deployFeature2Desc: 'Runs on your machine, keys encrypted locally',
+
+    // Landing Page - Agent Grid
+    agentGridAlpha: 'Large-cap momentum and breakout trading.',
+    agentGridBeta: 'FX trend and macro regime allocation.',
+    agentGridGamma: 'Private-market momentum basket engine.',
+
+    // Landing Page - Brand Stats
+    brandStatsVolume: 'TRADING VOL',
+    brandStatsAgents: 'AI AGENTS',
+    brandStatsStrategies: 'STRATEGIES',
+    brandStatsUptime: 'UPTIME',
+
+    // Footer
+    footerDocs: 'Documentation',
+    footerIssues: 'Issues',
+    footerPR: 'Pull Requests',
+
     // Advanced Chart
     advancedChart: {
       updating: 'Updating...',
@@ -1236,6 +1298,207 @@ export const translations = {
       close: 'Close',
       yes: 'Yes',
       no: 'No',
+
+      // ═══════════════════════════════════════════════════════════════
+      // Terminal Dashboard
+      // ═══════════════════════════════════════════════════════════════
+
+      // TerminalDashboard — metric row
+      'terminal.equity': 'Equity',
+      'terminal.totalPnL': 'Total P/L · incl. unrealized',
+      'terminal.realizedPnL': 'Realized P/L · closed trades',
+      'terminal.profitFactor': 'Profit factor',
+      'terminal.maxDrawdown': 'Max drawdown',
+
+      // TerminalDashboard — trades summary line
+      'terminal.trades': 'trades',
+      'terminal.win': 'win',
+      'terminal.loss': 'loss',
+      'terminal.gross': 'gross',
+      'terminal.fees': 'fees',
+      'terminal.net': 'net',
+      'terminal.sharpePerTrade': 'sharpe/trade',
+      'terminal.avgWinLoss': 'avg win/loss',
+
+      // TerminalDashboard — config strip
+      'terminal.dashModel': 'model',
+      'terminal.dashStrategy': 'strategy',
+      'terminal.dashLev': 'lev',
+      'terminal.dashScan': 'scan',
+      'terminal.dashUniverse': 'universe',
+      'terminal.dashPositions': 'positions',
+      'terminal.nextCycle': 'next cycle',
+      'terminal.running': '● running',
+      'terminal.stopped': '○ stopped',
+      'terminal.cycle': 'cycle',
+
+      // TerminalDashboard — wallet banner
+      'terminal.aiWalletEmpty': 'AI fee wallet is out of USDC — decisions are failing.',
+      'terminal.aiWalletLow': 'AI fee wallet is low ({balance} USDC) — top up soon.',
+      'terminal.safeMode': 'Safe mode: AI failed repeatedly, no new positions are being opened.',
+      'terminal.depositWallet': 'Deposit Base USDC to the Claw402 wallet, the trader recovers automatically.',
+      'terminal.aiLiveTitle': 'Your AI is live.',
+      'terminal.aiLiveHint': 'It reads the whole market before acting — the first decision usually lands within a minute or two and will appear in the Execution Log below. You can stop it anytime from the Config page.',
+
+      // TerminalDashboard — orchestration
+      'terminal.orchestration': 'orchestration',
+      'terminal.orchestrationTitle': 'Orchestration topology',
+      'terminal.orchestrationSubtitle': 'Orchestration topology · net inflow → signal → execute → hold',
+      'terminal.flow': 'FLOW',
+      'terminal.signal': 'SIGNAL',
+      'terminal.decision': 'DECISION',
+      'terminal.execute': 'EXECUTE',
+      'terminal.hold': 'HOLD',
+
+      // TerminalDashboard — positions table
+      'terminal.positions': 'Positions',
+      'terminal.positionsLive': 'Current positions · live',
+      'terminal.nOpen': '{n} open',
+      'terminal.closeAll': 'close all',
+      'terminal.closing': 'closing…',
+      'terminal.colSymbol': 'symbol',
+      'terminal.colSideLev': 'side·lev',
+      'terminal.colEntry': 'entry',
+      'terminal.colSize': 'size',
+      'terminal.colPnl': 'PnL',
+      'terminal.colReturnPct': 'return%',
+      'terminal.long': 'long',
+      'terminal.short': 'short',
+      'terminal.close': 'close',
+      'terminal.noOpenPositions': 'No open positions.',
+
+      // TerminalDashboard — recent trades
+      'terminal.recentTrades': 'Recent trades',
+      'terminal.recentCloses': 'Recent closes · symbol/side/hold/pnl',
+      'terminal.colSide': 'side',
+      'terminal.colHold': 'hold',
+      'terminal.colClosed': 'closed',
+      'terminal.noClosedTrades': 'No closed trades yet.',
+
+      // TerminalDashboard — market net inflow
+      'terminal.marketNetInflow': 'Market net inflow',
+      'terminal.marketNetInflowSub': 'Market net inflow · {window} · Vergex',
+      'terminal.nMarkets': '{n} markets',
+
+      // TerminalDashboard — by symbol history
+      'terminal.bySymbol': 'By symbol',
+      'terminal.bySymbolHistory': 'By-symbol history · trades/win/pnl',
+      'terminal.nTradesNWin': '{n} trades · {win}% win',
+      'terminal.noSymbolHistory': 'No symbol history.',
+
+      // TerminalDashboard — edge profile header
+      'terminal.edgeProfile': 'Edge profile',
+      'terminal.edgeNetByHold': 'Net by hold time & side · after fees',
+
+      // SignalMatrix
+      'terminal.signalMatrixTitle': 'Signal matrix',
+      'terminal.signalMatrixVergex': 'Signal matrix · vergex',
+      'terminal.noSignalData': 'No signal data (claw402).',
+      'terminal.bullish': 'Bullish',
+      'terminal.bearish': 'Bearish',
+      'terminal.neutral': 'Neutral',
+      'terminal.clickToSwitch': 'click to switch ▸',
+      'terminal.nSignals': '{n} signals',
+
+      // OrderBook
+      'terminal.orderBookTitle': 'Order book',
+      'terminal.l2': 'L2',
+      'terminal.liveStatus': '● live',
+      'terminal.syncStatus': '○ sync',
+      'terminal.downStatus': '○ down',
+      'terminal.connecting': 'Connecting to Hyperliquid…',
+      'terminal.price': 'price',
+      'terminal.size': 'size',
+      'terminal.cumDollar': 'cum $',
+      'terminal.spread': 'spread',
+      'terminal.buyRatio': 'B',
+      'terminal.S': 'S',
+
+      // LiquidationMap
+      'terminal.costLiqMap': 'Cost / Liq map',
+      'terminal.longCost': 'Long cost',
+      'terminal.shortCost': 'Short cost',
+      'terminal.longLiq': 'Long liq',
+      'terminal.shortLiq': 'Short liq',
+      'terminal.mark': 'mark',
+      'terminal.positionsLabel': '{n} positions',
+      'terminal.liqLevels': '{n} liq levels',
+      'terminal.loadingHeatmap': 'Loading cost/liquidation map…',
+      'terminal.noHeatmap': 'No cost/liq heatmap for {symbol} (crypto / main-dex markets have none).',
+      'terminal.costLine': 'Cost line',
+      'terminal.liq': 'liq',
+      'terminal.costLiqHint': 'Cost/liq heatmap unavailable for crypto majors on Hyperliquid main-DEX.',
+
+      // KlineChart
+      'terminal.market': 'MARKET',
+      'terminal.klineLive': '{INTERVAL} · Live candles',
+      'terminal.candles': 'Live candles',
+      'terminal.nBarsInterval': '{n} bars · {INTERVAL}',
+      'terminal.bars': 'bars',
+      'terminal.loadingMarket': 'Loading market…',
+
+      // FlowMarkets
+      'terminal.noNetFlowData': 'No net-flow data (claw402 payment required).',
+      'terminal.colSymbolUpper': 'SYMBOL',
+      'terminal.colNet': '{win} NET',
+      'terminal.colBuySell': 'BUY/SELL',
+      'terminal.colTrades': 'TRADES',
+      'terminal.colPrice': 'PRICE',
+
+      // ExecutionLog
+      'terminal.executionLog': 'Execution log',
+      'terminal.nCyc': '{n} cyc',
+      'terminal.dash': '—',
+      'terminal.execLogSubtitle': 'Execution log · AI decisions & fills per cycle',
+      'terminal.ok': 'ok',
+      'terminal.throttle': 'throttle',
+      'terminal.risk': 'risk',
+      'terminal.noExecEvents': 'No execution events yet.',
+      'terminal.cycleN': 'CYCLE {n}',
+      'terminal.noAction': 'no action',
+      'terminal.nActions': '{n} action{s}',
+      'terminal.fault': 'FAULT',
+      'terminal.conf': 'conf',
+
+      // RiskRadar
+      'terminal.noRiskData': 'No live risk data.',
+      'terminal.riskRadar': 'Risk radar',
+      'terminal.riskRadarSubtitle': 'Risk radar · live position-risk check',
+      'terminal.flat': 'Flat',
+      'terminal.longLean': 'Long-lean',
+      'terminal.shortLean': 'Short-lean',
+      'terminal.balanced': 'Balanced',
+      'terminal.risky': 'Risky',
+      'terminal.high': 'High',
+      'terminal.safeStatus': 'Safe',
+      'terminal.tight': 'Tight',
+      'terminal.ample': 'Ample',
+      'terminal.concentrated': 'Concentrated',
+      'terminal.spreadLabel': 'Spread',
+      'terminal.calm': 'Calm',
+      'terminal.deep': 'Deep',
+      'terminal.caution': 'Caution',
+      'terminal.full': 'Full',
+      'terminal.room': 'Room',
+      'terminal.netExposure': 'NET EXPOSURE',
+      'terminal.leverage': 'LEVERAGE',
+      'terminal.marginUsed': 'MARGIN USED',
+      'terminal.concentration': 'CONCENTRATION',
+      'terminal.maxDown': 'MAX DRAWDOWN',
+      'terminal.positionsCap': 'POSITIONS',
+      'terminal.unrealizedPnl': 'UNREALIZED PNL',
+      'terminal.ofEquity': 'of equity',
+      'terminal.topPosShare': 'top-position share',
+      'terminal.peakDrawdown': 'peak drawdown',
+      'terminal.heldCap': 'held / cap',
+
+      // EdgeProfile
+      'terminal.noClosedEdge': 'No closed trades yet.',
+      'terminal.nTradesWinRate': '{n} trades · {win}% win',
+      'terminal.feesLabel': 'fees',
+      'terminal.lastNClosed': 'last {sample} closed',
+      'terminal.edgeConcentratesLong': 'edge concentrates in holds ≥ 1h ({longHolds} vs {shortHolds} under 1h)',
+      'terminal.edgeConcentratesShort': 'short holds outperform on this sample ({shortHolds} vs {longHolds} ≥ 1h)',
     },
   },
   zh: {
@@ -1750,8 +2013,8 @@ export const translations = {
 
     // Hero Section
     githubStarsInDays: '3 天内 2.5K+ GitHub Stars',
-    heroTitle1: 'Read the Market.',
-    heroTitle2: 'Write the Trade.',
+    heroTitle1: 'AI 交易',
+    heroTitle2: '全面进化',
     heroDescription:
       'NOFX 是 AI 交易的未来标准——一个开放、社区驱动的代理式交易操作系统。支持 Binance、Aster DEX 等交易所，自托管、多代理竞争，让 AI 为你自动决策、执行和优化交易。',
     poweredBy: '由 Aster DEX 和 Binance 提供支持。',
@@ -2148,6 +2411,68 @@ export const translations = {
       abort: '中止操作',
     },
 
+    // 落地页 - Hero Section
+    heroMarquee: 'NOFX AI 交易 • 自动化财富 • 去中心化智能 • PUNK 精神 •',
+    heroSubtitle:
+      '自主交易智能体。高频执行。机构级策略，为风险爱好者而生。',
+    heroStartBtn: '开始交易',
+    heroSourceBtn: '源代码',
+    heroSystemOnline: '系统在线',
+
+    // 落地页 - 品牌特性
+    brandFeatureTitle: '核心协议',
+    brandFeatureSubtitle: '规格说明',
+    brandFeatureDesc: '下一代算法交易基础设施。',
+    featureAiDrivenTitle: 'AI 驱动',
+    featureAiDrivenDesc:
+      '由先进大模型（Claude、GPT-4、DeepSeek）驱动，实时分析市场情绪和技术指标。',
+    featureAutonomousTitle: '全自动',
+    featureAutonomousDesc:
+      '全自动交易循环。从数据获取到订单执行，无需人工干预。',
+    featureSocialTitle: '社交交易',
+    featureSocialDesc:
+      '关注并复制 AI 交易员。专为后人类经济时代构建的社交层。',
+    featureNonCustodialTitle: '自管资产',
+    featureNonCustodialDesc:
+      '你的资金，你的私钥。通过 API Key 或去中心化钱包连接。我们不触碰你的资产。',
+    featureHighFreqTitle: '高频交易',
+    featureHighFreqDesc:
+      '事件驱动架构，每秒可处理数千个市场信号。',
+    featureOpenSourceTitle: '开源代码',
+    featureOpenSourceDesc:
+      '可审计的代码库，社区驱动的策略。在我们的核心之上构建你自己的交易员。',
+
+    // 落地页 - 部署中心
+    deploySectionTitle: '系统部署',
+    deployTitle: '即时',
+    deployInstantly: '部署',
+    deployDesc:
+      '在笔记本或服务器上一条命令即可安装全部。打开它输出的地址，创建账户，引导式启动带你大约 5 分钟内开始第一笔 AI 交易——约 13 美元即可开始。',
+    deployStep1: '注册 — 第一个账户拥有此实例。',
+    deployStep2:
+      '充值两个小钱包：$1+ 用于 AI 费用，$12+ 用于交易（带引导说明和二维码）。',
+    deployStep3: '按下启动 — AI 自主交易；随时可停止。',
+    deployFeature1Label: '一键安装',
+    deployFeature1Desc: 'Docker 处理所有依赖',
+    deployFeature2Label: '私钥留在本地',
+    deployFeature2Desc: '在你的机器上运行，私钥本地加密',
+
+    // 落地页 - Agent Grid
+    agentGridAlpha: '美股大盘龙头股动量突破策略',
+    agentGridBeta: '外汇趋势与宏观走势配置策略',
+    agentGridGamma: '加密市场动量篮子弹引擎策略',
+
+    // 落地页 - Brand Stats
+    brandStatsVolume: '交易量',
+    brandStatsAgents: 'AI 交易员',
+    brandStatsStrategies: '策略数',
+    brandStatsUptime: '在线率',
+
+    // Footer
+    footerDocs: '文档',
+    footerIssues: '问题反馈',
+    footerPR: '合并请求',
+
     // Advanced Chart
     advancedChart: {
       updating: '更新中...',
@@ -2393,6 +2718,207 @@ export const translations = {
       close: '关闭',
       yes: '是',
       no: '否',
+
+      // ═══════════════════════════════════════════════════════════════
+      // Terminal Dashboard
+      // ═══════════════════════════════════════════════════════════════
+
+      // TerminalDashboard — metric row
+      'terminal.equity': '权益',
+      'terminal.totalPnL': '总盈亏 · 含未实现',
+      'terminal.realizedPnL': '已实现盈亏 · 已平仓',
+      'terminal.profitFactor': '盈利因子',
+      'terminal.maxDrawdown': '最大回撤',
+
+      // TerminalDashboard — trades summary line
+      'terminal.trades': '交易',
+      'terminal.win': '胜',
+      'terminal.loss': '负',
+      'terminal.gross': '毛利',
+      'terminal.fees': '手续费',
+      'terminal.net': '净利',
+      'terminal.sharpePerTrade': '夏普/笔',
+      'terminal.avgWinLoss': '均盈/均亏',
+
+      // TerminalDashboard — config strip
+      'terminal.dashModel': '模型',
+      'terminal.dashStrategy': '策略',
+      'terminal.dashLev': '杠杆',
+      'terminal.dashScan': '扫描',
+      'terminal.dashUniverse': '品种数',
+      'terminal.dashPositions': '持仓',
+      'terminal.nextCycle': '下轮',
+      'terminal.running': '● 运行中',
+      'terminal.stopped': '○ 已停止',
+      'terminal.cycle': '轮次',
+
+      // TerminalDashboard — wallet banner
+      'terminal.aiWalletEmpty': 'AI 手续费钱包已无 USDC — 决策失败。',
+      'terminal.aiWalletLow': 'AI 手续费钱包余额不足（{balance} USDC）— 请尽快充值。',
+      'terminal.safeMode': '安全模式：AI 多次失败，不再开新仓。',
+      'terminal.depositWallet': '向 Claw402 钱包充值 Base 链 USDC，交易员将自动恢复。',
+      'terminal.aiLiveTitle': 'AI 已上线。',
+      'terminal.aiLiveHint': '它先读取全市场再行动 — 首轮决策通常在一至两分钟内出现在下方执行日志中，可随时在配置页面停止。',
+
+      // TerminalDashboard — orchestration
+      'terminal.orchestration': '编排',
+      'terminal.orchestrationTitle': '编排拓扑',
+      'terminal.orchestrationSubtitle': '编排拓扑 · 资金流入 → 信号 → 执行 → 持仓',
+      'terminal.flow': '资金流',
+      'terminal.signal': '信号',
+      'terminal.decision': '决策',
+      'terminal.execute': '执行',
+      'terminal.hold': '持仓',
+
+      // TerminalDashboard — positions table
+      'terminal.positions': '持仓',
+      'terminal.positionsLive': '当前持仓 · 实时',
+      'terminal.nOpen': '{n} 个持仓',
+      'terminal.closeAll': '全部平仓',
+      'terminal.closing': '平仓中…',
+      'terminal.colSymbol': '品种',
+      'terminal.colSideLev': '方向·杠杆',
+      'terminal.colEntry': '开仓价',
+      'terminal.colSize': '仓位',
+      'terminal.colPnl': '盈亏',
+      'terminal.colReturnPct': '收益率%',
+      'terminal.long': '多',
+      'terminal.short': '空',
+      'terminal.close': '平仓',
+      'terminal.noOpenPositions': '暂无持仓。',
+
+      // TerminalDashboard — recent trades
+      'terminal.recentTrades': '最近交易',
+      'terminal.recentCloses': '最近平仓 · 品种/方向/持有/盈亏',
+      'terminal.colSide': '方向',
+      'terminal.colHold': '持有',
+      'terminal.colClosed': '平仓',
+      'terminal.noClosedTrades': '暂无已平仓交易。',
+
+      // TerminalDashboard — market net inflow
+      'terminal.marketNetInflow': '市场净流入',
+      'terminal.marketNetInflowSub': '市场净流入 · {window} · Vergex',
+      'terminal.nMarkets': '{n} 个市场',
+
+      // TerminalDashboard — by symbol history
+      'terminal.bySymbol': '按品种',
+      'terminal.bySymbolHistory': '品种历史 · 交易数/胜率/盈亏',
+      'terminal.nTradesNWin': '{n} 笔 · {win}% 胜率',
+      'terminal.noSymbolHistory': '暂无品种历史。',
+
+      // TerminalDashboard — edge profile header
+      'terminal.edgeProfile': '优势分析',
+      'terminal.edgeNetByHold': '按持仓时长与方向的净利润（扣费后）',
+
+      // SignalMatrix
+      'terminal.signalMatrixTitle': '信号矩阵',
+      'terminal.signalMatrixVergex': '信号矩阵 · vergex',
+      'terminal.noSignalData': '无信号数据 (claw402)。',
+      'terminal.bullish': '看涨',
+      'terminal.bearish': '看跌',
+      'terminal.neutral': '中性',
+      'terminal.clickToSwitch': '点击切换 ▸',
+      'terminal.nSignals': '{n} 个信号',
+
+      // OrderBook
+      'terminal.orderBookTitle': '订单簿',
+      'terminal.l2': 'L2',
+      'terminal.liveStatus': '● 实时',
+      'terminal.syncStatus': '○ 同步中',
+      'terminal.downStatus': '○ 断开',
+      'terminal.connecting': '正在连接 Hyperliquid…',
+      'terminal.price': '价格',
+      'terminal.size': '挂单量',
+      'terminal.cumDollar': '累计 $',
+      'terminal.spread': '价差',
+      'terminal.buyRatio': '买',
+      'terminal.S': '卖',
+
+      // LiquidationMap
+      'terminal.costLiqMap': '成本/清算图',
+      'terminal.longCost': '多头成本',
+      'terminal.shortCost': '空头成本',
+      'terminal.longLiq': '多头清算',
+      'terminal.shortLiq': '空头清算',
+      'terminal.mark': '标记价',
+      'terminal.positionsLabel': '{n} 个持仓',
+      'terminal.liqLevels': '{n} 个清算位',
+      'terminal.loadingHeatmap': '正在加载成本/清算图…',
+      'terminal.noHeatmap': '{symbol} 暂无成本/清算热力图（加密币/主 DEX 市场无此数据）。',
+      'terminal.costLine': '成本线',
+      'terminal.liq': '清算',
+      'terminal.costLiqHint': 'Hyperliquid 主 DEX 上的大盘加密币无成本/清算热力图。',
+
+      // KlineChart
+      'terminal.market': '市场',
+      'terminal.klineLive': '{INTERVAL} · 实时 K 线',
+      'terminal.candles': '实时 K 线',
+      'terminal.nBarsInterval': '{n} 根 K 线 · {INTERVAL}',
+      'terminal.bars': '根 K 线',
+      'terminal.loadingMarket': '正在加载市场…',
+
+      // FlowMarkets
+      'terminal.noNetFlowData': '无净流入数据（需要 claw402 付费）。',
+      'terminal.colSymbolUpper': '品种',
+      'terminal.colNet': '{win} 净流入',
+      'terminal.colBuySell': '买/卖',
+      'terminal.colTrades': '交易数',
+      'terminal.colPrice': '价格',
+
+      // ExecutionLog
+      'terminal.executionLog': '执行日志',
+      'terminal.nCyc': '{n} 轮',
+      'terminal.dash': '—',
+      'terminal.execLogSubtitle': '执行日志 · AI 决策与成交（按轮次）',
+      'terminal.ok': '成功',
+      'terminal.throttle': '限频',
+      'terminal.risk': '风险',
+      'terminal.noExecEvents': '暂无执行事件。',
+      'terminal.cycleN': '{n} 轮',
+      'terminal.noAction': '无操作',
+      'terminal.nActions': '{n} 项操作',
+      'terminal.fault': '故障',
+      'terminal.conf': '置信',
+
+      // RiskRadar
+      'terminal.noRiskData': '暂无实时风险数据。',
+      'terminal.riskRadar': '风险雷达',
+      'terminal.riskRadarSubtitle': '风险雷达 · 实时持仓风险检测',
+      'terminal.flat': '空仓',
+      'terminal.longLean': '偏多',
+      'terminal.shortLean': '偏空',
+      'terminal.balanced': '均衡',
+      'terminal.risky': '危险',
+      'terminal.high': '偏高',
+      'terminal.safeStatus': '安全',
+      'terminal.tight': '偏紧',
+      'terminal.ample': '充裕',
+      'terminal.concentrated': '集中',
+      'terminal.spreadLabel': '分散',
+      'terminal.calm': '平静',
+      'terminal.deep': '深度',
+      'terminal.caution': '警示',
+      'terminal.full': '已满',
+      'terminal.room': '有余',
+      'terminal.netExposure': '净敞口',
+      'terminal.leverage': '杠杆',
+      'terminal.marginUsed': '保证金',
+      'terminal.concentration': '集中度',
+      'terminal.maxDown': '最大回撤',
+      'terminal.positionsCap': '持仓数',
+      'terminal.unrealizedPnl': '未实现盈亏',
+      'terminal.ofEquity': '占权益',
+      'terminal.topPosShare': '最大仓位占比',
+      'terminal.peakDrawdown': '峰值回撤',
+      'terminal.heldCap': '持仓数/上限',
+
+      // EdgeProfile
+      'terminal.noClosedEdge': '暂无已平仓交易。',
+      'terminal.nTradesWinRate': '{n} 笔 · {win}% 胜率',
+      'terminal.feesLabel': '手续费',
+      'terminal.lastNClosed': '最近 {sample} 笔已平仓 · ',
+      'terminal.edgeConcentratesLong': '优势集中在持仓 ≥ 1h（长 {longHolds} / 短 {shortHolds}）',
+      'terminal.edgeConcentratesShort': '短持仓在此样本中表现更佳（短 {shortHolds} / 长 {longHolds}）',
     },
   },
   id: {
@@ -3520,6 +4046,207 @@ export const translations = {
       close: 'Tutup',
       yes: 'Ya',
       no: 'Tidak',
+
+      // ═══════════════════════════════════════════════════════════════
+      // Terminal Dashboard
+      // ═══════════════════════════════════════════════════════════════
+
+      // TerminalDashboard — metric row
+      'terminal.equity': 'Ekuitas',
+      'terminal.totalPnL': 'Total L/R · termasuk unrealized',
+      'terminal.realizedPnL': 'L/R Realized · transaksi tutup',
+      'terminal.profitFactor': 'Profit factor',
+      'terminal.maxDrawdown': 'Max drawdown',
+
+      // TerminalDashboard — trades summary line
+      'terminal.trades': 'transaksi',
+      'terminal.win': 'menang',
+      'terminal.loss': 'kalah',
+      'terminal.gross': 'kotor',
+      'terminal.fees': 'biaya',
+      'terminal.net': 'bersih',
+      'terminal.sharpePerTrade': 'sharpe/transaksi',
+      'terminal.avgWinLoss': 'rata-rata menang/kalah',
+
+      // TerminalDashboard — config strip
+      'terminal.dashModel': 'model',
+      'terminal.dashStrategy': 'strategi',
+      'terminal.dashLev': 'lev',
+      'terminal.dashScan': 'pindai',
+      'terminal.dashUniverse': 'universe',
+      'terminal.dashPositions': 'posisi',
+      'terminal.nextCycle': 'siklus berikutnya',
+      'terminal.running': '● berjalan',
+      'terminal.stopped': '○ berhenti',
+      'terminal.cycle': 'siklus',
+
+      // TerminalDashboard — wallet banner
+      'terminal.aiWalletEmpty': 'Dompet biaya AI kehabisan USDC — keputusan gagal.',
+      'terminal.aiWalletLow': 'Dompet biaya AI rendah ({balance} USDC) — segera isi ulang.',
+      'terminal.safeMode': 'Mode aman: AI gagal berulang kali, tidak ada posisi baru yang dibuka.',
+      'terminal.depositWallet': 'Setor USDC Base ke dompet Claw402, trader akan pulih secara otomatis.',
+      'terminal.aiLiveTitle': 'AI Anda sedang live.',
+      'terminal.aiLiveHint': 'AI membaca seluruh pasar sebelum bertindak — keputusan pertama biasanya muncul dalam satu hingga dua menit di Log Eksekusi di bawah. Anda bisa menghentikannya kapan saja dari halaman Konfigurasi.',
+
+      // TerminalDashboard — orchestration
+      'terminal.orchestration': 'orkestrasi',
+      'terminal.orchestrationTitle': 'Topologi orkestrasi',
+      'terminal.orchestrationSubtitle': 'Topologi orkestrasi · arus masuk → sinyal → eksekusi → hold',
+      'terminal.flow': 'ARUS',
+      'terminal.signal': 'SINYAL',
+      'terminal.decision': 'KEPUTUSAN',
+      'terminal.execute': 'EKSEKUSI',
+      'terminal.hold': 'HOLD',
+
+      // TerminalDashboard — positions table
+      'terminal.positions': 'Posisi',
+      'terminal.positionsLive': 'Posisi saat ini · live',
+      'terminal.nOpen': '{n} terbuka',
+      'terminal.closeAll': 'tutup semua',
+      'terminal.closing': 'menutup…',
+      'terminal.colSymbol': 'simbol',
+      'terminal.colSideLev': 'arah·lev',
+      'terminal.colEntry': 'entry',
+      'terminal.colSize': 'ukuran',
+      'terminal.colPnl': 'L/R',
+      'terminal.colReturnPct': 'return%',
+      'terminal.long': 'long',
+      'terminal.short': 'short',
+      'terminal.close': 'tutup',
+      'terminal.noOpenPositions': 'Tidak ada posisi terbuka.',
+
+      // TerminalDashboard — recent trades
+      'terminal.recentTrades': 'Transaksi terbaru',
+      'terminal.recentCloses': 'Tutupan terbaru · simbol/arah/tahan/L-R',
+      'terminal.colSide': 'arah',
+      'terminal.colHold': 'tahan',
+      'terminal.colClosed': 'ditutup',
+      'terminal.noClosedTrades': 'Belum ada transaksi yang ditutup.',
+
+      // TerminalDashboard — market net inflow
+      'terminal.marketNetInflow': 'Arus masuk bersih pasar',
+      'terminal.marketNetInflowSub': 'Arus masuk bersih pasar · {window} · Vergex',
+      'terminal.nMarkets': '{n} pasar',
+
+      // TerminalDashboard — by symbol history
+      'terminal.bySymbol': 'Per simbol',
+      'terminal.bySymbolHistory': 'Riwayat per simbol · transaksi/menang/L-R',
+      'terminal.nTradesNWin': '{n} transaksi · {win}% menang',
+      'terminal.noSymbolHistory': 'Belum ada riwayat simbol.',
+
+      // TerminalDashboard — edge profile header
+      'terminal.edgeProfile': 'Profil edge',
+      'terminal.edgeNetByHold': 'Net per durasi tahan & arah · setelah biaya',
+
+      // SignalMatrix
+      'terminal.signalMatrixTitle': 'Matriks sinyal',
+      'terminal.signalMatrixVergex': 'Matriks sinyal · vergex',
+      'terminal.noSignalData': 'Tidak ada data sinyal (claw402).',
+      'terminal.bullish': 'Bullish',
+      'terminal.bearish': 'Bearish',
+      'terminal.neutral': 'Netral',
+      'terminal.clickToSwitch': 'klik untuk ganti ▸',
+      'terminal.nSignals': '{n} sinyal',
+
+      // OrderBook
+      'terminal.orderBookTitle': 'Order book',
+      'terminal.l2': 'L2',
+      'terminal.liveStatus': '● live',
+      'terminal.syncStatus': '○ sinkron',
+      'terminal.downStatus': '○ mati',
+      'terminal.connecting': 'Menghubungkan ke Hyperliquid…',
+      'terminal.price': 'harga',
+      'terminal.size': 'ukuran',
+      'terminal.cumDollar': 'kumulatif $',
+      'terminal.spread': 'spread',
+      'terminal.buyRatio': 'B',
+      'terminal.S': 'S',
+
+      // LiquidationMap
+      'terminal.costLiqMap': 'Peta biaya / likuidasi',
+      'terminal.longCost': 'Biaya long',
+      'terminal.shortCost': 'Biaya short',
+      'terminal.longLiq': 'Likuidasi long',
+      'terminal.shortLiq': 'Likuidasi short',
+      'terminal.mark': 'tanda',
+      'terminal.positionsLabel': '{n} posisi',
+      'terminal.liqLevels': '{n} level likuidasi',
+      'terminal.loadingHeatmap': 'Memuat peta biaya/likuidasi…',
+      'terminal.noHeatmap': 'Belum ada peta biaya/likuidasi untuk {symbol} (pasar kripto/DEX utama tidak punya).',
+      'terminal.costLine': 'Garis biaya',
+      'terminal.liq': 'likuidasi',
+      'terminal.costLiqHint': 'Peta biaya/likuidasi tidak tersedia untuk kripto besar di Hyperliquid DEX utama.',
+
+      // KlineChart
+      'terminal.market': 'PASAR',
+      'terminal.klineLive': '{INTERVAL} · Live candles',
+      'terminal.candles': 'Live candles',
+      'terminal.nBarsInterval': '{n} candle · {INTERVAL}',
+      'terminal.bars': 'candle',
+      'terminal.loadingMarket': 'Memuat pasar…',
+
+      // FlowMarkets
+      'terminal.noNetFlowData': 'Tidak ada data arus masuk (claw402 perlu pembayaran).',
+      'terminal.colSymbolUpper': 'SIMBOL',
+      'terminal.colNet': '{win} NET',
+      'terminal.colBuySell': 'BELI/JUAL',
+      'terminal.colTrades': 'TRANSAKSI',
+      'terminal.colPrice': 'HARGA',
+
+      // ExecutionLog
+      'terminal.executionLog': 'Log eksekusi',
+      'terminal.nCyc': '{n} siklus',
+      'terminal.dash': '—',
+      'terminal.execLogSubtitle': 'Log eksekusi · keputusan & fill AI per siklus',
+      'terminal.ok': 'ok',
+      'terminal.throttle': 'throttle',
+      'terminal.risk': 'risiko',
+      'terminal.noExecEvents': 'Belum ada kejadian eksekusi.',
+      'terminal.cycleN': 'SIKLUS {n}',
+      'terminal.noAction': 'tidak ada aksi',
+      'terminal.nActions': '{n} aksi',
+      'terminal.fault': 'KERUSAKAN',
+      'terminal.conf': 'conf',
+
+      // RiskRadar
+      'terminal.noRiskData': 'Tidak ada data risiko live.',
+      'terminal.riskRadar': 'Radar risiko',
+      'terminal.riskRadarSubtitle': 'Radar risiko · cek posisi live',
+      'terminal.flat': 'Flat',
+      'terminal.longLean': 'Condong long',
+      'terminal.shortLean': 'Condong short',
+      'terminal.balanced': 'Seimbang',
+      'terminal.risky': 'Berbahaya',
+      'terminal.high': 'Tinggi',
+      'terminal.safeStatus': 'Aman',
+      'terminal.tight': 'Ketat',
+      'terminal.ample': 'Longgar',
+      'terminal.concentrated': 'Terkonsentrasi',
+      'terminal.spreadLabel': 'Tersebar',
+      'terminal.calm': 'Tenang',
+      'terminal.deep': 'Dalam',
+      'terminal.caution': 'Hati-hati',
+      'terminal.full': 'Penuh',
+      'terminal.room': 'Tersisa',
+      'terminal.netExposure': 'EKSPOSUR BERSIH',
+      'terminal.leverage': 'LEVERAGE',
+      'terminal.marginUsed': 'MARGIN DIGUNAKAN',
+      'terminal.concentration': 'KONSENTRASI',
+      'terminal.maxDown': 'DRAWDOWN MAKS',
+      'terminal.positionsCap': 'POSISI',
+      'terminal.unrealizedPnl': 'L/R BELUM TEREALISASI',
+      'terminal.ofEquity': 'dari ekuitas',
+      'terminal.topPosShare': 'bagian posisi atas',
+      'terminal.peakDrawdown': 'drawdown puncak',
+      'terminal.heldCap': 'dipegang / batas',
+
+      // EdgeProfile
+      'terminal.noClosedEdge': 'Belum ada transaksi yang ditutup.',
+      'terminal.nTradesWinRate': '{n} transaksi · {win}% menang',
+      'terminal.feesLabel': 'biaya',
+      'terminal.lastNClosed': '{sample} transaksi terakhir · ',
+      'terminal.edgeConcentratesLong': 'edge terkonsentrasi pada tahan ≥ 1j ({longHolds} vs {shortHolds} di bawah 1j)',
+      'terminal.edgeConcentratesShort': 'tahan pendek mengungguli dalam sample ini ({shortHolds} vs {longHolds} ≥ 1j)',
     },
   },
 }

@@ -121,22 +121,22 @@ export function TerminalDashboard({
 
   async function closePositionRow(symbol: string, side: 'LONG' | 'SHORT') {
     if (!traderId || closing) return
-    const ok = await confirmToast(`Market-close ${symbol} ${side}?`, {
-      title: 'Close position',
-      okText: 'Close',
-      cancelText: 'Cancel',
+    const ok = await confirmToast(`是否市价平仓 ${symbol} ${side}？`, {
+      title: '平仓',
+      okText: '确认平仓',
+      cancelText: '取消',
     })
     if (!ok) return
     setClosing(symbol)
     try {
       await api.closePosition(traderId, symbol, side)
-      notify.success(`${symbol} ${side} closed`)
+      notify.success(`${symbol} ${side} 已平仓`)
       await Promise.all([
         mutate(`positions-${traderId}`),
         mutate(`account-${traderId}`),
       ])
     } catch (err) {
-      notify.error(err instanceof Error ? err.message : 'Close failed')
+      notify.error(err instanceof Error ? err.message : '平仓失败')
     } finally {
       setClosing(null)
     }
@@ -145,8 +145,8 @@ export function TerminalDashboard({
   async function closeAllPositions(open: Position[]) {
     if (!traderId || closing || open.length === 0) return
     const ok = await confirmToast(
-      `Market-close ALL ${open.length} open positions?`,
-      { title: 'Flatten book', okText: 'Close all', cancelText: 'Cancel' }
+      `是否市价全部平仓 ${open.length} 个持仓？`,
+      { title: '全部平仓', okText: '全部平仓', cancelText: '取消' }
     )
     if (!ok) return
     setClosing('__all__')
@@ -501,7 +501,7 @@ export function TerminalDashboard({
             layers={[
               {
                 key: 'flow',
-                title: 'FLOW',
+                title: '资金流',
                 zh: 'flow',
                 items: [
                   ...(flow?.data?.inflow ?? []).map((i) => ({ symbol: i.symbol, dir: 'long' as const })),
@@ -510,7 +510,7 @@ export function TerminalDashboard({
               },
               {
                 key: 'signal',
-                title: 'SIGNAL',
+                title: '信号',
                 zh: 'signal',
                 items: (signalRank?.items ?? []).map((s) => ({
                   symbol: s.symbol,
@@ -520,7 +520,7 @@ export function TerminalDashboard({
               {
                 // every candidate the AI actually judged this cycle (its full decision set)
                 key: 'decision',
-                title: 'DECISION',
+                title: '决策',
                 zh: 'decision',
                 items: candidateCoins.map((c) => ({ symbol: c, dir: dirFor(c) })),
               },
@@ -529,7 +529,7 @@ export function TerminalDashboard({
                 // EXECUTE mirrors the live book (this cycle's fills plus anything
                 // still open from prior cycles) and flows straight into HOLD
                 key: 'exec',
-                title: 'EXECUTE',
+                title: '执行',
                 zh: 'execute',
                 items: (positions ?? []).map((p) => ({
                   symbol: p.symbol,
@@ -538,7 +538,7 @@ export function TerminalDashboard({
               },
               {
                 key: 'hold',
-                title: 'HOLD',
+                title: '持有',
                 zh: 'hold',
                 items: (positions ?? []).map((p) => ({
                   symbol: p.symbol,
@@ -617,7 +617,7 @@ export function TerminalDashboard({
                               type="button"
                               onClick={() => void closePositionRow(p.symbol, long ? 'LONG' : 'SHORT')}
                               disabled={closing !== null}
-                              title={`Close ${p.symbol}`}
+                              title={`平仓 ${p.symbol}`}
                               className="tm-mono"
                               style={{
                                 background: 'transparent',

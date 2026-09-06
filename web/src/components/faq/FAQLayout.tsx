@@ -56,7 +56,7 @@ export function FAQLayout() {
                   FAQ
                 </h1>
                 <p className="mt-1 font-mono text-xs uppercase tracking-[0.14em] text-nofx-text-muted">
-                  {totalItems} answers · wallets · launch · trading · self-hosting
+                  {totalItems} 个答案 · 钱包 · 启动 · 交易 · 自托管
                 </p>
               </div>
             </div>
@@ -88,13 +88,13 @@ export function FAQLayout() {
             ) : (
               <div className="rounded-xl border border-nofx-gold/20 bg-nofx-bg-lighter py-16 text-center">
                 <p className="font-mono text-sm text-nofx-text-muted">
-                  No matching questions for “{searchTerm}”.
+                  没有找到与“{searchTerm}”相关的问题。
                 </p>
                 <button
                   onClick={() => setSearchTerm('')}
                   className="mt-4 rounded-lg border border-nofx-gold/30 bg-nofx-gold/10 px-5 py-2 font-mono text-xs font-bold uppercase tracking-[0.12em] text-nofx-gold hover:bg-nofx-gold/20"
                 >
-                  Clear search
+                  清除搜索
                 </button>
               </div>
             )}
@@ -104,11 +104,10 @@ export function FAQLayout() {
         {/* still stuck */}
         <div className="mt-12 rounded-xl border border-nofx-gold/20 bg-nofx-bg-lighter p-6 text-center md:p-8">
           <h3 className="font-mono text-sm font-bold uppercase tracking-[0.16em] text-nofx-text">
-            Still have questions?
+            还有其他问题？
           </h3>
           <p className="mt-2 text-sm text-nofx-text-muted">
-            Ask in the community or open an issue — both are answered by the
-            people building NOFX.
+            在社区提问或提交 issue，都由构建 NOFX 的人回答。
           </p>
           <div className="mt-5 flex items-center justify-center gap-3">
             <a
@@ -117,7 +116,7 @@ export function FAQLayout() {
               rel="noopener noreferrer"
               className="rounded-lg border border-[rgba(26,24,19,0.14)] bg-nofx-bg-deeper px-5 py-2.5 font-mono text-xs font-bold uppercase tracking-[0.12em] text-nofx-text hover:border-nofx-gold/40"
             >
-              GitHub
+               GitHub
             </a>
             <a
               href="https://t.me/nofx_dev_community"
@@ -125,7 +124,7 @@ export function FAQLayout() {
               rel="noopener noreferrer"
               className="rounded-lg bg-nofx-gold px-5 py-2.5 font-mono text-xs font-bold uppercase tracking-[0.12em] text-white hover:bg-nofx-accent"
             >
-              Telegram community
+              Telegram 社区
             </a>
           </div>
         </div>

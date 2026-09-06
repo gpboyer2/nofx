@@ -4,33 +4,33 @@ import { Terminal, Cpu, Share2, Shield, Activity, Code } from 'lucide-react'
 const features = [
     {
         icon: Terminal,
-        title: "AI DRIVEN",
-        description: "Powered by advanced LLMs (Claude, GPT-4, DeepSeek) to analyze market sentiment and technicals in real-time."
+        title: "AI 驱动",
+        description: "基于先进大语言模型（Claude、GPT-4、DeepSeek）实时分析市场情绪与技术指标。"
     },
     {
         icon: Cpu,
-        title: "AUTONOMOUS",
-        description: "Fully automated trading loops. From data ingestion to order execution without human intervention."
+        title: "全自动化",
+        description: "全自动交易闭环，从数据获取到订单执行，无需人工干预。"
     },
     {
         icon: Share2,
-        title: "PUNK SOCIAL",
-        description: "Follow and copy AI traders. A social layer built for the post-human economy."
+        title: "社交交易",
+        description: "关注并跟单 AI 交易员，为新时代打造的社交交易层。"
     },
     {
         icon: Shield,
-        title: "NON-CUSTODIAL",
-        description: "Your funds, your keys. Connect via API keys or decentralized wallets. We never touch your assets."
+        title: "非托管",
+        description: "资金在您自己手中。通过 API Key 或去中心化钱包连接。我们从不触碰您的资产。"
     },
     {
         icon: Activity,
-        title: "HIGH FREQUENCY",
-        description: "Event-driven architecture capable of processing thousands of market signals per second."
+        title: "高频交易",
+        description: "事件驱动架构，每秒可处理数千个市场信号。"
     },
     {
         icon: Code,
-        title: "OPEN SOURCE",
-        description: "Auditable codebase. Community driven strategies. Build your own trader upon our core."
+        title: "开源",
+        description: "代码可审计，社区共建策略。基于我们的核心构建您自己的交易机器人。"
     }
 ]
 
@@ -41,10 +41,10 @@ export default function BrandFeatures() {
 
                 <div className="mb-16 border-l-4 border-nofx-gold pl-6">
                     <h2 className="text-4xl md:text-5xl font-black text-nofx-text uppercase tracking-tighter mb-4">
-                        Core Protocol <span className="text-nofx-text-muted">Specs</span>
+                        核心协议 <span className="text-nofx-text-muted">技术规格</span>
                     </h2>
                     <p className="text-xl text-nofx-text-muted font-mono">
-                        Next generation infrastructure for algorithmic dominance.
+                        下一代算法交易基础设施。
                     </p>
                 </div>
 

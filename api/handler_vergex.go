@@ -32,7 +32,7 @@ func (s *Server) handleVergexDirectionChangeCurrent(c *gin.Context) {
 	}
 	symbol := strings.TrimSpace(c.Query("symbol"))
 	if symbol == "" {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "symbol is required"})
+		c.JSON(http.StatusBadRequest, gin.H{"error": "缺少 symbol 参数"})
 		return
 	}
 	body, err := client.GetDirectionChangeCurrent(c.Request.Context(), symbol)
@@ -51,7 +51,7 @@ func (s *Server) handleVergexDirectionChangeHistory(c *gin.Context) {
 	}
 	symbol := strings.TrimSpace(c.Query("symbol"))
 	if symbol == "" {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "symbol is required"})
+		c.JSON(http.StatusBadRequest, gin.H{"error": "缺少 symbol 参数"})
 		return
 	}
 	body, err := client.GetDirectionChangeHistory(
@@ -114,7 +114,7 @@ func (s *Server) handleVergexFlowMarkets(c *gin.Context) {
 func (s *Server) newVergexClientForRequest(c *gin.Context) (*vergex.Client, bool) {
 	userID := c.GetString("user_id")
 	if userID == "" {
-		c.JSON(http.StatusUnauthorized, gin.H{"error": "Unauthorized"})
+		c.JSON(http.StatusUnauthorized, gin.H{"error": "未授权"})
 		return nil, false
 	}
 	walletKey, err := s.resolveStrategyDataWalletKey(userID, c.Query("ai_model_id"))
@@ -123,7 +123,7 @@ func (s *Server) newVergexClientForRequest(c *gin.Context) (*vergex.Client, bool
 		return nil, false
 	}
 	if walletKey == "" {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "claw402 wallet is not configured"})
+		c.JSON(http.StatusBadRequest, gin.H{"error": "claw402 钱包未配置"})
 		return nil, false
 	}
 	client, err := vergex.NewClient("", walletKey, &logger.MCPLogger{})

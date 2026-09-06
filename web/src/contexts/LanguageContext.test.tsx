@@ -8,11 +8,22 @@ function LanguageProbe() {
   return <div>{language}</div>
 }
 
-describe('English-only language policy', () => {
+describe('Bilingual language support', () => {
   beforeEach(() => localStorage.clear())
 
-  it('ignores stale Chinese browser state and normalizes storage to English', async () => {
-    localStorage.setItem('language', 'zh')
+  it('defaults to Chinese when no language is stored', async () => {
+    render(
+      <LanguageProvider>
+        <LanguageProbe />
+      </LanguageProvider>
+    )
+
+    expect(screen.getByText('zh')).toBeTruthy()
+    await waitFor(() => expect(localStorage.getItem('language')).toBe('zh'))
+  })
+
+  it('respects stored language preference', async () => {
+    localStorage.setItem('language', 'en')
 
     render(
       <LanguageProvider>
@@ -21,17 +32,16 @@ describe('English-only language policy', () => {
     )
 
     expect(screen.getByText('en')).toBeTruthy()
-    await waitFor(() => expect(localStorage.getItem('language')).toBe('en'))
   })
 
-  it('does not render a language switcher anywhere in the English-only header', () => {
+  it('does not render a language switcher in the header', () => {
     render(
       <LanguageProvider>
         <Header simple />
       </LanguageProvider>
     )
 
-    expect(screen.queryByRole('button', { name: 'Chinese' })).toBeNull()
+    expect(screen.queryByRole('button', { name: '中文' })).toBeNull()
     expect(screen.queryByRole('button', { name: 'EN' })).toBeNull()
     expect(screen.queryByRole('button', { name: 'ID' })).toBeNull()
   })

@@ -14,45 +14,45 @@ import { ROUTES } from '../../router/paths'
 
 const setupSteps = [
   {
-    title: 'Create your NOFX account',
+    title: '创建你的 NOFX 账户',
     detail:
-      'Your account keeps the Autopilot configuration, wallet authorization state, and trading dashboard in one place.',
+      '你的账户集中保存 Autopilot 配置、钱包授权状态和交易面板。',
     icon: KeyRound,
-    action: 'Create account',
+    action: '创建账户',
     to: ROUTES.register,
   },
   {
-    title: 'Fund the AI fee wallet',
+    title: '充值 AI 费用钱包',
     detail:
-      'NOFX prepares a Base USDC wallet for Claw402.ai data and model calls. This wallet is separate from trading collateral.',
+      'NOFX 为 Claw402.ai 数据和模型调用准备了一个 Base USDC 钱包，该钱包与交易保证金相互独立。',
     icon: CircleDollarSign,
-    action: 'Open deposit QR',
+    action: '打开充值二维码',
     to: ROUTES.login,
     returnUrl: `${ROUTES.traders}?setup=claw402`,
   },
   {
-    title: 'Authorize Hyperliquid',
+    title: '授权 Hyperliquid',
     detail:
-      'Connect your trading wallet, approve the NOFX Agent, and approve the builder fee. Funds remain in your Hyperliquid account.',
+      '连接你的交易钱包，批准 NOFX Agent 和构建手续费。资金始终保留在你的 Hyperliquid 账户中。',
     icon: Wallet,
-    action: 'Connect exchange',
+    action: '连接交易所',
     to: ROUTES.login,
     returnUrl: `${ROUTES.traders}?setup=hyperliquid`,
   },
   {
-    title: 'Deposit trading USDC',
+    title: '充值交易 USDC',
     detail:
-      'Add USDC on Hyperliquid, then start NOFX Autopilot. The strategy is created and launched automatically.',
+      '在 Hyperliquid 上充值 USDC，然后启动 NOFX Autopilot。策略会自动创建并启动。',
     icon: Zap,
-    action: 'Open Hyperliquid',
+    action: '打开 Hyperliquid',
     href: 'https://app.hyperliquid.xyz/',
   },
 ]
 
 const pipeline = [
-  'Read the live Claw402.ai board, with US stocks prioritized before crypto.',
-  'Load current direction, direction history, and cost/liquidation structure for each candidate.',
-  'Confirm with raw OHLCV candles, then trade full-size 10x only when the setup is strong enough.',
+  '读取 Claw402.ai 实时看板，美股优先于加密货币展示。',
+  '加载每个候选标的的方向、方向历史以及成本/清算结构。',
+  '用原始 OHLCV K 线进行确认，只有当信号足够强时才全仓 10 倍交易。',
 ]
 
 export function TraderLaunchGuestPage() {
@@ -66,12 +66,10 @@ export function TraderLaunchGuestPage() {
               NOFX Autopilot
             </div>
             <h1 className="max-w-3xl text-4xl font-bold tracking-tight text-nofx-text md:text-5xl">
-              One strategy. Four setup steps. Then it trades.
+              一个策略，四步配置，然后开始交易。
             </h1>
             <p className="mt-5 max-w-2xl text-base leading-7 text-nofx-text-muted">
-              NOFX runs a single Claw402-driven strategy: board, per-market
-              details, liquidation structure, candles, execution. No strategy
-              picker, no manual symbol picking required.
+              NOFX 运行单一的 Claw402 驱动策略：看板、各市场详情、清算结构、K 线、执行。无需选择策略，也无需手动挑选交易标的。
             </p>
             <div className="mt-7 flex flex-col gap-3 sm:flex-row">
               <Link
@@ -84,14 +82,14 @@ export function TraderLaunchGuestPage() {
                 }
                 className="inline-flex items-center justify-center gap-2 rounded-xl bg-nofx-gold px-5 py-3 text-sm font-bold text-white transition hover:bg-nofx-gold/90"
               >
-                Start setup
+                开始配置
                 <ArrowRight className="h-4 w-4" />
               </Link>
               <Link
                 to={ROUTES.register}
                 className="inline-flex items-center justify-center rounded-xl border border-nofx-gold/20 bg-nofx-bg-deeper px-5 py-3 text-sm font-semibold text-nofx-text transition hover:border-nofx-gold/40 hover:bg-nofx-bg-deeper"
               >
-                Create account
+                创建账户
               </Link>
             </div>
           </div>
@@ -163,12 +161,10 @@ export function TraderLaunchGuestPage() {
         <section className="grid gap-5 rounded-2xl border border-nofx-gold/20 bg-nofx-bg-lighter p-5 md:grid-cols-[0.78fr_1.22fr] md:p-6">
           <div>
             <div className="text-sm font-semibold uppercase tracking-[0.18em] text-nofx-gold">
-              No trading wallet yet?
+              还没有交易钱包？
             </div>
             <p className="mt-3 text-sm leading-6 text-nofx-text-muted">
-              NOFX does not need your main-wallet private key. Install or unlock
-              an EVM wallet, fund Hyperliquid with USDC, then authorize the NOFX
-              Agent after sign-in.
+              NOFX 不需要你的主钱包私钥。安装或解锁一个 EVM 钱包，用 USDC 为 Hyperliquid 充值，登录后再授权 NOFX Agent。
             </p>
           </div>
           <div className="grid gap-3 lg:grid-cols-3">
@@ -179,9 +175,9 @@ export function TraderLaunchGuestPage() {
               className="group rounded-xl border border-nofx-gold/20 bg-nofx-bg-deeper p-4 transition hover:border-nofx-gold/30 hover:bg-nofx-gold/[0.06]"
             >
               <Download className="mb-3 h-4 w-4 text-nofx-gold" />
-              <div className="font-semibold text-nofx-text">Install Rabby</div>
+              <div className="font-semibold text-nofx-text">安装 Rabby</div>
               <p className="mt-2 text-sm leading-6 text-nofx-text-muted">
-                Create or import an EVM wallet before connecting to Hyperliquid.
+                在连接 Hyperliquid 之前，先创建或导入一个 EVM 钱包。
               </p>
             </a>
             <a
@@ -193,8 +189,7 @@ export function TraderLaunchGuestPage() {
               <ExternalLink className="mb-3 h-4 w-4 text-nofx-gold" />
               <div className="font-semibold text-nofx-text">MetaMask</div>
               <p className="mt-2 text-sm leading-6 text-nofx-text-muted">
-                Already use MetaMask? Unlock it, then continue setup inside
-                NOFX.
+                已经在使用 MetaMask 了？解锁后即可在 NOFX 内继续配置。
               </p>
             </a>
             <a
@@ -205,11 +200,10 @@ export function TraderLaunchGuestPage() {
             >
               <ExternalLink className="mb-3 h-4 w-4 text-nofx-gold" />
               <div className="font-semibold text-nofx-text">
-                Open Hyperliquid
+                打开 Hyperliquid
               </div>
               <p className="mt-2 text-sm leading-6 text-nofx-text-muted">
-                Deposit USDC there. Trading funds stay in your Hyperliquid
-                account.
+                在那里充值 USDC。交易资金始终保留在你的 Hyperliquid 账户中。
               </p>
             </a>
           </div>
@@ -218,11 +212,10 @@ export function TraderLaunchGuestPage() {
         <section className="grid gap-4 rounded-2xl border border-nofx-gold/20 bg-nofx-bg-lighter p-5 md:grid-cols-[0.72fr_1.28fr] md:p-6">
           <div>
             <div className="text-sm font-semibold uppercase tracking-[0.18em] text-nofx-gold">
-              What runs after launch
+              启动后会发生什么
             </div>
             <p className="mt-3 text-sm leading-6 text-nofx-text-muted">
-              The same production path runs every cycle. The interface only asks
-              you to fund, authorize, and start.
+              每个循环都走同样的生产流程。界面只需要你充值、授权和启动。
             </p>
           </div>
           <div className="grid gap-3 lg:grid-cols-3">

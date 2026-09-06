@@ -10,12 +10,12 @@ interface DecisionCardProps {
 
 // Action type configuration
 const ACTION_CONFIG: Record<string, { color: string; bg: string; icon: string; label: string }> = {
-  open_long: { color: '#2E8B57', bg: 'rgba(46, 139, 87, 0.15)', icon: '📈', label: 'LONG' },
-  open_short: { color: '#D6433A', bg: 'rgba(214, 67, 58, 0.15)', icon: '📉', label: 'SHORT' },
-  close_long: { color: '#E0483B', bg: 'rgba(224, 72, 59, 0.15)', icon: '💰', label: 'CLOSE' },
-  close_short: { color: '#E0483B', bg: 'rgba(224, 72, 59, 0.15)', icon: '💰', label: 'CLOSE' },
-  hold: { color: '#8A8478', bg: 'rgba(138, 132, 120, 0.15)', icon: '⏸️', label: 'HOLD' },
-  wait: { color: '#8A8478', bg: 'rgba(138, 132, 120, 0.15)', icon: '⏳', label: 'WAIT' },
+  open_long: { color: '#2E8B57', bg: 'rgba(46, 139, 87, 0.15)', icon: '📈', label: '做多' },
+  open_short: { color: '#D6433A', bg: 'rgba(214, 67, 58, 0.15)', icon: '📉', label: '做空' },
+  close_long: { color: '#E0483B', bg: 'rgba(224, 72, 59, 0.15)', icon: '💰', label: '平仓' },
+  close_short: { color: '#E0483B', bg: 'rgba(224, 72, 59, 0.15)', icon: '💰', label: '平仓' },
+  hold: { color: '#8A8478', bg: 'rgba(138, 132, 120, 0.15)', icon: '⏸️', label: '持有' },
+  wait: { color: '#8A8478', bg: 'rgba(138, 132, 120, 0.15)', icon: '⏳', label: '观望' },
 }
 
 // Format price with proper decimals

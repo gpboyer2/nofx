@@ -18,8 +18,8 @@ export default function BrandHero() {
             {/* Top Marquee */}
             <div className="w-full bg-nofx-gold text-nofx-bg-lighter font-bold py-2 border-y border-nofx-text/20 z-20">
                 <Marquee speed={40}>
-                    <span className="mx-8 text-sm md:text-base uppercase tracking-widest">NOFX AI TRADING • AUTOMATED WEALTH • DECENTRALIZED INTELLIGENCE • PUNK ETHOS •</span>
-                    <span className="mx-8 text-sm md:text-base uppercase tracking-widest">NOFX AI TRADING • AUTOMATED WEALTH • DECENTRALIZED INTELLIGENCE • PUNK ETHOS •</span>
+                    <span className="mx-8 text-sm md:text-base uppercase tracking-widest">NOFX AI 交易 • 自动化财富 • 去中心化智能 • PUNK 精神 •</span>
+                    <span className="mx-8 text-sm md:text-base uppercase tracking-widest">NOFX AI 交易 • 自动化财富 • 去中心化智能 • PUNK 精神 •</span>
                 </Marquee>
             </div>
 
@@ -33,15 +33,15 @@ export default function BrandHero() {
                         transition={{ duration: 0.8, ease: "circOut" }}
                     >
                         <h1 className="text-6xl md:text-8xl lg:text-[7rem] font-black leading-[0.9] tracking-tighter mb-6">
-                            AI TRADING<br />
-                            <span className="text-nofx-gold">EVOLVED</span>
+                            AI 交易<br />
+                            <span className="text-nofx-gold">新纪元</span>
                         </h1>
 
                         <p className="text-xl md:text-2xl text-nofx-text-muted max-w-xl mb-10 font-mono leading-relaxed">
-                            Autonomous trading agents. High-frequency execution.
+                            自主交易智能体，高频执行。
                             <br />
-                            Institutional-grade strategies for the
-                            <span className="text-nofx-bg-lighter font-bold ml-2 bg-nofx-accent px-2 py-0.5">DEGENERATES</span>.
+                            机构级策略，献给每一位
+                            <span className="text-nofx-bg-lighter font-bold ml-2 bg-nofx-accent px-2 py-0.5">交易玩家</span>。
                         </p>
 
                         <div className="flex flex-wrap gap-4">
@@ -50,7 +50,7 @@ export default function BrandHero() {
                                 className="bg-nofx-gold text-nofx-bg-lighter text-lg font-black px-8 py-4 uppercase tracking-wider hover:bg-nofx-text hover:scale-105 transition-all flex items-center gap-2 clip-path-slant"
                                 style={{ clipPath: 'polygon(0 0, 100% 0, 95% 100%, 0% 100%)' }}
                             >
-                                Start Trading <ArrowRight className="w-6 h-6" />
+                                开始交易 <ArrowRight className="w-6 h-6" />
                             </button>
 
                             <a
@@ -59,14 +59,14 @@ export default function BrandHero() {
                                 rel="noreferrer"
                                 className="border-2 border-[rgba(26,24,19,0.2)] text-nofx-text text-lg font-bold px-8 py-4 uppercase tracking-wider hover:bg-nofx-text/5 hover:border-nofx-text transition-all flex items-center gap-2"
                             >
-                                <Github className="w-5 h-5" /> Source
+                                <Github className="w-5 h-5" /> 源码
                             </a>
                         </div>
 
                         <div className="mt-12 flex items-center gap-8 text-nofx-text-muted font-mono text-xs md:text-sm">
                             <div className="flex items-center gap-2">
                                 <div className="w-2 h-2 bg-nofx-success rounded-full animate-pulse" />
-                                SYSTEM ONLINE
+                                系统在线
                             </div>
                             <div className="flex items-center gap-2">
                                 <div className="w-2 h-2 bg-nofx-accent rounded-full" />

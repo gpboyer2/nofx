@@ -56,21 +56,21 @@ func queryBeginnerWalletBalance(address string) (balanceUSDC string, balanceStat
 func (s *Server) handleBeginnerOnboarding(c *gin.Context) {
 	userID := c.GetString("user_id")
 	if userID == "" {
-		c.JSON(http.StatusUnauthorized, gin.H{"error": "missing user context"})
+		c.JSON(http.StatusUnauthorized, gin.H{"error": "缺少用户上下文"})
 		return
 	}
 
 	privateKey, address, configuredModelID, reusedExisting, err := s.resolveBeginnerWallet(userID)
 	if err != nil {
 		logger.Errorf("Failed to resolve beginner wallet for user %s: %v", userID, err)
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "failed to prepare beginner wallet"})
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "准备新手钱包失败"})
 		return
 	}
 
 	if !reusedExisting {
 		if err := s.store.AIModel().Update(userID, "claw402", true, privateKey, "", payment.DefaultClaw402Model); err != nil {
 			logger.Errorf("Failed to save beginner claw402 config for user %s: %v", userID, err)
-			c.JSON(http.StatusInternalServerError, gin.H{"error": "failed to save beginner model configuration"})
+			c.JSON(http.StatusInternalServerError, gin.H{"error": "保存新手模型配置失败"})
 			return
 		}
 
@@ -111,7 +111,7 @@ func (s *Server) handleBeginnerOnboarding(c *gin.Context) {
 func (s *Server) handleCurrentBeginnerWallet(c *gin.Context) {
 	userID := c.GetString("user_id")
 	if userID == "" {
-		c.JSON(http.StatusUnauthorized, gin.H{"error": "missing user context"})
+		c.JSON(http.StatusUnauthorized, gin.H{"error": "缺少用户上下文"})
 		return
 	}
 	claw402Status := checkClaw402Health()
@@ -119,7 +119,7 @@ func (s *Server) handleCurrentBeginnerWallet(c *gin.Context) {
 	models, err := s.store.AIModel().List(userID)
 	if err != nil {
 		logger.Errorf("Failed to load current beginner wallet for user %s: %v", userID, err)
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "failed to load current wallet"})
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "加载当前钱包失败"})
 		return
 	}
 

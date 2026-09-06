@@ -89,7 +89,7 @@ describe('beginner-only live trading experience', () => {
       </MemoryRouter>
     )
 
-    expect(screen.getByRole('button', { name: 'Config' }).className).toContain(
+    expect(screen.getByRole('button', { name: '配置' }).className).toContain(
       'whitespace-nowrap'
     )
   })
@@ -102,7 +102,7 @@ describe('beginner-only live trading experience', () => {
     )
 
     expect(
-      screen.getByRole('button', { name: 'Config' }).parentElement?.className
+      screen.getByRole('button', { name: '配置' }).parentElement?.className
     ).toContain('lg:flex')
     expect(
       screen.getByRole('button', { name: 'Open navigation' }).className

@@ -47,16 +47,16 @@ func (s *Server) handleUpdateTelegramConfig(c *gin.Context) {
 		ModelID  string `json:"model_id"`
 	}
 	if err := c.ShouldBindJSON(&req); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "invalid request"})
+		c.JSON(http.StatusBadRequest, gin.H{"error": "请求无效"})
 		return
 	}
 	if req.BotToken == "" {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "bot_token is required"})
+		c.JSON(http.StatusBadRequest, gin.H{"error": "缺少 bot_token 参数"})
 		return
 	}
 
 	if err := s.store.TelegramConfig().Save(req.BotToken, req.ModelID); err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "failed to save config"})
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "保存配置失败"})
 		return
 	}
 
@@ -68,16 +68,16 @@ func (s *Server) handleUpdateTelegramConfig(c *gin.Context) {
 		}
 	}
 
-	c.JSON(http.StatusOK, gin.H{"success": true, "message": "Bot token saved. Bot will reload automatically."})
+	c.JSON(http.StatusOK, gin.H{"success": true, "message": "Bot Token 已保存，将自动重载"})
 }
 
 // handleUnbindTelegram removes Telegram user binding
 func (s *Server) handleUnbindTelegram(c *gin.Context) {
 	if err := s.store.TelegramConfig().Unbind(); err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "failed to unbind"})
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "解绑失败"})
 		return
 	}
-	c.JSON(http.StatusOK, gin.H{"success": true, "message": "Telegram binding removed"})
+	c.JSON(http.StatusOK, gin.H{"success": true, "message": "Telegram 绑定已移除"})
 }
 
 // handleUpdateTelegramModel updates only the AI model used for Telegram replies (no token re-entry needed)
@@ -86,18 +86,18 @@ func (s *Server) handleUpdateTelegramModel(c *gin.Context) {
 		ModelID string `json:"model_id"`
 	}
 	if err := c.ShouldBindJSON(&req); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "invalid request"})
+		c.JSON(http.StatusBadRequest, gin.H{"error": "请求无效"})
 		return
 	}
 
 	cfg, err := s.store.TelegramConfig().Get()
 	if err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "no Telegram config found, save a bot token first"})
+		c.JSON(http.StatusBadRequest, gin.H{"error": "未找到 Telegram 配置，请先保存 Bot Token"})
 		return
 	}
 
 	if err := s.store.TelegramConfig().Save(cfg.BotToken, req.ModelID); err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "failed to save model config"})
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "保存模型配置失败"})
 		return
 	}
 

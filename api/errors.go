@@ -49,7 +49,7 @@ func SafeErrorWithDetails(c *gin.Context, statusCode int, publicMsg, errorKey st
 // SafeInternalError logs internal error and returns a generic message
 func SafeInternalError(c *gin.Context, operation string, err error) {
 	logger.Errorf("[Internal Error] %s: %v", operation, err)
-	writeAPIError(c, http.StatusInternalServerError, operation+" failed", "", nil)
+	writeAPIError(c, http.StatusInternalServerError, operation+"失败", "", nil)
 }
 
 // SafeBadRequest returns a safe bad request error
@@ -64,12 +64,12 @@ func SafeBadRequestWithDetails(c *gin.Context, msg, errorKey string, errorParams
 
 // SafeNotFound returns a generic not found error
 func SafeNotFound(c *gin.Context, resource string) {
-	writeAPIError(c, http.StatusNotFound, resource+" not found", "", nil)
+	writeAPIError(c, http.StatusNotFound, resource+"不存在", "", nil)
 }
 
 // SafeUnauthorized returns unauthorized error
 func SafeUnauthorized(c *gin.Context) {
-	writeAPIError(c, http.StatusUnauthorized, "Unauthorized", "", nil)
+	writeAPIError(c, http.StatusUnauthorized, "未授权", "", nil)
 }
 
 // SafeForbidden returns forbidden error

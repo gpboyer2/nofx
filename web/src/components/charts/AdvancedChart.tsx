@@ -138,14 +138,14 @@ export function AdvancedChart({
 
   // Indicator configuration
   const [indicators, setIndicators] = useState<IndicatorConfig[]>([
-    { id: 'volume', name: 'Volume', enabled: true, color: '#E0483B' },
+    { id: 'volume', name: '成交量', enabled: true, color: '#E0483B' },
     { id: 'ma5', name: 'MA5', enabled: false, color: '#FF6B6B', params: { period: 5 } },
     { id: 'ma10', name: 'MA10', enabled: false, color: '#4ECDC4', params: { period: 10 } },
     { id: 'ma20', name: 'MA20', enabled: false, color: '#E0483B', params: { period: 20 } },
     { id: 'ma60', name: 'MA60', enabled: false, color: '#95E1D3', params: { period: 60 } },
     { id: 'ema12', name: 'EMA12', enabled: false, color: '#A8E6CF', params: { period: 12 } },
     { id: 'ema26', name: 'EMA26', enabled: false, color: '#FFD3B6', params: { period: 26 } },
-    { id: 'bb', name: 'Bollinger Bands', enabled: false, color: '#9B59B6' },
+    { id: 'bb', name: '布林带', enabled: false, color: '#9B59B6' },
   ])
 
   // Fetch kline data from service
@@ -881,7 +881,7 @@ export function AdvancedChart({
         const upperSeries = chartRef.current.addSeries(LineSeries, {
           color: indicator.color,
           lineWidth: 1,
-          title: 'BB Upper',
+          title: '布林上轨',
         })
         upperSeries.setData(bbData.map(d => ({ time: d.time as any, value: d.upper })))
 
@@ -889,14 +889,14 @@ export function AdvancedChart({
           color: indicator.color,
           lineWidth: 1,
           lineStyle: 2,
-          title: 'BB Middle',
+          title: '布林中轨',
         })
         middleSeries.setData(bbData.map(d => ({ time: d.time as any, value: d.middle })))
 
         const lowerSeries = chartRef.current.addSeries(LineSeries, {
           color: indicator.color,
           lineWidth: 1,
-          title: 'BB Lower',
+          title: '布林下轨',
         })
         lowerSeries.setData(bbData.map(d => ({ time: d.time as any, value: d.lower })))
 

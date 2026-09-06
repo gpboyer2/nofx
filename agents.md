@@ -920,3 +920,370 @@ management skill 内部必须按 action 级别区分风险，而不是统一处�
 - 对话层：先匹配 skill
 - 执行层：skill 内部复用现有 tool
 - planner 层：只兜底少数复杂情况
+
+
+## 开发流程（强制）
+
+1. 查看当前 Git 用户身份
+   - 命令：`git config user.name && git config user.email`
+   - 确认"我是谁"，并把该身份带入后续所有上下文。多人协作时用于判断：我的改动会不会影响别人负责的模块？是否和别人的提交冲突？我该怎么改才不破坏别人功能？
+   - 本仓库已单独设置身份（Hunk / 773561801qaz@gmail.com），与全局身份不同，不要改回全局。
+
+2. 拉取远程最新代码
+   - 命令：`git pull origin $(git branch --show-current)`（当前开发分支是 `feat/ppll`，**不要**拉 `main`，也不要切分支）
+   - 把远程最新代码合进当前分支。若拉取时报冲突，进入第 3 步。
+
+3. 解决冲突（仅在出现冲突时执行）
+   - 先 `git status` 查看是否存在 `Unmerged paths` / `both modified` 的冲突文件。
+   - 必须主动告知用户"存在冲突 + 我的处理方案"，不得擅自覆盖他人代码。
+   - 冲突全部解决后，立即完成这次合并提交。
+
+4. 提交并推送到远程
+   - 无条件调用技能 `./skills/git-commit`，若工作区干净（没有未提交改动），则跳过此步。
+
+5. 开发前准备（进入正式开发前必做，不可跳过）
+   - 1. 理解上下文：先阅读相关代码和文档，理解当前改动所在的业务场景和技术架构。
+   - 2. 查看近期提交：先查阅近 10 天的 git commit 消息（`git log --oneline -10`），了解项目当前开发进度和历史决策。
+   - 3. 查看暂存区和工作区：理解需求后，先 review git 暂存区（`git diff --cached`）和工作区（`git diff`），了解当前实现进度，避免重复工作或冲突。
+   - 4. 理解用户意图：用户在共同修改代码时，如果发现有变动，必须先理解用户的改动目的，不要擅自覆盖或否定。
+
+### 对话结束前（必做，按顺序调用两个技能，缺一不可）
+
+1. 调用 `./skills/self-test` — 自测验证
+2. 调用 `./skills/git-commit` — 为 Git 暂存区和工作区所有的代码都执行（可以按功能分批执行）。同步远程并提交推送
+
+### 技能路径说明
+
+本仓库没有 `skills/` 目录，上面写的 `./skills/xxx` 是用户级技能，实际位于 `~/.workbuddy/skills/`（`cc-self-test` / `cc-git-commit` / `cc-workflow`）。调用时按名字匹配即可。用户点名用某个技能时，直接执行该技能，**不要**改用 `workflow` 之类的工作流去套。
+
+
+## 用户情绪识别
+
+当用户表现出生气、不满、愤怒、失望、抱怨等负面情绪时（无论是通过措辞激烈程度、标点符号、重复追问、还是直接表达），必须立即执行 `./skills/workflow` 技能，启动多子代理工作流来排查和解决问题。此时不要在当前对话里继续打转，也不要试图用解释或安抚代替行动——用户需求未解决是情绪根源，只有通过工作流把问题修好才能平息。
+
+## 先搜后问
+
+遇到任何不确定、模棱两可、或者你心里有点怀疑的事情，先自己搜一搜；搜索互联网 2026 年最新的资料，多轮搜索多轮对比。搜完仍不确定的，问用户。不要把"可以问"的范围限定在某几类问题上——凡是拿不准的，哪怕觉得可能没必要问，也可以问。能问则问，宁可多确认一句，也不要基于猜测往下做。
+
+遇到需要实现的功能，优先搜索互联网上的公开仓库或模块，直接复用已有成熟方案，禁止手搓复杂代码。可以在 GitHub 搜索相关实现，或者通过多轮网络搜索找到合适的开源方案。
+
+## 代码复用与架构原则
+
+1. 优先复用现有正确逻辑：不新增多余抽象，不向旧代码兼容，统一入口与边界，不把原本清晰的路径拆得更碎。
+2. 更少路径：这个项目偏好"更少路径"，不喜欢兼容旧代码。禁止存在"兼容逻辑"、"兜底逻辑"、"保留旧路径"、"退回"等写法。
+3. 可改范围：可以改数据库、可以改配置、可以改前后端代码、可以重构，就是不要迁就旧有的。最讨厌迁就、最讨厌 backups、最讨厌向旧代码或旧业务兼容。
+4. 搜索复用优先：禁止手搓复杂代码。互联网上有很多公开的仓库或模块，可以直接搜索、拉取、复用。能搜索到就用搜索到的，不要自己从头写。
+5. 批量替换优先：需要批量修改时，先用搜索工具定位目标，然后用编辑工具批量替换。禁止用正则表达式一个个匹配替换的低效方式。能用工具就直接用工具，不要人工逐个处理。
+
+## 注释规范
+
+1. 文件头和函数注释：禁止缺失文件头注释或 JSDoc / GoDoc 函数注释。每个文件保留文件头，每个函数有且只有一个函数头注释（Go 用 `// 函数名 说明`，TS 用 JSDoc）。
+2. 详细注释保留：不要把原来的详细的注释改成简述，不要丢失注释或简化注释。原有详细注释是为了保留上下文和决策原因。
+3. 清理无意义注释：如果还有旧的注释或者没有意义的注释，应该合并或删除。禁止有无用代码、无用注释、旧注释没删干净。
+4. 强注释防改错：根据当前的需求、上下文、经验和用户要求，写强注释——要在注释里说明这段代码为什么这样做、不能怎样改，目的是避免别人或下次又改错。
+
+## 代码清理
+
+1. 无用代码删除：如果还有旧的代码、没有被使用的函数或变量，应该通过 grep 查找确认无误后删除。禁止存在无用代码。Go 里未使用的私有函数 `go vet` 不会报，但一样要删干净。
+2. 命名直接：命名尽量直接，减少 if/else 和假兼容。变量名和函数名要让读代码的人一眼看懂在做什么。
+3. 常量引用前必须 grep 确认存在：删除/重命名常量时 grep 全项目所有引用点；新增常量引用前要确认导出符号真的存在，不要靠"我记得有这个常量"就直接用。
+
+## 读写与交互规范
+
+1. 读写分离：查询不要有副作用。读操作只读不改，写操作只写不读（除非业务需要）。
+2. 字段语义稳定：前后端交互里，字段语义必须稳定，不允许模糊 fallback 链。字段含义一旦确定就不能随意扩展或漂移。
+3. 前端样式只走 Tailwind：本项目前端已经在用 Tailwind CSS 3 + `cn.ts`（clsx + cva），沿用即可。禁止再引入任何其他 CSS 框架（Bootstrap、UnoCSS、Emotion 等），也不要写大段内联 style。
+4. 禁止原生 HTML 表单：禁止使用 HTML 原生的表单元素，必须使用项目现有的 UI 组件（`web/src/components/ui/` 下基于 Radix + cva 的封装）。
+5. 频繁 API 调用注意：频繁请求 Binance REST 会因为权重问题封 IP，必须做好节流、缓存和限流策略。行情优先走 WebSocket / 共享缓存，不要每个 trader 各自狂刷 REST。
+6. 路由注册走统一入口：后端新增接口必须在 `api/server.go` 里用 `s.route(...)` 注册（带一行描述），它会自动进 `routeRegistry` 并在 `/api/routes` 之类的自文档接口里出现。禁止绕过 `s.route` 直接 `gin` 裸挂，否则接口文档会漏。
+
+## 错误处理
+
+禁止用"兼容逻辑"或"兜底逻辑"代替正常错误处理。出现业务问题时：
+
+1. 延迟重试，最多重试 3 次。
+2. 多次重试后放弃重试。
+3. 在后端日志体系中报错，记录完整上下文。
+4. 给前端的返回值中返回相关报错信息，让前端提示给用户。
+5. 服务重启后避免历史事件补发：重启后要识别"已处理过"的事件，避免重复推送通知；积压消息要主动清空，不要无脑补发。
+6. 外部系统故障要退避，不要刷屏重试：交易所或模型服务故障期要降级静默 + 间隔复查，不要把同一条告警反复推给用户。
+
+## 搜索与调研
+
+搜索互联网时优先查找 2026 年最新的资料，多轮搜索多轮对比。不要只看一轮结果就下结论，要交叉验证不同来源的信息。
+
+## API Key 管理
+
+必须把所有敏感信息（包括但不限于 apiKey、apiSecret、passphrase、privateKey、钱包私钥、大模型 API Key、签名、webhook 密钥等）以明文形式回显、保存和传输。具体要求：
+
+1. 明文回显：前端所有输入框、详情页、编辑态必须原样显示完整值，禁止掩码（如 `1234`）、禁止返回 `null` 或空串代替。
+2. 明文保存：数据库中禁止使用 AES 或任何对称/非对称加密；敏感字段必须以明文列直接存储。
+3. 明文传输：HTTP 请求、响应体、Socket 订阅、日志输出中必须包含完整原始值，禁止脱敏替换（如 `*已隐藏*`）、禁止检测到敏感词后拦截回显。
+
+这样做的目的是方便快速定位问题、方便抓包排查。除非用户明确要求，否则不要考虑脱敏或加密。
+
+## Git 操作限制
+
+1. 本分支开发：在当前分支（`feat/ppll`）上进行开发，不要切分支，不要 backup 备份。
+2. 只读历史：有问题去阅读 git 的历史代码。总结来说就是只能执行 git 的 read 操作，禁止执行 git edit 操作（如 rebase、reset、amend、push --force 等会改写历史的命令）。
+3. 绝对禁止 `git reset --hard` 和 `git push --force`：这两条命令会抹除他人提交、破坏协作历史，无论任何理由都不得执行。
+4. `.vscode/launch.json` 是刻意提交进仓库的（`.gitignore` 里放行），不要把它加回忽略列表。
+
+## 问题修复策略
+
+遇到 bug 或问题时，不要只修单个问题。要：
+
+1. 定位同类实现：搜索项目中是否有类似写法的代码。
+2. 分析影响范围：这个改动会影响哪些调用方、哪些模块。
+3. 梳理调用链：当前代码的上游和下游分别是什么。
+4. 分析职责边界：这个逻辑应该属于哪个模块/层。
+5. 找出设计层根因：这是局部 bug 还是系统性架构问题？如果是系统性问题，要从架构层面解决，不要只打个补丁。
+6. 全局重命名后必须全量排查：如果 bug 根因是某次全局重命名（如 `trader_id` ↔ `trader_key`）遗漏，不能只修找到的那一处。必须用 grep 搜索全项目所有同类写法，逐一对照模型定义确认。遗漏一处就是一个定时炸弹，早晚会炸。
+
+## 核心铁律：不改已有代码
+
+能不动就不动。需要变体就复制新文件，不要在原文件上改。宁可代码重复，也不要改坏别人的功能。
+
+用户明确要求改的除外。但即使用户要求改，也要遵循上述代码复用与架构原则——能复用的就复用，能统一入口的就统一入口，不要新增多余的抽象层。
+
+额外要注意的：我们这是多人开发和多会话开发的场景，不要管别的会话的改动，只专注自己的任务！
+我也正在改代码。如果你发现有其他的增、删、改等变动，那是我在操作！别破坏我的操作，要理解我的目的！
+
+## 调试日志强制要求
+
+解决 bug 时必须通过调试日志定位问题根因，禁止靠猜来判断问题。
+后端日志统一走 `logger/` 包，内容须包含函数名、关键变量值、决策分支走向。
+关键调试日志可以选择性的加前缀，排查时用正则匹配标记日志，不被海量日志淹没。
+在关键路径加日志后再改代码，用日志回溯问题根因，而不是先改代码再看结果。
+问题解决后临时调试日志可酌情保留或清理，但排查过程中必须有日志支撑。
+
+### 禁止无故删除别人的调试日志
+
+每一条调试日志都是排查问题的线索来源。即使日志看起来"多余"或"太详细"，也必须保留，除非满足以下条件：
+
+1. 该日志确实是无效代码（如引用了已删除的变量）。
+2. 用户已在对话中明确告知"删除哪些日志"。
+3. 用户未表示异议。
+
+违反此约束等同于破坏他人的排查工具，是严重的协作事故。
+
+## 输出语言规范
+
+用中文输出，禁止程序员黑话。和用户沟通时必须使用自然人语言，不要满嘴框架名词、设计模式缩写、技术黑话。要说人话：讲"后端没起来"而不是"8080 端口 ECONNREFUSED"，讲"日志在终端里看不到"而不是"stdout 未重定向"。
+
+## 禁止删除 docs 文件
+
+禁止删除 `./docs` 目录中的任何文件，无论其内容看起来是否为临时文件或无意义文件。
+
+## 自测要求
+
+要求自测自改、自查自纠、自己执行、自己启动，一步到位，不要怕麻烦，一次完成。每次修改后要启动服务验证，确保改动没有引入新问题。实现最好、最大、最全的效果，不要把半成品留给用户。
+
+- 后端：`make test-backend`（等价 `go test ./...`），改动哪个包就至少跑哪个包的测试。
+- 前端：`make test-frontend`（等价 `web/` 下 `npm run test`，vitest）。
+- 全量：`make test`。
+- 编译门禁：Go 改动后必须 `go build ./...` 通过；前端改动后必须 `npm run build`（含 `tsc`）通过。
+- 无凭证 / 无网络的测试要自动跳过，不要因为环境缺 key 就报红。
+
+## 本地开发启动
+
+用 VS Code 的调试配置一键启动，不要自己手动敲命令乱起：
+
+- 复合配置 `Full Stack - development`（`.vscode/launch.json`）会同时起前后端，停止时一起停。
+- 后端 Go 调试日志直接输出到 VS Code **内置终端**（`console: integratedTerminal`），前端 Vite 同样跑在终端里，两个终端标签页可随时切换、随时关；调试控制台仍保留断点与调用栈。
+- delve 每次调试产生的临时二进制固定在 `.debug-bin/`（已 gitignore），不会污染仓库根目录。
+- 命令行备选：`make run`（后端）+ `make run-frontend`（前端）。
+- **禁止通过 pm2 或其他进程守护方式启动或管理本地开发环境。**
+
+## 运行环境与端口规划
+
+| 环境 | 后端 | 前端 | 说明 |
+|---|---|---|---|
+| 本地 dev | 8080（`NOFX_BACKEND_PORT`） | 3000（`NOFX_FRONTEND_PORT`） | Vite 把 `/api` 代理到 8080 |
+| Docker（本地/服务器） | 见 `docker-compose.yml` | Nginx 反代（见 `nginx/`） | `make docker-up` / `make docker-down` |
+
+要点：
+
+1. 后端必须以**项目根目录**为工作目录启动，否则 `godotenv` 读不到根目录的 `.env`（密钥、代理、数据库路径全在里面）。
+2. 数据库默认 SQLite（`DB_TYPE` 可切 Postgres），文件在 `data/` 下，已 gitignore。
+3. 登录态是 JWT（`JWT_SECRET`），前端在 `web/src/contexts/` 管理；开发与生产账号体系一致，没有"本地免登录"这种特殊分支，不要自作主张加。
+4. 前端看到的 `/api/xxx` 全部连不上（ECONNREFUSED）时，第一反应是**后端没在跑或正在重启**，不要去改前端代码。
+
+
+## 项目全貌与技术栈
+
+| 层 | 技术 | 关键文件 |
+|---|---|---|
+| 后端 | Go 1.25 + Gin + GORM | `main.go` → `api/server.go` |
+| 数据库 | SQLite（默认）/ Postgres | `store/gorm.go`、`store/driver.go` |
+| 前端 | React 18 + Vite + TypeScript + Tailwind 3 | `web/src/main.tsx` |
+| 前端 UI | Radix UI + cva 自建组件 `web/src/components/ui/` | `web/src/lib/cn.ts` |
+| 前端状态 | zustand stores + SWR 请求 | `web/src/stores/`、`web/src/lib/httpClient.ts` |
+| 前端路由 | react-router-dom v7 | `web/src/router/` |
+| 交易循环 | trader 自动交易主循环 + 决策 + 网格 | `trader/auto_trader.go`、`trader/auto_trader_loop.go`、`trader/auto_trader_decision.go`、`trader/auto_trader_grid*.go` |
+| 决策内核 | prompt 组装、输出校验、仓位格式化 | `kernel/engine.go`、`kernel/engine_prompt.go`、`kernel/prompt_builder.go`、`kernel/schema.go` |
+| 行情 | K 线 / 指标 / 多数据源 | `market/`（含 `data_klines.go`、`data_indicators.go`、`api_client.go`） |
+| 交易所接入 | 按交易所分包 | `provider/hyperliquid`、`provider/aster`、`provider/alpaca`、`provider/nofxos`、`provider/vergex`、`provider/coinank`、`provider/twelvedata` |
+| AI 模型 | 按模型分包 | `mcp/provider/`（deepseek、openai、claude、gemini、grok、kimi、qwen、minimax） |
+| 加密与钱包 | 传输加密、私钥与钱包 | `crypto/`、`wallet/`、`safe/` |
+| 通知 | Telegram | `telegram/` |
+| 日志 | 统一日志包 | `logger/` |
+| 部署 | Docker / Railway | `docker-compose*.yml`、`Dockerfile.railway`、`railway/` |
+
+
+## 目录结构与文件索引
+
+### 顶层目录
+
+```
+ppll-nofx/
+├── agents.md              # 本文件 — AI 工作规范（唯一事实来源）
+├── main.go                # 后端入口
+├── api/                   # HTTP 层：Gin 路由与 handler
+├── auth/                  # 认证（JWT）
+├── config/                # 配置加载（.env + 默认值）
+├── crypto/                # 传输加密
+├── kernel/                # 决策内核：prompt、输出校验、格式化
+├── logger/                # 统一日志
+├── manager/               # trader 管理器
+├── market/                # 行情数据与指标
+├── mcp/                   # MCP 客户端与模型 provider
+├── provider/              # 交易所 / 数据源接入
+├── safe/                  # 安全与风控辅助
+├── store/                 # 数据访问层（GORM 模型与查询）
+├── trader/                # 自动交易循环与网格
+├── telegram/              # Telegram 通知
+├── wallet/                # 钱包与签名
+├── web/                   # 前端 React 应用
+├── docs/                  # 全部文档（禁止删除）
+├── scripts/               # 少量脚本
+├── data/                  # 运行时数据（SQLite、日志，已 gitignore）
+└── .vscode/launch.json    # 调试配置（刻意提交，见 Git 操作限制）
+```
+
+### 后端关键目录
+
+| 目录 / 文件 | 职责 |
+|---|---|
+| `api/server.go` | Gin 服务启动、`setupRoutes()`、中间件、CORS |
+| `api/route_registry.go` | 路由自文档注册表，所有接口必须经 `s.route()` 登记 |
+| `api/handler_*.go` | 各业务 handler（trader、exchange、order、wallet、ai model、telegram、competition、onboarding 等） |
+| `api/launch_preflight.go` | 启动前自检 |
+| `kernel/` | 决策内核：`engine.go` 主流程、`engine_prompt.go` / `prompt_builder.go` 拼 prompt、`schema.go` 校验模型输出、`formatter.go` 格式化、`grid_engine.go` 网格 |
+| `trader/` | `auto_trader.go` 生命周期、`auto_trader_loop.go` 主循环、`auto_trader_decision.go` 决策解析、`auto_trader_grid*.go` 网格策略 |
+| `market/` | 行情：`data_klines.go` K 线、`data_indicators.go` 指标、`api_client.go` 数据源客户端 |
+| `provider/` | 交易所与数据源接入，一个交易所一个包 |
+| `mcp/provider/` | 大模型接入，一个模型一个文件 |
+| `store/` | GORM 模型与查询：trader、strategy、exchange、order、position、equity、user、ai_model、grid 等 |
+| `config/config.go` | 全部配置项与默认值（端口、数据库、加密开关） |
+| `safe/` | 安全相关（风控/限额辅助） |
+
+### 前端关键目录
+
+| 目录 / 文件 | 职责 |
+|---|---|
+| `web/src/main.tsx` | 应用入口 |
+| `web/src/App.tsx` | 根组件：主题、全局通知、路由挂载 |
+| `web/src/router/` | react-router-dom v7 路由表 |
+| `web/src/pages/` | 页面 |
+| `web/src/components/` | 组件，其中 `components/ui/` 是 Radix + cva 自建基础组件 |
+| `web/src/stores/` | zustand 状态 |
+| `web/src/lib/` | `httpClient.ts`（axios 封装）、`api/`（各模块 API）、`notify.tsx`、`crypto.ts`、`onboarding.ts` |
+| `web/src/contexts/` | React Context（登录态、语言等） |
+| `web/src/i18n/` | 多语言文案（改动时注意 key 不要重复，重复的后者会静默覆盖前者） |
+| `web/src/types/` | TypeScript 类型定义 |
+
+
+## Trader 与策略规范
+
+### 决策链路是主干，改动前先摸清顺序
+
+一次自动决策的完整链路：`trader/auto_trader_loop.go` 主循环定时触发 → `market/` 取行情与指标 → `kernel/prompt_builder.go` 组装 prompt → `mcp/provider/` 调大模型 → `api`/`kernel/schema.go` 校验模型输出 → `trader/auto_trader_decision.go` 解析成交易动作 → `provider/`（对应交易所）下单 → `store/` 落库（订单、持仓、权益）。
+
+改任何一环都要确认上下游字段同步改，字段名不匹配不会报错，只会读到空值导致静默失败（这类坑最难查，历史上吃过亏）。
+
+### 交易所与模型接入统一走 provider
+
+1. 新交易所：在 `provider/` 下新建包，实现与既有交易所一致的接口，不要在 trader 主循环里直接写某家的 HTTP 调用。
+2. 新模型：在 `mcp/provider/` 下新建文件，注册进 `mcp/providers.go` 的注册表；注册表是模型存在性的唯一事实来源，禁止运行时动态扫描。
+3. 禁止在业务代码里 `switch` 交易所名字做分支散落各处——差异收敛在 provider 包内。
+
+### 策略与 prompt 的单一事实来源
+
+- 策略与 trader 配置的持久化在 `store/strategy.go`、`store/trader.go`。
+- prompt 模板与拼装规则在 `kernel/`，设计说明与调参指南见 `docs/prompt-guide.md` / `docs/prompt-guide.zh-CN.md`。
+- 改 prompt 等于改交易行为，必须在日志里能追到"这次决策用的是哪份 prompt"，否则事后无法复盘。
+
+### 风控红线
+
+1. 下单前必须有明确的风控参数（仓位上限、单笔限额、最大持仓），不允许"算出来多少就下多少"。
+2. 交易所或模型服务报错时退避重试，最多 3 次，之后放弃并在日志与前端报错，不允许静默继续下单。
+3. 禁止把"拿不到数据"当成"数据为零"继续跑策略——行情缺失必须中断本轮决策，不要用空数据拼出一份假 prompt 喂给模型。
+
+
+## 前端开发规范
+
+### UI 组件库
+
+- 基础组件在 `web/src/components/ui/`，基于 Radix UI + `class-variance-authority`，样式用 Tailwind 类名，拼接用 `web/src/lib/cn.ts`。
+- 图标用 `lucide-react`，图表用 `lightweight-charts`。
+- 禁止引入任何其他 CSS 框架或第二套 UI 库。
+- 禁止使用 HTML 原生表单元素（`<input>` / `<select>` / `<button>` 裸标签），必须用 `components/ui/` 里的封装。
+
+### 状态与数据请求
+
+- 全局状态用 zustand（`web/src/stores/`），服务端数据用 SWR（封装在 `web/src/lib/httpClient.ts` + `web/src/lib/api/`）。
+- 登录态相关的 Context 在 `web/src/contexts/`。
+
+### 多语言
+
+- 文案统一在 `web/src/i18n/`。新增 key 前先 grep 确认没重复：**同一个对象里写两遍同名 key，Vite 只会警告，后面的静默覆盖前面的**，排查起来很浪费时间。
+
+### 前端调试
+
+- 保留 console 输出，方便在浏览器控制台直接看；不要引入 vConsole、eruda 等外部调试工具。
+- 移动端调试只需要切成 iPhone 11 视口看，不做其他分辨率的响应式兼容检查。
+
+
+## 后端开发规范
+
+### 模块与代码风格
+
+- Go 模块名 `nofx`，Go 版本 1.25。所有代码 `gofmt` 格式化（`make fmt`）。
+- 导出的函数、类型、常量必须有 GoDoc 注释，注释写"为什么这么做"，不是复述代码。
+
+### HTTP 层
+
+- 路由统一在 `api/server.go` 用 `s.route(...)` 注册并写一行描述，会自动进路由自文档。
+- handler 只做参数校验与响应组装，业务逻辑下沉到 `trader/` / `kernel/` / `store/`，不要在 handler 里写大段业务。
+- 错误响应走 `api/errors.go` 的统一格式，前端才能稳定提示。
+
+### 数据层
+
+- 全部走 `store/` 下的 GORM 模型与查询，禁止在 handler 或 trader 里裸写 SQL。
+- 查询函数不要有副作用（读写分离）；需要事务的地方显式开事务。
+
+### 配置
+
+- 配置加载在 `config/config.go`，环境变量见 `.env.example`（`NOFX_BACKEND_PORT`、`JWT_SECRET`、`DATA_ENCRYPTION_KEY`、`DB_*` 等）。
+- 新增配置项：加默认值 + 加环境变量读取 + 同步更新 `.env.example`，三处缺一不可。
+
+### 日志
+
+- 统一用 `logger/` 包，禁止各模块自己 `fmt.Println`。
+- 关键路径（行情获取、prompt 组装、模型返回、下单、成交回报）都要有日志，且带上 trader 标识，方便按 trader 过滤。
+
+
+## 部署规范
+
+- **除非用户明确要求，否则不得执行任何部署到服务器的动作和脚本。**
+- 线上排查必须用 sshpass 方式先看线上日志，通过日志倒推问题，绝对不能上来就看代码和改代码。
+
+
+## 排障方法论 — 常见问题的第一反应
+
+1. **前端一片 `/api` 报 ECONNREFUSED**：后端没起或在重启中。先看 8080 有没有在听（`lsof -nP -iTCP:8080 -sTCP:LISTEN`），不要去改前端。
+2. **trader 不交易**：先查日志里本轮循环有没有走到"拿行情 → 拼 prompt → 调模型 → 解析决策 → 下单"的每一步，定位断在哪一环，再去看对应的代码。禁止凭感觉改参数。
+3. **模型返回解析失败**：看 `kernel/schema.go` 的校验日志和原始返回内容，是模型输出格式变了，还是 prompt 写错了。
+4. **余额 / 持仓对不上**：先确认交易所返回口径与本地落库口径是否一致（不同交易所的可用余额、占用保证金定义不同），再查 `store/position*.go` 的写入。
+5. **改了代码没生效**：确认跑的是不是最新编译产物（Go 每次调试都会重新编译，但如果你跑的是旧的二进制或容器里的旧镜像，就会白改）。

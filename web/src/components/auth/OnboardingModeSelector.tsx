@@ -1,18 +1,14 @@
 import type { UserMode } from '../../lib/onboarding'
 
 interface OnboardingModeSelectorProps {
-  language: string
   mode: UserMode
   onChange: (mode: UserMode) => void
 }
 
 export function OnboardingModeSelector({
-  language,
   mode,
   onChange,
 }: OnboardingModeSelectorProps) {
-  const isZh = language === 'zh'
-
   const options: Array<{
     id: UserMode
     title: string
@@ -21,25 +17,21 @@ export function OnboardingModeSelector({
   }> = [
     {
       id: 'beginner',
-      title: isZh ? 'Beginner Mode' : 'Beginner Mode',
-      badge: isZh ? 'Recommended' : 'Recommended',
-      description: isZh
-        ? 'Generate a Base wallet automatically and start with Claw402 + GLM by default.'
-        : 'Generate a Base wallet automatically and start with Claw402 + GLM by default.',
+      title: '初学者模式',
+      badge: '推荐',
+      description: '自动生成 Base 钱包，默认使用 Claw402 + GLM。',
     },
     {
       id: 'advanced',
-      title: isZh ? 'Advanced Mode' : 'Advanced Mode',
-      description: isZh
-        ? 'Keep the full manual flow and configure models, wallets, and exchanges yourself.'
-        : 'Keep the full manual flow and configure models, wallets, and exchanges yourself.',
+      title: '高级模式',
+      description: '保留完整的手动配置流程，自行设置模型、钱包和交易所。',
     },
   ]
 
   return (
     <div className="space-y-2">
       <div className="text-xs font-medium text-nofx-text-muted">
-        {isZh ? 'Experience' : 'Experience'}
+        使用体验
       </div>
       <div className="grid grid-cols-1 gap-2">
         {options.map((option) => {

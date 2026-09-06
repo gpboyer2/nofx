@@ -63,7 +63,7 @@ func (s *Server) handleGetTraderConfig(c *gin.Context) {
 	traderID := c.Param("id")
 
 	if traderID == "" {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "Trader ID cannot be empty"})
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Trader ID 不能为空"})
 		return
 	}
 
@@ -203,7 +203,7 @@ func (s *Server) handlePositionHistory(c *gin.Context) {
 	// Get store
 	store := trader.GetStore()
 	if store == nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "Store not available"})
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "存储不可用"})
 		return
 	}
 
@@ -283,7 +283,7 @@ func (s *Server) handleTrades(c *gin.Context) {
 	// Get trades from store
 	store := trader.GetStore()
 	if store == nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "Store not available"})
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "存储不可用"})
 		return
 	}
 
@@ -339,7 +339,7 @@ func (s *Server) handleOrders(c *gin.Context) {
 	// Get orders from store
 	store := trader.GetStore()
 	if store == nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "Store not available"})
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "存储不可用"})
 		return
 	}
 
@@ -358,7 +358,7 @@ func (s *Server) handleOrderFills(c *gin.Context) {
 	orderIDStr := c.Param("id")
 	orderID, err := strconv.ParseInt(orderIDStr, 10, 64)
 	if err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid order ID"})
+		c.JSON(http.StatusBadRequest, gin.H{"error": "订单 ID 无效"})
 		return
 	}
 
@@ -376,7 +376,7 @@ func (s *Server) handleOrderFills(c *gin.Context) {
 
 	store := trader.GetStore()
 	if store == nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "Store not available"})
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "存储不可用"})
 		return
 	}
 
@@ -407,7 +407,7 @@ func (s *Server) handleOpenOrders(c *gin.Context) {
 	// Get symbol parameter (required for exchange query)
 	symbol := c.Query("symbol")
 	if symbol == "" {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "symbol parameter is required"})
+		c.JSON(http.StatusBadRequest, gin.H{"error": "缺少 symbol 参数"})
 		return
 	}
 

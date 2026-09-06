@@ -2,7 +2,7 @@ import { useState, useEffect, useRef } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Menu, X, ChevronDown, Settings } from 'lucide-react'
-import { t, type Language } from '../../i18n/translations'
+import type { Language } from '../../i18n/translations'
 import { OFFICIAL_LINKS } from '../../constants/branding'
 import { getCurrentPageForPath, ROUTES, type Page } from '../../router/paths'
 import { HyperliquidWalletConnect } from './HyperliquidWalletConnect'
@@ -103,54 +103,44 @@ export default function HeaderBar({
                   {
                     page: 'data',
                     path: ROUTES.data,
-                    label:
-                      language === 'zh'
-                        ? 'Data'
-                        : language === 'id'
-                          ? 'Data'
-                          : 'Data',
+                    label: '数据',
                     requiresAuth: false,
                   },
                   {
                     page: 'strategy-market',
                     path: ROUTES.strategyMarket,
-                    label:
-                      language === 'zh'
-                        ? 'Market'
-                        : language === 'id'
-                          ? 'Pasar'
-                          : 'Market',
+                    label: '市场',
                     requiresAuth: true,
                     hidden: true,
                   },
                   {
                     page: 'traders',
                     path: ROUTES.traders,
-                    label: t('configNav', language),
+                    label: '配置',
                     requiresAuth: true,
                   },
                   {
                     page: 'trader',
                     path: ROUTES.dashboard,
-                    label: t('dashboardNav', language),
+                    label: '仪表盘',
                     requiresAuth: true,
                   },
                   {
                     page: 'strategy',
                     path: ROUTES.strategy,
-                    label: t('strategyNav', language),
+                    label: '策略',
                     requiresAuth: true,
                   },
                   {
                     page: 'competition',
                     path: ROUTES.competition,
-                    label: t('realtimeNav', language),
+                    label: '排行榜',
                     requiresAuth: true,
                   },
                   {
                     page: 'faq',
                     path: ROUTES.faq,
-                    label: t('faqNav', language),
+                    label: '常见问题',
                     requiresAuth: false,
                   },
                 ]
@@ -288,7 +278,7 @@ export default function HeaderBar({
                     <div className="absolute right-0 top-full mt-2 w-48 rounded-lg shadow-lg overflow-hidden z-50 bg-nofx-bg-lighter border border-nofx-gold/20">
                       <div className="px-3 py-2 border-b border-nofx-gold/20">
                         <div className="text-xs text-nofx-text-muted">
-                          {t('loggedInAs', language)}
+                          已登录为
                         </div>
                         <div className="text-sm font-medium text-nofx-text-muted">
                           {user.email}
@@ -302,7 +292,7 @@ export default function HeaderBar({
                         className="w-full flex items-center gap-2 px-3 py-2 text-sm transition-colors hover:bg-[rgba(26,24,19,0.06)] text-nofx-text-muted hover:text-nofx-text"
                       >
                         <Settings className="w-3.5 h-3.5" />
-                        Settings
+                        设置
                       </button>
 
                       {onLogout && (
@@ -313,7 +303,7 @@ export default function HeaderBar({
                           }}
                           className="w-full px-3 py-2 text-sm font-semibold transition-colors hover:opacity-80 text-center bg-nofx-danger/20 text-nofx-danger"
                         >
-                          {t('exitLogin', language)}
+                          退出登录
                         </button>
                       )}
                     </div>
@@ -330,7 +320,7 @@ export default function HeaderBar({
                     onClick={() => navigateInApp(ROUTES.login)}
                     className="px-3 py-2 text-sm font-medium transition-colors rounded text-nofx-text-muted hover:text-nofx-text"
                   >
-                    {t('signIn', language)}
+                    登录
                   </button>
                 </div>
               )
@@ -386,54 +376,44 @@ export default function HeaderBar({
                     {
                       page: 'data',
                       path: ROUTES.data,
-                      label:
-                        language === 'zh'
-                          ? 'Data'
-                          : language === 'id'
-                            ? 'Data'
-                            : 'Data',
+                      label: '数据',
                       requiresAuth: false,
                     },
                     {
                       page: 'strategy-market',
                       path: ROUTES.strategyMarket,
-                      label:
-                        language === 'zh'
-                          ? 'Market'
-                          : language === 'id'
-                            ? 'Pasar'
-                            : 'Market',
+                      label: '市场',
                       requiresAuth: true,
                       hidden: true,
                     },
                     {
                       page: 'traders',
                       path: ROUTES.traders,
-                      label: t('configNav', language),
+                      label: '配置',
                       requiresAuth: true,
                     },
                     {
                       page: 'trader',
                       path: ROUTES.dashboard,
-                      label: t('dashboardNav', language),
+                      label: '仪表盘',
                       requiresAuth: true,
                     },
                     {
                       page: 'strategy',
                       path: ROUTES.strategy,
-                      label: t('strategyNav', language),
+                      label: '策略',
                       requiresAuth: true,
                     },
                     {
                       page: 'competition',
                       path: ROUTES.competition,
-                      label: t('realtimeNav', language),
+                      label: '排行榜',
                       requiresAuth: true,
                     },
                     {
                       page: 'faq',
                       path: ROUTES.faq,
-                      label: t('faqNav', language),
+                      label: '常见问题',
                       requiresAuth: false,
                     },
                   ]
@@ -488,8 +468,8 @@ export default function HeaderBar({
                 {isHomePage && (
                   <div className="pt-6 border-t border-white/5 space-y-4">
                     {[
-                      { key: 'features', label: t('features', language) },
-                      { key: 'howItWorks', label: t('howItWorks', language) },
+                      { key: 'features', label: '功能特性' },
+                      { key: 'howItWorks', label: '如何使用' },
                     ].map((item, i) => (
                       <motion.a
                         key={item.key}
@@ -561,7 +541,7 @@ export default function HeaderBar({
                       }}
                       className="bg-red-500/10 border border-red-500/20 text-red-500 rounded-lg font-bold text-sm hover:bg-red-500/20 transition-colors"
                     >
-                      {t('exitLogin', language)}
+                      退出登录
                     </button>
                   ) : (
                     resolvedCurrentPage !== 'login' &&
@@ -574,7 +554,7 @@ export default function HeaderBar({
                         }}
                         className="flex items-center justify-center bg-nofx-gold text-white rounded-lg font-bold text-sm hover:opacity-90 transition-colors"
                       >
-                        {t('signIn', language)}
+                        登录
                       </button>
                     )
                   )}

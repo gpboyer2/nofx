@@ -10,9 +10,9 @@ interface LogEntry {
 }
 
 const generateLog = (id: number): LogEntry => {
-    const types = ['EXEC', 'SIGNAL', 'RISK', 'MACRO', 'SYS']
+    const types = ['执行', '信号', '风险', '宏观', '系统']
     const pairs = ['AAPL-USDC', 'NVDA-USDC', 'GOLD-USDC', 'EURUSD-USDC', 'OPENAI-IPO']
-    const actions = ['BUY', 'SELL', 'HEDGE', 'ROTATE']
+    const actions = ['买入', '卖出', '对冲', '调仓']
     const type = types[Math.floor(Math.random() * types.length)]
 
     let msg = ''
@@ -20,23 +20,23 @@ const generateLog = (id: number): LogEntry => {
 
     switch (type) {
         case 'EXEC':
-            msg = `AGENT-${Math.floor(Math.random() * 99)} ${actions[Math.floor(Math.random() * 4)]} ${pairs[Math.floor(Math.random() * pairs.length)]} @ ${Math.floor(Math.random() * 600)}`
+            msg = `智能体-${Math.floor(Math.random() * 99)} ${actions[Math.floor(Math.random() * 4)]} ${pairs[Math.floor(Math.random() * pairs.length)]} @ ${Math.floor(Math.random() * 600)}`
             color = 'text-nofx-success'
             break;
         case 'SIGNAL':
-            msg = `US equities momentum signal confirmed (${(Math.random()).toFixed(3)} z-score)`
+            msg = `美股动量信号确认（z 分值：${(Math.random()).toFixed(3)}）`
             color = 'text-nofx-gold'
             break;
         case 'RISK':
-            msg = `Risk check passed: ${pairs[Math.floor(Math.random() * pairs.length)]} exposure within limits`
+            msg = `风险检查通过：${pairs[Math.floor(Math.random() * pairs.length)]} 敞口在限额内`
             color = 'text-nofx-danger'
             break;
         case 'MACRO':
-            msg = `Macro feed latency < ${Math.floor(Math.random() * 10)}ms`
+            msg = `宏观数据流延迟 < ${Math.floor(Math.random() * 10)}ms`
             color = 'text-nofx-text-muted'
             break;
         default:
-            msg = `System optimization cycle complete. Allocating resources.`
+            msg = `系统优化周期完成。正在分配资源。`
             color = 'text-nofx-accent'
     }
 
@@ -70,7 +70,7 @@ export default function LiveFeed() {
                 <div className="hidden md:flex items-center gap-6 text-nofx-text-muted border-r border-[rgba(26,24,19,0.14)] pr-6 shrink-0">
                     <div className="flex items-center gap-2">
                         <div className="w-1.5 h-1.5 bg-nofx-success rounded-full animate-pulse"></div>
-                        <span className="font-bold text-nofx-text">WS_CONN: STABLE</span>
+                        <span className="font-bold text-nofx-text">WS连接: 稳定</span>
                     </div>
                     <div className="flex items-center gap-2">
                         <span className="text-nofx-gold">TPS: 48,291</span>

@@ -1,10 +1,10 @@
 import { motion } from 'framer-motion'
 
 const stats = [
-    { label: "TRADING VOL", value: "$4.2B+" },
-    { label: "AI AGENTS", value: "850+" },
-    { label: "STRATEGIES", value: "Infinite" },
-    { label: "UPTIME", value: "99.9%" },
+    { label: "交易量", value: "$4.2B+" },
+    { label: "AI 交易员", value: "850+" },
+    { label: "策略", value: "无限" },
+    { label: "运行时间", value: "99.9%" },
 ]
 
 export default function BrandStats() {

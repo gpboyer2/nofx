@@ -189,15 +189,15 @@ func checkLaunchAIModel(model *store.AIModel) LaunchCheck {
 	case model == nil:
 		check.Status = launchCheckStatusFailed
 		check.Code = "MODEL_NOT_FOUND"
-		check.Message = "The selected AI model was not found. Configure an AI model first."
+		check.Message = "所选 AI 模型不存在，请先配置 AI 模型。"
 	case !model.Enabled:
 		check.Status = launchCheckStatusFailed
 		check.Code = "MODEL_DISABLED"
-		check.Message = fmt.Sprintf("AI model \"%s\" is disabled. Enable it first.", model.Name)
+		check.Message = fmt.Sprintf("AI model \"%s\" 未启用，请先启用。", model.Name)
 	case strings.TrimSpace(model.APIKey.String()) == "":
 		check.Status = launchCheckStatusFailed
 		check.Code = "MODEL_MISSING_CREDENTIALS"
-		check.Message = fmt.Sprintf("AI model \"%s\" has no credential saved. Add the API key or wallet key first.", model.Name)
+		check.Message = fmt.Sprintf("AI model \"%s\" 未保存凭证，请先添加 API Key 或钱包密钥。", model.Name)
 	default:
 		check.Status = launchCheckStatusOK
 		check.Message = model.Name
@@ -235,7 +235,7 @@ func checkLaunchAIWallet(model *store.AIModel) []LaunchCheck {
 	if err != nil {
 		fundsCheck.Status = launchCheckStatusWarning
 		fundsCheck.Code = "AI_WALLET_BALANCE_UNKNOWN"
-		fundsCheck.Message = "Could not verify the Base USDC balance right now. The trader will start, but AI calls fail if the wallet is empty."
+		fundsCheck.Message = "暂时无法验证 Base USDC 余额。交易员可以启动，但如果钱包为空，AI 调用将会失败。"
 		return []LaunchCheck{walletCheck, fundsCheck}
 	}
 
@@ -244,7 +244,7 @@ func checkLaunchAIWallet(model *store.AIModel) []LaunchCheck {
 		fundsCheck.Status = launchCheckStatusFailed
 		fundsCheck.Code = "AI_WALLET_INSUFFICIENT_FUNDS"
 		fundsCheck.Message = fmt.Sprintf(
-			"The Claw402 wallet holds %.2f USDC but needs at least %.0f USDC on Base to pay for AI and data calls.",
+			"The Claw402 wallet holds %.2f USDC 但 Base 上至少需要 %.0f USDC 才能支付 AI 和数据调用费用。",
 			balance, MinAIFeeUSDC,
 		)
 	} else {
@@ -264,7 +264,7 @@ func checkLaunchStrategy(strategy *store.Strategy, required bool) LaunchCheck {
 	case required:
 		check.Status = launchCheckStatusFailed
 		check.Code = "STRATEGY_NOT_FOUND"
-		check.Message = "The selected strategy was not found. Pick or create a strategy first."
+		check.Message = "所选策略不存在，请先选择或创建一个策略。"
 	default:
 		check.Status = launchCheckStatusSkipped
 	}
@@ -296,7 +296,7 @@ func (s *Server) checkLaunchExchange(userID string, exchange *store.Exchange) []
 	if err != nil {
 		accountCheck.Status = launchCheckStatusWarning
 		accountCheck.Code = "EXCHANGE_STATE_UNKNOWN"
-		accountCheck.Message = "Could not verify the exchange account right now."
+		accountCheck.Message = "暂时无法验证交易所账户。"
 		fundsCheck.Status = launchCheckStatusSkipped
 		return []LaunchCheck{configCheck, accountCheck, fundsCheck}
 	}
@@ -305,7 +305,7 @@ func (s *Server) checkLaunchExchange(userID string, exchange *store.Exchange) []
 	if !ok {
 		accountCheck.Status = launchCheckStatusWarning
 		accountCheck.Code = "EXCHANGE_STATE_UNKNOWN"
-		accountCheck.Message = "Could not verify the exchange account right now."
+		accountCheck.Message = "暂时无法验证交易所账户。"
 		fundsCheck.Status = launchCheckStatusSkipped
 		return []LaunchCheck{configCheck, accountCheck, fundsCheck}
 	}
@@ -315,7 +315,7 @@ func (s *Server) checkLaunchExchange(userID string, exchange *store.Exchange) []
 		accountCheck.Code = state.ErrorCode
 		accountCheck.Message = state.ErrorMessage
 		if accountCheck.Message == "" {
-			accountCheck.Message = fmt.Sprintf("Exchange account \"%s\" is not ready (%s).", exchangeDisplayName(exchange), state.Status)
+			accountCheck.Message = fmt.Sprintf("交易所账户 \"%s\" 未就绪（%s）。", exchangeDisplayName(exchange), state.Status)
 		}
 		fundsCheck.Status = launchCheckStatusSkipped
 		return []LaunchCheck{configCheck, accountCheck, fundsCheck}
@@ -335,7 +335,7 @@ func (s *Server) checkLaunchExchange(userID string, exchange *store.Exchange) []
 
 	if funded < MinTradingUSDC {
 		message := fmt.Sprintf(
-			"Exchange account \"%s\" holds %.2f %s but needs at least %.0f %s to place the first trade.",
+			"交易所账户 \"%s\" 余额为 %.2f %s，但至少需要 %.0f %s 才能进行首次交易。",
 			exchangeDisplayName(exchange), funded, fundsCheck.Asset, MinTradingUSDC, fundsCheck.Asset,
 		)
 		if exchange.Testnet {
@@ -357,19 +357,19 @@ func (s *Server) checkLaunchExchange(userID string, exchange *store.Exchange) []
 // returns stable uppercase codes for the checklist UI.
 func describeExchangeConfigIssue(exchange *store.Exchange) (string, string) {
 	if exchange == nil {
-		return "The selected exchange account was not found. Connect an exchange first.", "EXCHANGE_NOT_FOUND"
+		return "所选交易所账户不存在，请先连接一个交易所。", "EXCHANGE_NOT_FOUND"
 	}
 	if !exchange.Enabled {
-		return fmt.Sprintf("Exchange account \"%s\" is disabled. Enable it first.", exchangeDisplayName(exchange)), "EXCHANGE_DISABLED"
+		return fmt.Sprintf("交易所账户 \"%s\" 未启用，请先启用。", exchangeDisplayName(exchange)), "EXCHANGE_DISABLED"
 	}
 	if missing := missingExchangeFields(exchange); len(missing) > 0 {
 		return fmt.Sprintf(
-			"Exchange account \"%s\" is missing %s. Complete the connection first.",
+			"交易所账户 \"%s\" 缺少 %s，请先完成连接配置。",
 			exchangeDisplayName(exchange), strings.Join(missing, ", "),
 		), "EXCHANGE_MISSING_FIELDS"
 	}
 	if exchange.ExchangeType == "hyperliquid" && !exchange.HyperliquidBuilderApproved {
-		return "Hyperliquid builder authorization is not complete. Reconnect the wallet and finish the authorization.", "HYPERLIQUID_BUILDER_NOT_APPROVED"
+		return "Hyperliquid builder 授权未完成，请重新连接钱包并完成授权。", "HYPERLIQUID_BUILDER_NOT_APPROVED"
 	}
 	return "", ""
 }

@@ -60,7 +60,7 @@ func (s *Server) handleGetModelConfigs(c *gin.Context) {
 	models, err := s.store.AIModel().List(userID)
 	if err != nil {
 		logger.Infof("❌ Failed to get AI model configs: %v", err)
-		SafeInternalError(c, "Failed to get AI model configs", err)
+		SafeInternalError(c, "获取 AI 模型配置失败", err)
 		return
 	}
 
@@ -126,7 +126,7 @@ func (s *Server) handleUpdateModelConfigs(c *gin.Context) {
 	// Read raw request body
 	bodyBytes, err := c.GetRawData()
 	if err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "Failed to read request body"})
+		c.JSON(http.StatusBadRequest, gin.H{"error": "读取请求体失败"})
 		return
 	}
 
@@ -137,7 +137,7 @@ func (s *Server) handleUpdateModelConfigs(c *gin.Context) {
 		// Transport encryption disabled, accept plain JSON
 		if err := json.Unmarshal(bodyBytes, &req); err != nil {
 			logger.Infof("❌ Failed to parse plain JSON request: %v", err)
-			c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid request format"})
+			c.JSON(http.StatusBadRequest, gin.H{"error": "请求格式无效"})
 			return
 		}
 		logger.Infof("📝 Received plain text model config (UserID: %s)", userID)
@@ -146,7 +146,7 @@ func (s *Server) handleUpdateModelConfigs(c *gin.Context) {
 		var encryptedPayload crypto.EncryptedPayload
 		if err := json.Unmarshal(bodyBytes, &encryptedPayload); err != nil {
 			logger.Infof("❌ Failed to parse encrypted payload: %v", err)
-			c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid request format, encrypted transmission required"})
+			c.JSON(http.StatusBadRequest, gin.H{"error": "请求格式无效，需要使用加密传输"})
 			return
 		}
 
@@ -154,9 +154,9 @@ func (s *Server) handleUpdateModelConfigs(c *gin.Context) {
 		if encryptedPayload.WrappedKey == "" {
 			logger.Infof("❌ Detected unencrypted request (UserID: %s)", userID)
 			c.JSON(http.StatusBadRequest, gin.H{
-				"error":   "This endpoint only supports encrypted transmission, please use encrypted client",
+				"error":   "此接口仅支持加密传输，请使用加密客户端",
 				"code":    "ENCRYPTION_REQUIRED",
-				"message": "Encrypted transmission is required for security reasons",
+				"message": "出于安全原因，必须使用加密传输",
 			})
 			return
 		}
@@ -165,14 +165,14 @@ func (s *Server) handleUpdateModelConfigs(c *gin.Context) {
 		decrypted, err := s.cryptoHandler.cryptoService.DecryptSensitiveData(&encryptedPayload)
 		if err != nil {
 			logger.Infof("❌ Failed to decrypt model config (UserID: %s): %v", userID, err)
-			c.JSON(http.StatusBadRequest, gin.H{"error": "Failed to decrypt data"})
+			c.JSON(http.StatusBadRequest, gin.H{"error": "数据解密失败"})
 			return
 		}
 
 		// Parse decrypted data
 		if err := json.Unmarshal([]byte(decrypted), &req); err != nil {
 			logger.Infof("❌ Failed to parse decrypted data: %v", err)
-			c.JSON(http.StatusBadRequest, gin.H{"error": "Failed to parse decrypted data"})
+			c.JSON(http.StatusBadRequest, gin.H{"error": "解密数据解析失败"})
 			return
 		}
 		logger.Infof("🔓 Decrypted model config data (UserID: %s)", userID)
@@ -203,7 +203,7 @@ func (s *Server) handleUpdateModelConfigs(c *gin.Context) {
 			cleanURL := strings.TrimSuffix(modelData.CustomAPIURL, "#")
 			if err := security.ValidateURL(cleanURL); err != nil {
 				logger.Warnf("Invalid custom_api_url for model %s: %v", modelID, err)
-				c.JSON(http.StatusBadRequest, gin.H{"error": fmt.Sprintf("Invalid custom_api_url for model %s: URL must be a valid HTTPS endpoint", modelID)})
+				c.JSON(http.StatusBadRequest, gin.H{"error": fmt.Sprintf("模型 %s 的 custom_api_url 无效：URL 必须为有效的 HTTPS 地址", modelID)})
 				return
 			}
 		}
@@ -218,7 +218,7 @@ func (s *Server) handleUpdateModelConfigs(c *gin.Context) {
 
 		err := s.store.AIModel().Update(userID, modelID, modelData.Enabled, modelData.APIKey, modelData.CustomAPIURL, modelData.CustomModelName)
 		if err != nil {
-			SafeInternalError(c, fmt.Sprintf("Update model %s", modelID), err)
+			SafeInternalError(c, fmt.Sprintf("更新模型 %s 失败", modelID), err)
 			return
 		}
 	}
@@ -237,7 +237,7 @@ func (s *Server) handleUpdateModelConfigs(c *gin.Context) {
 	}
 
 	logger.Infof("✓ AI model config updated: %+v", SanitizeModelConfigForLog(req.Models))
-	c.JSON(http.StatusOK, gin.H{"message": "Model configuration updated"})
+	c.JSON(http.StatusOK, gin.H{"message": "模型配置已更新"})
 }
 
 // handleGetSupportedModels Get list of AI models supported by the system

@@ -485,13 +485,13 @@ func (s *Server) handleGetServerIP(c *gin.Context) {
 
 	// If still cannot get it, return error
 	if publicIP == "" {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "Unable to get public IP address"})
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "无法获取公网 IP 地址"})
 		return
 	}
 
 	c.JSON(http.StatusOK, gin.H{
 		"public_ip": publicIP,
-		"message":   "Please add this IP address to the whitelist",
+		"message":   "请将此 IP 地址加入白名单",
 	})
 }
 
@@ -648,7 +648,7 @@ func (s *Server) authMiddleware() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		authHeader := c.GetHeader("Authorization")
 		if authHeader == "" {
-			c.JSON(http.StatusUnauthorized, gin.H{"error": "Missing Authorization header"})
+			c.JSON(http.StatusUnauthorized, gin.H{"error": "缺少 Authorization 请求头"})
 			c.Abort()
 			return
 		}
@@ -656,7 +656,7 @@ func (s *Server) authMiddleware() gin.HandlerFunc {
 		// Check Bearer token format
 		tokenParts := strings.Split(authHeader, " ")
 		if len(tokenParts) != 2 || tokenParts[0] != "Bearer" {
-			c.JSON(http.StatusUnauthorized, gin.H{"error": "Invalid Authorization format"})
+			c.JSON(http.StatusUnauthorized, gin.H{"error": "Authorization 格式无效"})
 			c.Abort()
 			return
 		}
@@ -665,7 +665,7 @@ func (s *Server) authMiddleware() gin.HandlerFunc {
 
 		// Blacklist check
 		if auth.IsTokenBlacklisted(tokenString) {
-			c.JSON(http.StatusUnauthorized, gin.H{"error": "Token expired, please login again"})
+			c.JSON(http.StatusUnauthorized, gin.H{"error": "Token 已过期，请重新登录"})
 			c.Abort()
 			return
 		}
@@ -674,7 +674,7 @@ func (s *Server) authMiddleware() gin.HandlerFunc {
 		claims, err := auth.ValidateJWT(tokenString)
 		if err != nil {
 			logger.Errorf("[Auth] Invalid token: %v", err)
-			c.JSON(http.StatusUnauthorized, gin.H{"error": "Invalid or expired token"})
+			c.JSON(http.StatusUnauthorized, gin.H{"error": "Token 无效或已过期"})
 			c.Abort()
 			return
 		}

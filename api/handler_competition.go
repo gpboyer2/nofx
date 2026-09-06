@@ -258,7 +258,7 @@ func (s *Server) handlePublicTraderList(c *gin.Context) {
 	traders, ok := tradersData.([]map[string]interface{})
 	if !ok {
 		c.JSON(http.StatusInternalServerError, gin.H{
-			"error": "Trader data format error",
+			"error": "交易员数据格式错误",
 		})
 		return
 	}
@@ -327,7 +327,7 @@ func (s *Server) handleEquityHistoryBatch(c *gin.Context) {
 
 			traders, ok := topTraders["traders"].([]map[string]interface{})
 			if !ok {
-				c.JSON(http.StatusInternalServerError, gin.H{"error": "Trader data format error"})
+				c.JSON(http.StatusInternalServerError, gin.H{"error": "交易员数据格式错误"})
 				return
 			}
 
@@ -417,7 +417,7 @@ func (s *Server) getEquityHistoryForTraders(traderIDs []string, hours int) map[s
 		}
 		if err != nil {
 			logger.Errorf("[API] Failed to get equity history for %s: %v", traderID, err)
-			errors[traderID] = "Failed to get historical data"
+			errors[traderID] = "获取历史数据失败"
 			continue
 		}
 
@@ -494,13 +494,13 @@ func (s *Server) getEquityHistoryForTraders(traderIDs []string, hours int) map[s
 func (s *Server) handleGetPublicTraderConfig(c *gin.Context) {
 	traderID := c.Param("id")
 	if traderID == "" {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "Trader ID cannot be empty"})
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Trader ID 不能为空"})
 		return
 	}
 
 	trader, err := s.traderManager.GetTrader(traderID)
 	if err != nil {
-		c.JSON(http.StatusNotFound, gin.H{"error": "Trader does not exist"})
+		c.JSON(http.StatusNotFound, gin.H{"error": "交易员不存在"})
 		return
 	}
 

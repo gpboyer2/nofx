@@ -132,7 +132,7 @@ export function FAQContent({ categories, onActiveItemChange }: FAQContentProps) 
               {category.title}
             </h2>
             <span className="ml-auto font-mono text-[10px] uppercase tracking-[0.12em] text-nofx-text-muted">
-              {category.items.length} {category.items.length === 1 ? 'entry' : 'entries'}
+              {category.items.length} 条
             </span>
           </div>
 

@@ -91,7 +91,7 @@ func rateLimitMiddleware(l *ipRateLimiter) gin.HandlerFunc {
 		if !l.allow(c.ClientIP(), time.Now()) {
 			c.Header("Retry-After", "60")
 			c.JSON(http.StatusTooManyRequests, gin.H{
-				"error": "Too many requests. Please slow down and try again in a minute.",
+				"error": "请求过于频繁，请稍后再试",
 			})
 			c.Abort()
 			return

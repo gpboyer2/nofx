@@ -9,7 +9,7 @@ const traderPresets = [
     // ... (rest of agents array remains, but I can't skip lines in replacement content easily without context. Wait, let's just replace the top section)
     // Actually, I'll use multi_replace for targeted cleanup.
     class: 'US_STOCKS',
-    desc: 'Large-cap momentum and breakout trading.',
+    desc: "大盘股动量突破交易策略。",
     apy: '142%',
     winRate: '68%',
     risk: 'HIGH',
@@ -21,7 +21,7 @@ const traderPresets = [
   {
     name: 'BETA-X',
     class: 'MACRO_FX',
-    desc: 'FX trend and macro regime allocation.',
+    desc: "外汇趋势与宏观市场配置策略。",
     apy: '89%',
     winRate: '55%',
     risk: 'MED',
@@ -33,7 +33,7 @@ const traderPresets = [
   {
     name: 'GAMMA-RAY',
     class: 'PRE_IPO',
-    desc: 'Private-market momentum basket engine.',
+    desc: "私募市场动量篮子引擎策略。",
     apy: '24%',
     winRate: '99%',
     risk: 'LOW',
@@ -70,18 +70,18 @@ export default function AgentGrid() {
         <div className="flex flex-col md:flex-row justify-between items-end mb-10 md:mb-16 gap-6">
           <div>
             <div className="flex items-center gap-2 text-nofx-gold font-mono text-xs mb-2 tracking-widest uppercase">
-              <Crosshair className="w-4 h-4" /> ASSET CLASS SELECT
+              <Crosshair className="w-4 h-4" /> 资产类别选择
             </div>
             <h2 className="text-4xl md:text-5xl font-black text-nofx-text uppercase tracking-tighter">
-              PROFESSIONAL{' '}
+              专业{' '}
               <span className="text-nofx-gold">
-                TRADERS
+                交易员
               </span>
             </h2>
           </div>
           <div className="font-mono text-right text-xs text-nofx-text-muted max-w-xs">
-            CREATE TRADERS FOR US STOCKS, COMMODITIES, FX AND PRE-IPO MARKETS.
-            DESCRIBE THE STRATEGY IN ONE SENTENCE.
+            为美股、大宗商品、外汇和 Pre-IPO 市场创建交易员。
+            一句话描述您的策略即可开始。
           </div>
         </div>
 
@@ -160,7 +160,7 @@ export default function AgentGrid() {
                     onClick={handleInitialize}
                     className={`w-full py-4 text-xs font-bold font-mono uppercase tracking-[0.2em] border border-[rgba(26,24,19,0.14)] hover:border-${preset.color === 'text-nofx-gold' ? 'nofx-gold' : 'nofx-text'} hover:bg-nofx-text/5 transition-all flex items-center justify-center gap-2 group-hover:text-nofx-text cursor-pointer text-nofx-text`}
                   >
-                    <span className={preset.color}>[</span> INITIALIZE{' '}
+                    <span className={preset.color}>[</span> 初始化{' '}
                     <span className={preset.color}>]</span>
                   </button>
                 </div>

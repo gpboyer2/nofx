@@ -19,18 +19,18 @@ import (
 func (s *Server) handleLogout(c *gin.Context) {
 	authHeader := c.GetHeader("Authorization")
 	if authHeader == "" {
-		c.JSON(http.StatusUnauthorized, gin.H{"error": "Missing Authorization header"})
+		c.JSON(http.StatusUnauthorized, gin.H{"error": "缺少授权头信息"})
 		return
 	}
 	parts := strings.Split(authHeader, " ")
 	if len(parts) != 2 || parts[0] != "Bearer" {
-		c.JSON(http.StatusUnauthorized, gin.H{"error": "Invalid Authorization format"})
+		c.JSON(http.StatusUnauthorized, gin.H{"error": "授权格式无效"})
 		return
 	}
 	tokenString := parts[1]
 	claims, err := auth.ValidateJWT(tokenString)
 	if err != nil {
-		c.JSON(http.StatusUnauthorized, gin.H{"error": "Invalid token"})
+		c.JSON(http.StatusUnauthorized, gin.H{"error": "Token 无效"})
 		return
 	}
 	var exp time.Time
@@ -40,7 +40,7 @@ func (s *Server) handleLogout(c *gin.Context) {
 		exp = time.Now().Add(24 * time.Hour)
 	}
 	auth.BlacklistToken(tokenString, exp)
-	c.JSON(http.StatusOK, gin.H{"message": "Logged out"})
+	c.JSON(http.StatusOK, gin.H{"message": "已退出登录"})
 }
 
 // handleRegister Handle user registration request.
@@ -49,12 +49,12 @@ func (s *Server) handleLogout(c *gin.Context) {
 func (s *Server) handleRegister(c *gin.Context) {
 	userCount, err := s.store.User().Count()
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to check user count"})
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "检查用户数量失败"})
 		return
 	}
 
 	if userCount > 0 {
-		c.JSON(http.StatusForbidden, gin.H{"error": "System already initialized"})
+		c.JSON(http.StatusForbidden, gin.H{"error": "系统已初始化"})
 		return
 	}
 
@@ -77,14 +77,14 @@ func (s *Server) handleRegister(c *gin.Context) {
 	// Check if email already exists
 	_, err = s.store.User().GetByEmail(req.Email)
 	if err == nil {
-		c.JSON(http.StatusConflict, gin.H{"error": "Email already registered"})
+		c.JSON(http.StatusConflict, gin.H{"error": "该邮箱已被注册"})
 		return
 	}
 
 	// Generate password hash
 	passwordHash, err := auth.HashPassword(req.Password)
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "Password processing failed"})
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "密码处理失败"})
 		return
 	}
 
@@ -111,7 +111,7 @@ func (s *Server) handleRegister(c *gin.Context) {
 	// Generate JWT token
 	token, err := auth.GenerateJWT(user.ID, user.Email)
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to generate token"})
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Token 生成失败"})
 		return
 	}
 
@@ -125,7 +125,7 @@ func (s *Server) handleRegister(c *gin.Context) {
 		"token":   token,
 		"user_id": user.ID,
 		"email":   user.Email,
-		"message": "Registration successful",
+		"message": "注册成功",
 	})
 }
 
@@ -154,20 +154,20 @@ func (s *Server) handleLogin(c *gin.Context) {
 		// Perform a dummy comparison so the response time does not reveal
 		// whether the email exists (anti user-enumeration), then fail uniformly.
 		auth.CheckPassword(req.Password, dummyPasswordHash)
-		c.JSON(http.StatusUnauthorized, gin.H{"error": "Email or password incorrect"})
+		c.JSON(http.StatusUnauthorized, gin.H{"error": "邮箱或密码错误"})
 		return
 	}
 
 	// Verify password
 	if !auth.CheckPassword(req.Password, user.PasswordHash) {
-		c.JSON(http.StatusUnauthorized, gin.H{"error": "Email or password incorrect"})
+		c.JSON(http.StatusUnauthorized, gin.H{"error": "邮箱或密码错误"})
 		return
 	}
 
 	// Issue token directly after password verification.
 	token, err := auth.GenerateJWT(user.ID, user.Email)
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to generate token"})
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Token 生成失败"})
 		return
 	}
 
@@ -175,7 +175,7 @@ func (s *Server) handleLogin(c *gin.Context) {
 		"token":   token,
 		"user_id": user.ID,
 		"email":   user.Email,
-		"message": "Login successful",
+		"message": "登录成功",
 	})
 }
 
@@ -198,7 +198,7 @@ func (s *Server) handleChangePassword(c *gin.Context) {
 		SafeInternalError(c, "Failed to update password", err)
 		return
 	}
-	c.JSON(http.StatusOK, gin.H{"message": "Password updated"})
+	c.JSON(http.StatusOK, gin.H{"message": "密码已更新"})
 }
 
 // NOTE: Password and account recovery used to live here as the public,

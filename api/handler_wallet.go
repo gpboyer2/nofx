@@ -31,7 +31,7 @@ func (s *Server) handleWalletValidate(c *gin.Context) {
 	if err := c.ShouldBindJSON(&req); err != nil {
 		c.JSON(http.StatusBadRequest, walletValidateResponse{
 			Valid: false,
-			Error: "invalid request body",
+			Error: "请求体无效",
 		})
 		return
 	}
@@ -42,7 +42,7 @@ func (s *Server) handleWalletValidate(c *gin.Context) {
 	if !strings.HasPrefix(pk, "0x") {
 		c.JSON(http.StatusOK, walletValidateResponse{
 			Valid: false,
-			Error: "missing 0x prefix",
+			Error: "缺少 0x 前缀",
 		})
 		return
 	}
@@ -59,7 +59,7 @@ func (s *Server) handleWalletValidate(c *gin.Context) {
 	if _, err := hex.DecodeString(hexPart); err != nil {
 		c.JSON(http.StatusOK, walletValidateResponse{
 			Valid: false,
-			Error: "contains invalid hex characters",
+			Error: "包含无效的十六进制字符",
 		})
 		return
 	}
@@ -69,7 +69,7 @@ func (s *Server) handleWalletValidate(c *gin.Context) {
 	if err != nil {
 		c.JSON(http.StatusOK, walletValidateResponse{
 			Valid: false,
-			Error: "invalid private key",
+			Error: "私钥无效",
 		})
 		return
 	}
@@ -102,7 +102,7 @@ func (s *Server) handleWalletGenerate(c *gin.Context) {
 	// Generate new EVM wallet
 	privateKey, err := crypto.GenerateKey()
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "failed to generate wallet"})
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "生成钱包失败"})
 		return
 	}
 

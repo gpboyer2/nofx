@@ -29,7 +29,7 @@ func validateStrategyConfig(config *store.StrategyConfig) []string {
 	if (config.Indicators.EnableQuantData || config.Indicators.EnableOIRanking ||
 		config.Indicators.EnableNetFlowRanking || config.Indicators.EnablePriceRanking) &&
 		config.Indicators.NofxOSAPIKey == "" {
-		warnings = append(warnings, "NofxOS API key is not configured. NofxOS data sources may not work properly.")
+		warnings = append(warnings, "未配置 NofxOS API Key，NofxOS 数据源可能无法正常工作")
 	}
 
 	return warnings
@@ -52,7 +52,7 @@ func (s *Server) handleEstimateTokens(c *gin.Context) {
 		Config store.StrategyConfig `json:"config" binding:"required"`
 	}
 	if err := c.ShouldBindJSON(&req); err != nil {
-		SafeBadRequest(c, "Invalid request parameters")
+		SafeBadRequest(c, "请求参数无效")
 		return
 	}
 
@@ -64,7 +64,7 @@ func (s *Server) handleEstimateTokens(c *gin.Context) {
 func (s *Server) handlePublicStrategies(c *gin.Context) {
 	strategies, err := s.store.Strategy().ListPublic()
 	if err != nil {
-		SafeInternalError(c, "Failed to get public strategies", err)
+		SafeInternalError(c, "获取公开策略失败", err)
 		return
 	}
 
@@ -102,7 +102,7 @@ func (s *Server) handlePublicStrategies(c *gin.Context) {
 func (s *Server) handleGetStrategies(c *gin.Context) {
 	userID := c.GetString("user_id")
 	if userID == "" {
-		c.JSON(http.StatusUnauthorized, gin.H{"error": "Unauthorized"})
+		c.JSON(http.StatusUnauthorized, gin.H{"error": "未授权访问"})
 		return
 	}
 
@@ -116,7 +116,7 @@ func (s *Server) handleGetStrategies(c *gin.Context) {
 
 	strategies, err := s.store.Strategy().List(userID)
 	if err != nil {
-		SafeInternalError(c, "Failed to get strategy list", err)
+		SafeInternalError(c, "获取策略列表失败", err)
 		return
 	}
 
@@ -152,13 +152,13 @@ func (s *Server) handleGetStrategy(c *gin.Context) {
 	strategyID := c.Param("id")
 
 	if userID == "" {
-		c.JSON(http.StatusUnauthorized, gin.H{"error": "Unauthorized"})
+		c.JSON(http.StatusUnauthorized, gin.H{"error": "未授权访问"})
 		return
 	}
 
 	strategy, err := s.store.Strategy().Get(userID, strategyID)
 	if err != nil {
-		c.JSON(http.StatusNotFound, gin.H{"error": "Strategy not found"})
+		c.JSON(http.StatusNotFound, gin.H{"error": "策略不存在"})
 		return
 	}
 
@@ -183,7 +183,7 @@ func (s *Server) handleGetStrategy(c *gin.Context) {
 func (s *Server) handleCreateStrategy(c *gin.Context) {
 	userID := c.GetString("user_id")
 	if userID == "" {
-		c.JSON(http.StatusUnauthorized, gin.H{"error": "Unauthorized"})
+		c.JSON(http.StatusUnauthorized, gin.H{"error": "未授权访问"})
 		return
 	}
 
@@ -197,7 +197,7 @@ func (s *Server) handleCreateStrategy(c *gin.Context) {
 	}
 
 	if err := c.ShouldBindJSON(&req); err != nil {
-		SafeBadRequest(c, "Invalid request parameters")
+		SafeBadRequest(c, "请求参数无效")
 		return
 	}
 
@@ -227,7 +227,7 @@ func (s *Server) handleCreateStrategy(c *gin.Context) {
 	// Serialize configuration
 	configJSON, err := json.Marshal(req.Config)
 	if err != nil {
-		SafeInternalError(c, "Serialize configuration", err)
+		SafeInternalError(c, "序列化配置失败", err)
 		return
 	}
 
@@ -245,7 +245,7 @@ func (s *Server) handleCreateStrategy(c *gin.Context) {
 	}
 
 	if err := s.store.Strategy().Create(strategy); err != nil {
-		SafeInternalError(c, "Failed to create strategy", err)
+		SafeInternalError(c, "创建策略失败", err)
 		return
 	}
 
@@ -255,7 +255,7 @@ func (s *Server) handleCreateStrategy(c *gin.Context) {
 
 	response := gin.H{
 		"id":      strategy.ID,
-		"message": "Strategy created successfully",
+		"message": "策略创建成功",
 	}
 	if len(warnings) > 0 {
 		response["warnings"] = warnings
@@ -273,18 +273,18 @@ func (s *Server) handleUpdateStrategy(c *gin.Context) {
 	strategyID := c.Param("id")
 
 	if userID == "" {
-		c.JSON(http.StatusUnauthorized, gin.H{"error": "Unauthorized"})
+		c.JSON(http.StatusUnauthorized, gin.H{"error": "未授权访问"})
 		return
 	}
 
 	// Check if it's a system default strategy
 	existing, err := s.store.Strategy().Get(userID, strategyID)
 	if err != nil {
-		c.JSON(http.StatusNotFound, gin.H{"error": "Strategy not found"})
+		c.JSON(http.StatusNotFound, gin.H{"error": "策略不存在"})
 		return
 	}
 	if existing.IsDefault {
-		c.JSON(http.StatusForbidden, gin.H{"error": "Cannot modify system default strategy"})
+		c.JSON(http.StatusForbidden, gin.H{"error": "不能修改系统默认策略"})
 		return
 	}
 
@@ -297,7 +297,7 @@ func (s *Server) handleUpdateStrategy(c *gin.Context) {
 	}
 
 	if err := c.ShouldBindJSON(&req); err != nil {
-		SafeBadRequest(c, "Invalid request parameters")
+		SafeBadRequest(c, "请求参数无效")
 		return
 	}
 
@@ -312,12 +312,12 @@ func (s *Server) handleUpdateStrategy(c *gin.Context) {
 	if len(req.Config) > 0 && string(req.Config) != "null" {
 		var patch map[string]any
 		if err := json.Unmarshal(req.Config, &patch); err != nil {
-			SafeBadRequest(c, "Invalid config JSON")
+			SafeBadRequest(c, "配置 JSON 格式无效")
 			return
 		}
 		mergedConfig, err = store.MergeStrategyConfig(mergedConfig, patch)
 		if err != nil {
-			SafeBadRequest(c, "Invalid config JSON")
+			SafeBadRequest(c, "配置 JSON 格式无效")
 			return
 		}
 	}
@@ -336,7 +336,7 @@ func (s *Server) handleUpdateStrategy(c *gin.Context) {
 
 	configJSON, err := json.Marshal(mergedConfig)
 	if err != nil {
-		SafeInternalError(c, "Serialize configuration", err)
+		SafeInternalError(c, "序列化配置失败", err)
 		return
 	}
 
@@ -351,7 +351,7 @@ func (s *Server) handleUpdateStrategy(c *gin.Context) {
 	}
 
 	if err := s.store.Strategy().Update(strategy); err != nil {
-		SafeInternalError(c, "Failed to update strategy", err)
+		SafeInternalError(c, "更新策略失败", err)
 		return
 	}
 
@@ -367,7 +367,7 @@ func (s *Server) handleUpdateStrategy(c *gin.Context) {
 		}
 		if allExceed && len(estimate.ModelLimits) > 0 {
 			c.JSON(http.StatusBadRequest, gin.H{
-				"error":          fmt.Sprintf("Estimated %d tokens exceeds all known model context limits. Reduce coins, timeframes, or K-line count.", estimate.Total),
+				"error":          fmt.Sprintf("预估 %d tokens 超出所有已知模型的上下文限制，请减少币种、时间框架或 K 线数量", estimate.Total),
 				"token_estimate": estimate,
 			})
 			return
@@ -378,7 +378,7 @@ func (s *Server) handleUpdateStrategy(c *gin.Context) {
 	warnings := validateStrategyConfig(&mergedConfig)
 	warnings = append(warnings, store.StrategyClampWarnings(beforeClamp, mergedConfig, mergedConfig.Language)...)
 
-	response := gin.H{"message": "Strategy updated successfully"}
+	response := gin.H{"message": "策略更新成功"}
 	if len(warnings) > 0 {
 		response["warnings"] = warnings
 	}
@@ -392,16 +392,16 @@ func (s *Server) handleDeleteStrategy(c *gin.Context) {
 	strategyID := c.Param("id")
 
 	if userID == "" {
-		c.JSON(http.StatusUnauthorized, gin.H{"error": "Unauthorized"})
+		c.JSON(http.StatusUnauthorized, gin.H{"error": "未授权访问"})
 		return
 	}
 
 	if err := s.store.Strategy().Delete(userID, strategyID); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": SanitizeError(err, "Failed to delete strategy")})
+		c.JSON(http.StatusBadRequest, gin.H{"error": SanitizeError(err, "删除策略失败")})
 		return
 	}
 
-	c.JSON(http.StatusOK, gin.H{"message": "Strategy deleted successfully"})
+	c.JSON(http.StatusOK, gin.H{"message": "策略删除成功"})
 }
 
 // handleActivateStrategy Activate strategy
@@ -410,16 +410,16 @@ func (s *Server) handleActivateStrategy(c *gin.Context) {
 	strategyID := c.Param("id")
 
 	if userID == "" {
-		c.JSON(http.StatusUnauthorized, gin.H{"error": "Unauthorized"})
+		c.JSON(http.StatusUnauthorized, gin.H{"error": "未授权访问"})
 		return
 	}
 
 	if err := s.store.Strategy().SetActive(userID, strategyID); err != nil {
-		SafeInternalError(c, "Failed to activate strategy", err)
+		SafeInternalError(c, "激活策略失败", err)
 		return
 	}
 
-	c.JSON(http.StatusOK, gin.H{"message": "Strategy activated successfully"})
+	c.JSON(http.StatusOK, gin.H{"message": "策略激活成功"})
 }
 
 // handleDuplicateStrategy Duplicate strategy
@@ -428,7 +428,7 @@ func (s *Server) handleDuplicateStrategy(c *gin.Context) {
 	sourceID := c.Param("id")
 
 	if userID == "" {
-		c.JSON(http.StatusUnauthorized, gin.H{"error": "Unauthorized"})
+		c.JSON(http.StatusUnauthorized, gin.H{"error": "未授权访问"})
 		return
 	}
 
@@ -437,19 +437,19 @@ func (s *Server) handleDuplicateStrategy(c *gin.Context) {
 	}
 
 	if err := c.ShouldBindJSON(&req); err != nil {
-		SafeBadRequest(c, "Invalid request parameters")
+		SafeBadRequest(c, "请求参数无效")
 		return
 	}
 
 	newID := uuid.New().String()
 	if err := s.store.Strategy().Duplicate(userID, sourceID, newID, req.Name); err != nil {
-		SafeInternalError(c, "Failed to duplicate strategy", err)
+		SafeInternalError(c, "复制策略失败", err)
 		return
 	}
 
 	c.JSON(http.StatusOK, gin.H{
 		"id":      newID,
-		"message": "Strategy duplicated successfully",
+		"message": "策略复制成功",
 	})
 }
 
@@ -458,13 +458,13 @@ func (s *Server) handleGetActiveStrategy(c *gin.Context) {
 	userID := c.GetString("user_id")
 
 	if userID == "" {
-		c.JSON(http.StatusUnauthorized, gin.H{"error": "Unauthorized"})
+		c.JSON(http.StatusUnauthorized, gin.H{"error": "未授权访问"})
 		return
 	}
 
 	strategy, err := s.store.Strategy().GetActive(userID)
 	if err != nil {
-		c.JSON(http.StatusNotFound, gin.H{"error": "No active strategy"})
+		c.JSON(http.StatusNotFound, gin.H{"error": "暂无已激活的策略"})
 		return
 	}
 
@@ -501,7 +501,7 @@ func (s *Server) handleGetDefaultStrategyConfig(c *gin.Context) {
 func (s *Server) handlePreviewPrompt(c *gin.Context) {
 	userID := c.GetString("user_id")
 	if userID == "" {
-		c.JSON(http.StatusUnauthorized, gin.H{"error": "Unauthorized"})
+		c.JSON(http.StatusUnauthorized, gin.H{"error": "未授权访问"})
 		return
 	}
 
@@ -512,7 +512,7 @@ func (s *Server) handlePreviewPrompt(c *gin.Context) {
 	}
 
 	if err := c.ShouldBindJSON(&req); err != nil {
-		SafeBadRequest(c, "Invalid request parameters")
+		SafeBadRequest(c, "请求参数无效")
 		return
 	}
 
@@ -550,7 +550,7 @@ func (s *Server) handlePreviewPrompt(c *gin.Context) {
 func (s *Server) handleStrategyTestRun(c *gin.Context) {
 	userID := c.GetString("user_id")
 	if userID == "" {
-		c.JSON(http.StatusUnauthorized, gin.H{"error": "Unauthorized"})
+		c.JSON(http.StatusUnauthorized, gin.H{"error": "未授权访问"})
 		return
 	}
 
@@ -562,7 +562,7 @@ func (s *Server) handleStrategyTestRun(c *gin.Context) {
 	}
 
 	if err := c.ShouldBindJSON(&req); err != nil {
-		SafeBadRequest(c, "Invalid request parameters")
+		SafeBadRequest(c, "请求参数无效")
 		return
 	}
 
@@ -587,9 +587,9 @@ func (s *Server) handleStrategyTestRun(c *gin.Context) {
 	if err != nil {
 		logger.Errorf("[API Error] Failed to get candidate coins: %v", err)
 		c.JSON(http.StatusInternalServerError, gin.H{
-			"error":       "Failed to get candidate coins",
-			"ai_response": "",
-		})
+				"error":       "获取候选币种失败",
+				"ai_response": "",
+			})
 		return
 	}
 
@@ -690,9 +690,9 @@ func (s *Server) handleStrategyTestRun(c *gin.Context) {
 				"candidate_count": len(candidates),
 				"candidates":      candidates,
 				"prompt_variant":  req.PromptVariant,
-				"ai_response":     fmt.Sprintf("❌ AI call failed: %s", aiErr.Error()),
+				"ai_response":     fmt.Sprintf("❌ AI 调用失败：%s", aiErr.Error()),
 				"ai_error":        aiErr.Error(),
-				"note":            "AI call error",
+				"note":            "AI 调用出错",
 			})
 			return
 		}
@@ -704,7 +704,7 @@ func (s *Server) handleStrategyTestRun(c *gin.Context) {
 			"candidates":      candidates,
 			"prompt_variant":  req.PromptVariant,
 			"ai_response":     aiResponse,
-			"note":            "✅ Real AI test run successful",
+				"note":            "✅ 真实 AI 测试运行成功",
 		})
 		return
 	}
@@ -716,8 +716,8 @@ func (s *Server) handleStrategyTestRun(c *gin.Context) {
 		"candidate_count": len(candidates),
 		"candidates":      candidates,
 		"prompt_variant":  req.PromptVariant,
-		"ai_response":     "Please select an AI model and click 'Run Test' to perform real AI analysis.",
-		"note":            "AI model not selected or real AI call not enabled",
+		"ai_response":     "请选择 AI 模型并点击\"运行测试\"进行真实的 AI 分析",
+		"note":            "未选择 AI 模型或未启用真实 AI 调用",
 	})
 }
 

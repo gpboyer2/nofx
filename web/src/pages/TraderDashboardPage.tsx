@@ -489,7 +489,7 @@ export function TraderDashboardPage({
                     </div>
                     <div className="flex items-center gap-6 text-sm flex-wrap text-nofx-text-muted font-mono pl-2">
                         <span className="flex items-center gap-2">
-                            <span className="opacity-60">AI Model:</span>
+                            <span className="opacity-60">AI 模型：</span>
                             <span
                                 className="font-bold px-2 py-0.5 rounded text-xs tracking-wide"
                                 style={{
@@ -506,7 +506,7 @@ export function TraderDashboardPage({
                         </span>
                         <span className="w-px h-3 bg-nofx-text/10 hidden md:block" />
                         <span className="flex items-center gap-2">
-                            <span className="opacity-60">Exchange:</span>
+                            <span className="opacity-60">交易所：</span>
                             <span className="text-nofx-text-main font-semibold">
                                 {getExchangeDisplayNameFromList(
                                     selectedTrader.exchange_id,
@@ -516,17 +516,17 @@ export function TraderDashboardPage({
                         </span>
                         <span className="w-px h-3 bg-nofx-text/10 hidden md:block" />
                         <span className="flex items-center gap-2">
-                            <span className="opacity-60">Strategy:</span>
+                            <span className="opacity-60">策略：</span>
                             <span className="text-nofx-gold font-semibold tracking-wide">
-                                {selectedTrader.strategy_name || 'No Strategy'}
+                                {selectedTrader.strategy_name || '暂无策略'}
                             </span>
                         </span>
                         {status && (
                             <div className="hidden md:contents">
                                 <span className="w-px h-3 bg-nofx-text/10" />
-                                <span>Cycles: <span className="text-nofx-text-main">{status.call_count}</span></span>
+                                <span>循环次数：<span className="text-nofx-text-main">{status.call_count}</span></span>
                                 <span className="w-px h-3 bg-nofx-text/10" />
-                                <span>Runtime: <span className="text-nofx-text-main">{status.runtime_minutes} min</span></span>
+                                <span>运行时间：<span className="text-nofx-text-main">{status.runtime_minutes} 分钟</span></span>
                             </div>
                         )}
                     </div>
@@ -534,12 +534,12 @@ export function TraderDashboardPage({
 
                 {/* Debug Info */}
                 <div className="mb-4 px-3 py-1.5 rounded bg-nofx-bg-deeper border border-[rgba(26,24,19,0.14)] text-[10px] font-mono text-nofx-text-muted flex justify-between items-center opacity-60 hover:opacity-100 transition-opacity">
-                    <span style={{ color: '#2E8B57' }}>SYSTEM_STATUS::ONLINE</span>
+                    <span style={{ color: '#2E8B57' }}>系统状态::在线</span>
                     {account ? (
                         <div className="flex gap-4">
-                            <span>LAST_UPDATE::{lastUpdate}</span>
-                            <span>EQ::{account.total_equity?.toFixed(2)}</span>
-                            <span>PNL::{account.total_pnl?.toFixed(2)}</span>
+                            <span>最后更新::{lastUpdate}</span>
+                            <span>权益::{account.total_equity?.toFixed(2)}</span>
+                            <span>盈亏::{account.total_pnl?.toFixed(2)}</span>
                         </div>
                     ) : accountFailed ? (
                         <span style={{ color: '#D6433A' }}>{t('traderDashboard.accountFetchFailed', language)}</span>

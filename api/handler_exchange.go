@@ -140,7 +140,7 @@ func (s *Server) handleGetExchangeConfigs(c *gin.Context) {
 	logger.Infof("🔍 Querying exchange configs for user %s", userID)
 	exchanges, err := s.store.Exchange().List(userID)
 	if err != nil {
-		SafeInternalError(c, "Failed to get exchange configs", err)
+		SafeInternalError(c, "获取交易所配置失败", err)
 		return
 	}
 
@@ -186,7 +186,7 @@ func (s *Server) handleUpdateExchangeConfigs(c *gin.Context) {
 	// Read raw request body
 	bodyBytes, err := c.GetRawData()
 	if err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "Failed to read request body"})
+		c.JSON(http.StatusBadRequest, gin.H{"error": "读取请求体失败"})
 		return
 	}
 
@@ -197,7 +197,7 @@ func (s *Server) handleUpdateExchangeConfigs(c *gin.Context) {
 		// Transport encryption disabled, accept plain JSON
 		if err := json.Unmarshal(bodyBytes, &req); err != nil {
 			logger.Infof("❌ Failed to parse plain JSON request: %v", err)
-			c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid request format"})
+			c.JSON(http.StatusBadRequest, gin.H{"error": "请求格式无效"})
 			return
 		}
 		logger.Infof("📝 Received plain text exchange config (UserID: %s)", userID)
@@ -206,7 +206,7 @@ func (s *Server) handleUpdateExchangeConfigs(c *gin.Context) {
 		var encryptedPayload crypto.EncryptedPayload
 		if err := json.Unmarshal(bodyBytes, &encryptedPayload); err != nil {
 			logger.Infof("❌ Failed to parse encrypted payload: %v", err)
-			c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid request format, encrypted transmission required"})
+			c.JSON(http.StatusBadRequest, gin.H{"error": "请求格式无效，需要使用加密传输"})
 			return
 		}
 
@@ -214,9 +214,9 @@ func (s *Server) handleUpdateExchangeConfigs(c *gin.Context) {
 		if encryptedPayload.WrappedKey == "" {
 			logger.Infof("❌ Detected unencrypted request (UserID: %s)", userID)
 			c.JSON(http.StatusBadRequest, gin.H{
-				"error":   "This endpoint only supports encrypted transmission, please use encrypted client",
+				"error":   "此接口仅支持加密传输，请使用加密客户端",
 				"code":    "ENCRYPTION_REQUIRED",
-				"message": "Encrypted transmission is required for security reasons",
+				"message": "出于安全原因，必须使用加密传输",
 			})
 			return
 		}
@@ -225,14 +225,14 @@ func (s *Server) handleUpdateExchangeConfigs(c *gin.Context) {
 		decrypted, err := s.cryptoHandler.cryptoService.DecryptSensitiveData(&encryptedPayload)
 		if err != nil {
 			logger.Infof("❌ Failed to decrypt exchange config (UserID: %s): %v", userID, err)
-			c.JSON(http.StatusBadRequest, gin.H{"error": "Failed to decrypt data"})
+			c.JSON(http.StatusBadRequest, gin.H{"error": "数据解密失败"})
 			return
 		}
 
 		// Parse decrypted data
 		if err := json.Unmarshal([]byte(decrypted), &req); err != nil {
 			logger.Infof("❌ Failed to parse decrypted data: %v", err)
-			c.JSON(http.StatusBadRequest, gin.H{"error": "Failed to parse decrypted data"})
+			c.JSON(http.StatusBadRequest, gin.H{"error": "解密数据解析失败"})
 			return
 		}
 		logger.Infof("🔓 Decrypted exchange config data (UserID: %s)", userID)
@@ -243,7 +243,7 @@ func (s *Server) handleUpdateExchangeConfigs(c *gin.Context) {
 	for exchangeID, exchangeData := range req.Exchanges {
 		existing, err := s.store.Exchange().GetByID(userID, exchangeID)
 		if err != nil {
-			SafeInternalError(c, fmt.Sprintf("Load exchange %s", exchangeID), err)
+			SafeInternalError(c, fmt.Sprintf("加载交易所账户 %s 失败", exchangeID), err)
 			return
 		}
 		effectiveAPIKey := strings.TrimSpace(exchangeData.APIKey)
@@ -305,7 +305,7 @@ func (s *Server) handleUpdateExchangeConfigs(c *gin.Context) {
 			effectiveLighterAPIKeyPrivateKey,
 		); len(missing) > 0 {
 			c.JSON(http.StatusBadRequest, gin.H{
-				"error":          fmt.Sprintf("Missing required exchange fields: %s", strings.Join(missing, ", ")),
+				"error":          fmt.Sprintf("缺少必填的交易所字段：%s", strings.Join(missing, ", ")),
 				"missing_fields": missing,
 			})
 			return
@@ -319,7 +319,7 @@ func (s *Server) handleUpdateExchangeConfigs(c *gin.Context) {
 
 		err = s.store.Exchange().Update(userID, exchangeID, true, exchangeData.APIKey, exchangeData.SecretKey, exchangeData.Passphrase, exchangeData.Testnet, effectiveHyperliquidWalletAddr, effectiveHyperliquidUnifiedAcct, effectiveHyperliquidBuilderApproved, effectiveAsterUser, effectiveAsterSigner, exchangeData.AsterPrivateKey, effectiveLighterWalletAddr, exchangeData.LighterPrivateKey, exchangeData.LighterAPIKeyPrivateKey, exchangeData.LighterAPIKeyIndex)
 		if err != nil {
-			SafeInternalError(c, fmt.Sprintf("Update exchange %s", exchangeID), err)
+			SafeInternalError(c, fmt.Sprintf("更新交易所账户 %s 失败", exchangeID), err)
 			return
 		}
 	}
@@ -340,7 +340,7 @@ func (s *Server) handleUpdateExchangeConfigs(c *gin.Context) {
 	}
 
 	logger.Infof("✓ Exchange config updated: %+v", SanitizeExchangeConfigForLog(req.Exchanges))
-	c.JSON(http.StatusOK, gin.H{"message": "Exchange configuration updated"})
+	c.JSON(http.StatusOK, gin.H{"message": "交易所配置已更新"})
 }
 
 // handleCreateExchange Create a new exchange account
@@ -351,7 +351,7 @@ func (s *Server) handleCreateExchange(c *gin.Context) {
 	// Read raw request body
 	bodyBytes, err := c.GetRawData()
 	if err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "Failed to read request body"})
+		c.JSON(http.StatusBadRequest, gin.H{"error": "读取请求体失败"})
 		return
 	}
 
@@ -362,34 +362,34 @@ func (s *Server) handleCreateExchange(c *gin.Context) {
 		// Transport encryption disabled, accept plain JSON
 		if err := json.Unmarshal(bodyBytes, &req); err != nil {
 			logger.Infof("❌ Failed to parse plain JSON request: %v", err)
-			c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid request format"})
+			c.JSON(http.StatusBadRequest, gin.H{"error": "请求格式无效"})
 			return
 		}
 	} else {
 		// Transport encryption enabled, require encrypted payload
 		var encryptedPayload crypto.EncryptedPayload
 		if err := json.Unmarshal(bodyBytes, &encryptedPayload); err != nil {
-			c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid request format, encrypted transmission required"})
+			c.JSON(http.StatusBadRequest, gin.H{"error": "请求格式无效，需要使用加密传输"})
 			return
 		}
 
 		if encryptedPayload.WrappedKey == "" {
 			c.JSON(http.StatusBadRequest, gin.H{
-				"error":   "This endpoint only supports encrypted transmission",
+				"error":   "此接口仅支持加密传输",
 				"code":    "ENCRYPTION_REQUIRED",
-				"message": "Encrypted transmission is required for security reasons",
+				"message": "出于安全原因，必须使用加密传输",
 			})
 			return
 		}
 
 		decrypted, err := s.cryptoHandler.cryptoService.DecryptSensitiveData(&encryptedPayload)
 		if err != nil {
-			c.JSON(http.StatusBadRequest, gin.H{"error": "Failed to decrypt data"})
+			c.JSON(http.StatusBadRequest, gin.H{"error": "数据解密失败"})
 			return
 		}
 
 		if err := json.Unmarshal([]byte(decrypted), &req); err != nil {
-			c.JSON(http.StatusBadRequest, gin.H{"error": "Failed to parse decrypted data"})
+			c.JSON(http.StatusBadRequest, gin.H{"error": "解密数据解析失败"})
 			return
 		}
 	}
@@ -400,7 +400,7 @@ func (s *Server) handleCreateExchange(c *gin.Context) {
 		"hyperliquid": true, "aster": true, "lighter": true, "gate": true, "kucoin": true, "indodax": true,
 	}
 	if !validTypes[req.ExchangeType] {
-		c.JSON(http.StatusBadRequest, gin.H{"error": fmt.Sprintf("Invalid exchange type: %s", req.ExchangeType)})
+		c.JSON(http.StatusBadRequest, gin.H{"error": fmt.Sprintf("无效的交易所类型：%s", req.ExchangeType)})
 		return
 	}
 	if missing := store.MissingRequiredExchangeCredentialFields(
@@ -416,7 +416,7 @@ func (s *Server) handleCreateExchange(c *gin.Context) {
 		req.LighterAPIKeyPrivateKey,
 	); len(missing) > 0 {
 		c.JSON(http.StatusBadRequest, gin.H{
-			"error":          fmt.Sprintf("Missing required exchange fields: %s", strings.Join(missing, ", ")),
+			"error":          fmt.Sprintf("缺少必填的交易所字段：%s", strings.Join(missing, ", ")),
 			"missing_fields": missing,
 		})
 		return
@@ -433,7 +433,7 @@ func (s *Server) handleCreateExchange(c *gin.Context) {
 	)
 	if err != nil {
 		logger.Infof("❌ Failed to create exchange account: %v", err)
-		SafeInternalError(c, "Failed to create exchange account", err)
+		SafeInternalError(c, "创建交易所账户失败", err)
 		return
 	}
 
@@ -441,7 +441,7 @@ func (s *Server) handleCreateExchange(c *gin.Context) {
 
 	logger.Infof("✓ Created exchange account: type=%s, name=%s, id=%s", req.ExchangeType, req.AccountName, id)
 	c.JSON(http.StatusOK, gin.H{
-		"message": "Exchange account created",
+		"message": "交易所账户已创建",
 		"id":      id,
 	})
 }
@@ -452,21 +452,21 @@ func (s *Server) handleDeleteExchange(c *gin.Context) {
 	exchangeID := c.Param("id")
 
 	if exchangeID == "" {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "Exchange ID is required"})
+		c.JSON(http.StatusBadRequest, gin.H{"error": "交易所账户 ID 不能为空"})
 		return
 	}
 
 	// Check if any traders are using this exchange
 	traders, err := s.store.Trader().List(userID)
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to check traders"})
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "检查交易员列表失败"})
 		return
 	}
 
 	for _, trader := range traders {
 		if trader.ExchangeID == exchangeID {
 			c.JSON(http.StatusBadRequest, gin.H{
-				"error":       "Cannot delete exchange account that is in use by traders",
+				"error":       "该交易所账户正在被交易员使用，无法删除",
 				"trader_id":   trader.ID,
 				"trader_name": trader.Name,
 			})
@@ -478,14 +478,14 @@ func (s *Server) handleDeleteExchange(c *gin.Context) {
 	err = s.store.Exchange().Delete(userID, exchangeID)
 	if err != nil {
 		logger.Infof("❌ Failed to delete exchange account: %v", err)
-		SafeInternalError(c, "Failed to delete exchange account", err)
+		SafeInternalError(c, "删除交易所账户失败", err)
 		return
 	}
 
 	s.exchangeAccountStateCache.Invalidate(userID)
 
 	logger.Infof("✓ Deleted exchange account: id=%s", exchangeID)
-	c.JSON(http.StatusOK, gin.H{"message": "Exchange account deleted"})
+	c.JSON(http.StatusOK, gin.H{"message": "交易所账户已删除"})
 }
 
 // handleGetSupportedExchanges Get list of exchanges supported by the system

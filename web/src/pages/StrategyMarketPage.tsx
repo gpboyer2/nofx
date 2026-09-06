@@ -1,6 +1,3 @@
-import { useLanguage } from '../contexts/LanguageContext'
-import { t } from '../i18n/translations'
-
 // Strategy Market — embedded vergex.trade/explore.
 //
 // vergex.trade now lists the NOFX origins in its enforced
@@ -12,13 +9,11 @@ import { t } from '../i18n/translations'
 //
 // Mirrors the DataPage.tsx pattern (vergex.trade/trending).
 export function StrategyMarketPage() {
-  const { language } = useLanguage()
-
   return (
     <div className="h-[calc(100vh-64px)] w-full">
       <iframe
         src="https://vergex.trade/explore"
-        title={t('strategyMarket', language) || 'Strategy Market'}
+        title="策略市场"
         className="h-full w-full border-0"
         // Permission policy: keep minimal. `fullscreen` matches the existing
         // DataPage iframe; `clipboard-write` was previously listed but is

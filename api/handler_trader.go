@@ -90,7 +90,7 @@ func isSupportedTraderSymbol(symbol string) bool {
 
 func exchangeDisplayName(exchange *store.Exchange) string {
 	if exchange == nil {
-		return "the selected exchange account"
+		return "所选交易所账户"
 	}
 	if exchange.AccountName != "" {
 		return fmt.Sprintf("%s (%s)", exchange.Name, exchange.AccountName)
@@ -98,7 +98,7 @@ func exchangeDisplayName(exchange *store.Exchange) string {
 	if exchange.Name != "" {
 		return exchange.Name
 	}
-	return "the selected exchange account"
+	return "所选交易所账户"
 }
 
 func missingExchangeFields(exchange *store.Exchange) []string {
@@ -573,14 +573,14 @@ func (s *Server) handleUpdateTrader(c *gin.Context) {
 
 	var req UpdateTraderRequest
 	if err := c.ShouldBindJSON(&req); err != nil {
-		SafeBadRequest(c, "Invalid request parameters")
+		SafeBadRequest(c, "请求参数无效")
 		return
 	}
 
 	// Check if trader exists and belongs to current user
 	traders, err := s.store.Trader().List(userID)
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to get trader list"})
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "获取交易员列表失败"})
 		return
 	}
 
@@ -593,7 +593,7 @@ func (s *Server) handleUpdateTrader(c *gin.Context) {
 	}
 
 	if existingTrader == nil {
-		c.JSON(http.StatusNotFound, gin.H{"error": "Trader does not exist"})
+		c.JSON(http.StatusNotFound, gin.H{"error": "交易员不存在"})
 		return
 	}
 
@@ -692,14 +692,14 @@ func (s *Server) handleUpdateTrader(c *gin.Context) {
 		traderRecord.ID, traderRecord.Name, traderRecord.AIModelID, traderRecord.StrategyID, scanIntervalMinutes)
 	err = s.store.Trader().Update(traderRecord)
 	if err != nil {
-		SafeInternalError(c, "Failed to update trader", err)
+		SafeInternalError(c, "更新交易员失败", err)
 		return
 	}
 
 	if resetInitialBalance {
 		logger.Infof("🔄 Exchange changed for trader %s, resetting stale initial_balance to 0", traderID)
 		if err := s.store.Trader().UpdateInitialBalance(userID, traderID, 0); err != nil {
-			SafeInternalError(c, "Failed to reset trader initial balance", err)
+			SafeInternalError(c, "重置交易员初始余额失败", err)
 			return
 		}
 	}
@@ -734,7 +734,7 @@ func (s *Server) handleUpdateTrader(c *gin.Context) {
 		// A running trader is restarted with the new config (async above), so
 		// report it as running — callers must not fire a redundant start.
 		"is_running": wasRunning,
-		"message":    "Trader updated successfully",
+		"message":    "交易员更新成功",
 	})
 }
 
@@ -746,7 +746,7 @@ func (s *Server) handleDeleteTrader(c *gin.Context) {
 	// Delete from database
 	err := s.store.Trader().Delete(userID, traderID)
 	if err != nil {
-		SafeInternalError(c, "Failed to delete trader", err)
+		SafeInternalError(c, "删除交易员失败", err)
 		return
 	}
 
@@ -763,7 +763,7 @@ func (s *Server) handleDeleteTrader(c *gin.Context) {
 	s.traderManager.RemoveTrader(traderID)
 
 	logger.Infof("✓ Trader deleted: %s", traderID)
-	c.JSON(http.StatusOK, gin.H{"message": "Trader deleted"})
+	c.JSON(http.StatusOK, gin.H{"message": "交易员已删除"})
 }
 
 // handleStartTrader Start trader
@@ -774,7 +774,7 @@ func (s *Server) handleStartTrader(c *gin.Context) {
 	// Verify trader belongs to current user
 	fullCfg, err := s.store.Trader().GetFullConfig(userID, traderID)
 	if err != nil {
-		c.JSON(http.StatusNotFound, gin.H{"error": "Trader does not exist or no access permission"})
+		c.JSON(http.StatusNotFound, gin.H{"error": "交易员不存在或无权访问"})
 		return
 	}
 	traderName := traderID
@@ -796,7 +796,7 @@ func (s *Server) handleStartTrader(c *gin.Context) {
 		status := existingTrader.GetStatus()
 		if isRunning, ok := status["is_running"].(bool); ok && isRunning {
 			c.JSON(http.StatusBadRequest, gin.H{
-				"error":     "Trader is already running",
+				"error":     "交易员已在运行中",
 				"error_key": "trader.start.already_running",
 			})
 			return
@@ -889,7 +889,7 @@ func (s *Server) handleStartTrader(c *gin.Context) {
 	}
 
 	logger.Infof("✓ Trader %s started", trader.GetName())
-	c.JSON(http.StatusOK, gin.H{"message": "Trader started"})
+	c.JSON(http.StatusOK, gin.H{"message": "交易员已启动"})
 }
 
 // handleStopTrader Stop trader
@@ -900,20 +900,20 @@ func (s *Server) handleStopTrader(c *gin.Context) {
 	// Verify trader belongs to current user
 	_, err := s.store.Trader().GetFullConfig(userID, traderID)
 	if err != nil {
-		c.JSON(http.StatusNotFound, gin.H{"error": "Trader does not exist or no access permission"})
+		c.JSON(http.StatusNotFound, gin.H{"error": "交易员不存在或无权访问"})
 		return
 	}
 
 	trader, err := s.traderManager.GetTrader(traderID)
 	if err != nil {
-		c.JSON(http.StatusNotFound, gin.H{"error": "Trader does not exist"})
+		c.JSON(http.StatusNotFound, gin.H{"error": "交易员不存在"})
 		return
 	}
 
 	// Check if trader is running
 	status := trader.GetStatus()
 	if isRunning, ok := status["is_running"].(bool); ok && !isRunning {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "Trader is already stopped"})
+		c.JSON(http.StatusBadRequest, gin.H{"error": "交易员已处于停止状态"})
 		return
 	}
 
@@ -927,5 +927,5 @@ func (s *Server) handleStopTrader(c *gin.Context) {
 	}
 
 	logger.Infof("⏹  Trader %s stopped", trader.GetName())
-	c.JSON(http.StatusOK, gin.H{"message": "Trader stopped"})
+	c.JSON(http.StatusOK, gin.H{"message": "交易员已停止"})
 }

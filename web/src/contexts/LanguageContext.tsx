@@ -10,17 +10,21 @@ const LanguageContext = createContext<LanguageContextType | undefined>(
   undefined
 )
 
-export function LanguageProvider({ children }: { children: ReactNode }) {
-  // The product UI is English-only. Normalize legacy browser state left by the
-  // removed language switcher so an old `language=zh|id` value cannot revive a
-  // partially translated, layout-breaking interface.
-  const [language] = useState<Language>(() => {
-    localStorage.setItem('language', 'en')
-    return 'en'
-  })
+function getInitialLanguage(): Language {
+  const stored = localStorage.getItem('language')
+  if (stored === 'en' || stored === 'zh' || stored === 'id') {
+    return stored
+  }
+  localStorage.setItem('language', 'zh')
+  return 'zh'
+}
 
-  const handleSetLanguage = (_lang: Language) => {
-    localStorage.setItem('language', 'en')
+export function LanguageProvider({ children }: { children: ReactNode }) {
+  const [language, setLanguage] = useState<Language>(getInitialLanguage)
+
+  const handleSetLanguage = (lang: Language) => {
+    localStorage.setItem('language', lang)
+    setLanguage(lang)
   }
 
   return (

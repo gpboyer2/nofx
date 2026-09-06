@@ -9,7 +9,7 @@ interface FAQSearchBarProps {
 export function FAQSearchBar({
   searchTerm,
   onSearchChange,
-  placeholder = 'Search FAQ...',
+  placeholder = '搜索常见问题...',
 }: FAQSearchBarProps) {
   return (
     <div className="relative group">

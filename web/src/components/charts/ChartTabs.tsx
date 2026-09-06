@@ -232,7 +232,7 @@ export function ChartTabs({ traderId, selectedSymbol, updateKey, exchangeId }: C
                             type="text"
                             value={searchFilter}
                             onChange={(e) => setSearchFilter(e.target.value)}
-                            placeholder="Search symbol..."
+                            placeholder="搜索标的..."
                             className="flex-1 bg-transparent text-[11px] text-nofx-text placeholder-nofx-text-muted focus:outline-none font-mono"
                             autoFocus
                           />
@@ -242,7 +242,7 @@ export function ChartTabs({ traderId, selectedSymbol, updateKey, exchangeId }: C
                         {['stock', 'commodity', 'index', 'forex', 'pre_ipo', 'crypto'].map(category => {
                           const categorySymbols = filteredSymbols.filter(s => s.category === category)
                           if (categorySymbols.length === 0) return null
-                          const labels: Record<string, string> = { crypto: 'Crypto', stock: 'Stocks', forex: 'Forex', commodity: 'Commodities', index: 'Indices', pre_ipo: 'Pre-IPO' }
+                          const labels: Record<string, string> = { crypto: '加密货币', stock: '股票', forex: '外汇', commodity: '大宗商品', index: '指数', pre_ipo: 'Pre-IPO' }
                           return (
                             <div key={category}>
                               <div className="px-3 py-1.5 text-[9px] font-bold text-nofx-text-muted/60 bg-black/5 uppercase tracking-wider">{labels[category]}</div>
@@ -290,11 +290,11 @@ export function ChartTabs({ traderId, selectedSymbol, updateKey, exchangeId }: C
                 type="text"
                 value={symbolInput}
                 onChange={(e) => setSymbolInput(e.target.value)}
-                placeholder="Sym"
+                placeholder="代码"
                 className="w-16 px-2 py-1 bg-nofx-bg-deeper border border-[rgba(26,24,19,0.14)] rounded-l text-[10px] text-nofx-text placeholder-nofx-text-muted focus:outline-none focus:border-nofx-gold/50 font-mono transition-colors"
               />
               <button type="submit" className="px-2 py-1 bg-black/5 border border-[rgba(26,24,19,0.14)] border-l-0 rounded-r text-[10px] text-nofx-text-muted hover:text-nofx-text hover:bg-black/10 transition-all">
-                Go
+                前往
               </button>
             </form>
           </div>
