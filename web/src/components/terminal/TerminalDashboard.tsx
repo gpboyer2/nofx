@@ -164,8 +164,8 @@ export function TerminalDashboard({
       mutate(`positions-${traderId}`),
       mutate(`account-${traderId}`),
     ])
-    if (failed === 0) notify.success('All positions closed')
-    else notify.error(`${failed}/${open.length} closes failed`)
+    if (failed === 0) notify.success('所有仓位已关闭')
+    else notify.error(`${failed}/${open.length} 个平仓失败`)
     setClosing(null)
   }
 
@@ -396,7 +396,7 @@ export function TerminalDashboard({
             minute (the AI is reading the market); tell newcomers what to expect */}
         {!on && status?.is_running && (status.call_count ?? 0) <= 1 && !status.safe_mode && (
           <div className="tm-mono" style={{ display: 'flex', gap: 10, alignItems: 'center', margin: '8px 14px 0', padding: '8px 12px', fontSize: 11, border: '1px solid var(--tm-up)', color: 'var(--tm-ink)', background: 'rgba(40,140,80,0.06)', flexWrap: 'wrap' }}>
-            <span style={{ fontWeight: 600, color: 'var(--tm-up)' }}>Your AI is live.</span>
+            <span style={{ fontWeight: 600, color: 'var(--tm-up)' }}>您的 AI 已启动</span>
             <span style={{ color: 'var(--tm-ink-2)' }}>
               It reads the whole market before acting — the first decision usually lands within a minute or two and will appear in the Execution Log below. You can stop it anytime from the Config page.
             </span>
@@ -494,8 +494,8 @@ export function TerminalDashboard({
         {/* orchestration topology — second row, full width (the agent workflow) */}
         <div style={sc}>
           <div style={{ display: 'flex', alignItems: 'baseline', gap: 10, marginBottom: 4 }}>
-            <span className="tm-px" style={{ fontSize: 12 }}>Orchestration topology</span>
-            <span className="tm-sc">Orchestration topology · net inflow → signal → execute → hold</span>
+            <span className="tm-px" style={{ fontSize: 12 }}>编排拓扑</span>
+            <span className="tm-sc">编排拓扑 · 资金流入 → 信号 → 执行 → 持仓</span>
           </div>
           <OrchestrationTopology
             layers={[
@@ -561,8 +561,8 @@ export function TerminalDashboard({
           <div style={sc}>
             {/* live open positions (the book right now) */}
             <div style={{ display: 'flex', alignItems: 'baseline', gap: 8, marginBottom: 6 }}>
-              <span className="tm-px" style={{ fontSize: 11 }}>Positions</span>
-              <span className="tm-sc">Current positions · live</span>
+              <span className="tm-px" style={{ fontSize: 11 }}>持仓</span>
+              <span className="tm-sc">当前持仓 · 实时</span>
               <span className="tm-sc" style={{ marginLeft: 'auto' }}>{positions?.length ?? 0} open</span>
               {traderId && !on && positions && positions.length > 0 && (
                 <button
@@ -593,7 +593,7 @@ export function TerminalDashboard({
                     <td style={{ padding: '0 0 3px' }}>side·lev</td>
                     <td style={{ padding: '0 0 3px', textAlign: 'right' }}>entry</td>
                     <td style={{ padding: '0 0 3px', textAlign: 'right' }}>size</td>
-                    <td style={{ padding: '0 0 3px', textAlign: 'right' }}>PnL</td>
+                    <td style={{ padding: '0 0 3px', textAlign: 'right' }}>盈亏</td>
                     <td style={{ padding: '0 0 3px', textAlign: 'right' }}>return%</td>
                     {traderId && !on && <td style={{ padding: '0 0 3px' }} />}
                   </tr>
@@ -639,13 +639,13 @@ export function TerminalDashboard({
                   })}
                 </tbody>
               </table>
-            ) : <div className="tm-sc" style={{ padding: '8px 0' }}>No open positions.</div>}
+            ) : <div className="tm-sc" style={{ padding: '8px 0' }}>暂无开放持仓</div>}
 
             <div className="tm-rule" style={{ margin: '12px 0 10px' }} />
 
             <div style={{ display: 'flex', alignItems: 'baseline', gap: 8, marginBottom: 6 }}>
-              <span className="tm-px" style={{ fontSize: 11 }}>Recent trades</span>
-              <span className="tm-sc">Recent closes · symbol/side/hold/pnl</span>
+              <span className="tm-px" style={{ fontSize: 11 }}>最近交易</span>
+              <span className="tm-sc">最近平仓 · 币种/方向/持仓/盈亏</span>
             </div>
             {recentTrades.length > 0 ? (
               <table className="tm-mono" style={{ width: '100%', borderCollapse: 'collapse', fontSize: 11 }}>
@@ -655,7 +655,7 @@ export function TerminalDashboard({
                     <td style={{ padding: '0 0 3px' }}>side</td>
                     <td style={{ padding: '0 0 3px', textAlign: 'right' }}>hold</td>
                     <td style={{ padding: '0 0 3px' }}> closed</td>
-                    <td style={{ padding: '0 0 3px', textAlign: 'right' }}>PnL</td>
+                    <td style={{ padding: '0 0 3px', textAlign: 'right' }}>盈亏</td>
                   </tr>
                 </thead>
                 <tbody>
@@ -673,7 +673,7 @@ export function TerminalDashboard({
                   })}
                 </tbody>
               </table>
-            ) : <div className="tm-sc" style={{ padding: '8px 0' }}>No closed trades yet.</div>}
+            ) : <div className="tm-sc" style={{ padding: '8px 0' }}>暂无已平仓交易</div>}
           </div>
         </div>
         <div className="tm-rule" />
@@ -682,16 +682,16 @@ export function TerminalDashboard({
         <div style={{ display: 'grid', gridTemplateColumns: 'minmax(0,1.2fr) minmax(0,0.9fr) minmax(0,0.9fr)' }}>
           <div style={{ ...sc, borderRight: cellBorder }}>
             <div style={{ display: 'flex', alignItems: 'baseline', gap: 10, marginBottom: 8 }}>
-              <span className="tm-px" style={{ fontSize: 12 }}>Market net inflow</span>
-              <span className="tm-sc">Market net inflow · {flow?.data?.window || '1h'} · Vergex</span>
+              <span className="tm-px" style={{ fontSize: 12 }}>市场净流入</span>
+              <span className="tm-sc">市场净流入 · {flow?.data?.window || '1h'} · Vergex</span>
               <span className="tm-sc" style={{ marginLeft: 'auto' }}>{flowItems.length} markets</span>
             </div>
             <FlowMarkets items={flowItems} window={flow?.data?.window} />
           </div>
           <div style={{ ...sc, borderRight: cellBorder }}>
             <div style={{ display: 'flex', alignItems: 'baseline', gap: 8, marginBottom: 8 }}>
-              <span className="tm-px" style={{ fontSize: 11 }}>By symbol</span>
-              <span className="tm-sc">By-symbol history · trades/win/pnl</span>
+              <span className="tm-px" style={{ fontSize: 11 }}>按币种</span>
+              <span className="tm-sc">按币种历史 · 交易/胜率/盈亏</span>
             </div>
             {symbolStats.length > 0 ? symbolStats.map((s) => (
               <div key={s.symbol} style={{ marginBottom: 7 }}>
@@ -704,12 +704,12 @@ export function TerminalDashboard({
                   <div style={{ height: 4, width: `${(s.total_trades / maxSymTrades) * 100}%`, background: s.total_pnl >= 0 ? 'var(--tm-up)' : 'var(--tm-dn)' }} />
                 </div>
               </div>
-            )) : <div className="tm-sc">No symbol history.</div>}
+            )) : <div className="tm-sc">暂无币种历史。</div>}
           </div>
           <div style={sc}>
             <div style={{ display: 'flex', alignItems: 'baseline', gap: 8, marginBottom: 8 }}>
-              <span className="tm-px" style={{ fontSize: 11 }}>Edge profile</span>
-              <span className="tm-sc">Net by hold time &amp; side · after fees</span>
+              <span className="tm-px" style={{ fontSize: 11 }}>优势分析</span>
+              <span className="tm-sc">持仓时间和方向净收益 · 扣除手续费后</span>
             </div>
             <EdgeProfile positions={history?.positions} />
           </div>

@@ -326,7 +326,7 @@ export default function HeaderBar({
               )
             )}
 
-            {/* Language switcher removed — the product UI is English-only. */}
+            {/* 产品 UI 已全面中文化 */}
           </div>
         </div>
 
@@ -457,7 +457,7 @@ export default function HeaderBar({
                         )}
                         {tab.requiresAuth && !isLoggedIn && (
                           <span className="text-[10px] px-1.5 py-0.5 rounded border border-zinc-800 text-zinc-500 font-normal tracking-wide uppercase align-middle relative -top-1">
-                            LOGIN_REQ
+                            需登录
                           </span>
                         )}
                       </motion.button>
@@ -530,7 +530,7 @@ export default function HeaderBar({
                   ))}
                 </div>
 
-                {/* Account (language switcher removed — English-only UI) */}
+                {/* 账户区（产品 UI 已全面中文化） */}
                 <div className="grid grid-cols-1 gap-4">
                   {/* Auth Actions */}
                   {isLoggedIn && user ? (

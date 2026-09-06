@@ -84,9 +84,9 @@ export function LoginPage() {
           <div className="relative max-w-lg">
             <div className="inline-flex items-center gap-2 mb-7 px-3 py-1 rounded-full border border-nofx-success/25 bg-nofx-success/[0.06]">
               <div className="w-1.5 h-1.5 rounded-full bg-nofx-success animate-pulse" />
-              <span className="text-[10.5px] font-mono tracking-[0.18em] text-nofx-success uppercase">
-                Terminal Online
-              </span>
+                <span className="text-[10.5px] font-mono tracking-[0.18em] text-nofx-success uppercase">
+                  {language === 'zh' ? '终端在线' : 'Terminal Online'}
+                </span>
             </div>
             <h2 className="text-4xl xl:text-5xl font-bold tracking-tight text-nofx-text leading-[1.05]">
               {language === 'zh' ? (
@@ -127,7 +127,7 @@ export function LoginPage() {
               value="10+"
               label={
                 language === 'zh'
-                  ? 'Exchanges'
+                  ? '交易所'
                   : language === 'id'
                   ? 'Bursa'
                   : 'Exchanges'
@@ -137,7 +137,7 @@ export function LoginPage() {
               value="7"
               label={
                 language === 'zh'
-                  ? 'AI Models'
+                  ? 'AI 模型'
                   : language === 'id'
                   ? 'Model AI'
                   : 'AI Models'

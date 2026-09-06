@@ -468,10 +468,10 @@ function Claw402ConfigForm({
           setClaw402Status(data.claw402_status || 'unknown')
           setKeyError('')
         } else {
-          setKeyError(data.error || 'Invalid key')
+          setKeyError(data.error || '密钥无效')
         }
       } catch {
-        setKeyError('Validation request failed')
+        setKeyError('验证请求失败')
       } finally {
         setValidating(false)
       }
@@ -626,7 +626,7 @@ function Claw402ConfigForm({
                           border: '1px solid rgba(46, 139, 87, 0.22)',
                         }}
                       >
-                        NEW
+                        新
                       </span>
                     ) : null}
                   </div>
@@ -750,7 +750,7 @@ function Claw402ConfigForm({
                   cursor: 'pointer',
                 }}
               >
-                {language === 'zh' ? '🔑 Create Wallet' : '🔑 Create Wallet'}
+                {language === 'zh' ? '🔑 创建钱包' : '🔑 Create Wallet'}
               </button>
             )}
           </div>
@@ -770,12 +770,12 @@ function Claw402ConfigForm({
               >
                 🚨{' '}
                 {language === 'zh'
-                  ? 'Important: Backup your private key NOW!'
+                  ? '重要：立即备份您的私钥！'
                   : 'Important: Backup your private key NOW!'}
               </div>
               <div className="text-[11px] mb-2" style={{ color: '#D6433A' }}>
                 {language === 'zh'
-                  ? 'This is your wallet private key. If lost, it cannot be recovered and all assets will be permanently lost. Copy and save it securely.'
+                  ? '这是您的钱包私钥。如果丢失，将无法找回，所有资产将永久丢失。请复制并安全保存。'
                   : 'This is your wallet private key. If lost, it cannot be recovered and all assets will be permanently lost. Copy and save it securely.'}
               </div>
               <div className="flex items-center gap-2 mb-2">
@@ -800,7 +800,7 @@ function Claw402ConfigForm({
                     cursor: 'pointer',
                   }}
                 >
-                  {copiedAddr ? '✅ Copied' : '📋 Copy Key'}
+                  {copiedAddr ? (language === 'zh' ? '✅ 已复制' : '✅ Copied') : (language === 'zh' ? '📋 复制密钥' : '📋 Copy Key')}
                 </button>
               </div>
               <div
@@ -810,19 +810,19 @@ function Claw402ConfigForm({
                 <div>
                   ✅{' '}
                   {language === 'zh'
-                    ? 'Save to a password manager (1Password / Bitwarden)'
+                    ? '保存到密码管理器（推荐 1Password 或 Bitwarden）'
                     : 'Save to a password manager (1Password / Bitwarden)'}
                 </div>
                 <div>
                   ✅{' '}
                   {language === 'zh'
-                    ? 'Or write it down and store it safely'
+                    ? '或者写下来并安全存放'
                     : 'Or write it down and store it safely'}
                 </div>
                 <div>
                   ❌{' '}
                   {language === 'zh'
-                    ? 'Do NOT screenshot or share with anyone'
+                    ? '请勿截图或分享给任何人'
                     : 'Do NOT screenshot or share with anyone'}
                 </div>
               </div>
@@ -907,7 +907,7 @@ function Claw402ConfigForm({
                   >
                     ⚠️{' '}
                     {language === 'zh'
-                      ? 'Please confirm this is your wallet address (verify in MetaMask)'
+                      ? '请确认这是您的钱包地址（在 MetaMask 中验证）'
                       : 'Please confirm this is your wallet address (verify in MetaMask)'}
                   </div>
                 </div>
@@ -932,10 +932,10 @@ function Claw402ConfigForm({
                     >
                       {showDeposit
                         ? language === 'zh'
-                          ? 'Hide'
+                          ? '隐藏'
                           : 'Hide'
                         : language === 'zh'
-                          ? '💳 Deposit'
+                          ? '💳 充值'
                           : '💳 Deposit'}
                     </button>
                   </div>
@@ -954,7 +954,7 @@ function Claw402ConfigForm({
                     >
                       💳{' '}
                       {language === 'zh'
-                        ? 'Deposit USDC (Base Chain)'
+                        ? '充值 USDC（Base 链）'
                         : 'Deposit USDC (Base Chain)'}
                     </div>
                     <div className="flex gap-3 items-start mb-3">
@@ -970,7 +970,7 @@ function Claw402ConfigForm({
                           style={{ color: '#8A8478' }}
                         >
                           {language === 'zh'
-                            ? 'Scan QR or copy address to transfer'
+                            ? '扫描二维码或复制地址转账'
                             : 'Scan QR or copy address to transfer'}
                         </div>
                         <code
@@ -994,7 +994,7 @@ function Claw402ConfigForm({
                             cursor: 'pointer',
                           }}
                         >
-                          {copiedAddr ? '✅ Copied' : '📋 Copy Address'}
+                          {copiedAddr ? (language === 'zh' ? '✅ 已复制' : '✅ Copied') : (language === 'zh' ? '📋 复制地址' : '📋 Copy Address')}
                         </button>
                       </div>
                     </div>
@@ -1005,13 +1005,13 @@ function Claw402ConfigForm({
                       <div>
                         📱{' '}
                         {language === 'zh'
-                          ? 'Scan QR with exchange app to transfer'
+                          ? '使用交易所应用扫描二维码转账'
                           : 'Scan QR with exchange app to transfer'}
                       </div>
                       <div>
                         •{' '}
                         {language === 'zh'
-                          ? 'Choose Base network when withdrawing'
+                          ? '提现时选择 Base 网络'
                           : 'Choose Base network when withdrawing'}
                       </div>
                       <div>
@@ -1029,7 +1029,7 @@ function Claw402ConfigForm({
                       <div>
                         •{' '}
                         {language === 'zh'
-                          ? 'Min $1 USDC to start'
+                          ? '最少充值 1 USDC 即可开始'
                           : 'Min $1 USDC to start'}
                       </div>
                     </div>
@@ -1253,8 +1253,10 @@ function StandardProviderConfigForm({
             color: '#2E8B57',
           }}
         >
-          Current model key status:{' '}
-          {selectedModel.has_api_key ? 'API Key configured' : 'API Key not configured'}
+          {language === 'zh' ? '当前模型密钥状态：' : 'Current model key status:'}{' '}
+          {language === 'zh'
+            ? (selectedModel.has_api_key ? 'API Key 已配置' : 'API Key 未配置')
+            : (selectedModel.has_api_key ? 'API Key configured' : 'API Key not configured')}
         </div>
       )}
 
@@ -1285,7 +1287,7 @@ function StandardProviderConfigForm({
           onChange={(e) => onApiKeyChange(e.target.value)}
           placeholder={
             editingModelId && selectedModel.has_api_key
-              ? 'Saved. Re-enter to replace.'
+              ? (language === 'zh' ? '已保存，重新输入以替换' : 'Saved. Re-enter to replace.')
               : t('enterAPIKey', language)
           }
           className="w-full px-4 py-3 rounded-xl"

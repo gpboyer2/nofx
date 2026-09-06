@@ -368,7 +368,7 @@ export function PositionHistory({ traderId }: PositionHistoryProps) {
         setSymbolStats(data.symbol_stats || [])
         setDirectionStats(data.direction_stats || [])
       } catch (err) {
-        setError(err instanceof Error ? err.message : 'Failed to load history')
+        setError(err instanceof Error ? err.message : '加载历史记录失败')
       } finally {
         setLoading(false)
       }

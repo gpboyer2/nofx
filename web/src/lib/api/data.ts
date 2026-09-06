@@ -221,7 +221,7 @@ export const dataApi = {
     const result = await httpClient.get<SymbolListResponse>(
       `${API_BASE}/symbols?exchange=${encodeURIComponent(exchange)}`
     )
-    if (!result.success) throw new Error('Failed to fetch symbol list')
+    if (!result.success) throw new Error('获取交易对列表失败')
     return result.data || { exchange, symbols: [], count: 0 }
   },
 
@@ -232,7 +232,7 @@ export const dataApi = {
       `${API_BASE}/vergex/direction-change/leaderboard`
     )
     if (!result.success)
-      throw new Error('Failed to fetch Claw402/Vergex direction leaderboard')
+      throw new Error('获取方向排行榜失败')
     const items = (result.data?.items || []).slice(0, limit).map((item) => ({
       rank: item.rank,
       symbol: item.symbol,
@@ -253,7 +253,7 @@ export const dataApi = {
       { timeout: 90000 }
     )
     if (!result.success)
-      throw new Error(result.message || 'Failed to fetch current direction')
+      throw new Error(result.message || '获取当前方向失败')
     return result.data!
   },
 
@@ -274,7 +274,7 @@ export const dataApi = {
       { timeout: 90000 }
     )
     if (!result.success)
-      throw new Error(result.message || 'Failed to fetch direction history')
+      throw new Error(result.message || '获取方向历史失败')
     return result.data || { items: [] }
   },
 
@@ -287,7 +287,7 @@ export const dataApi = {
     )
     if (!result.success)
       throw new Error(
-        result.message || 'Failed to fetch cost/liquidation heatmap'
+        result.message || '获取成本/清算热力图失败'
       )
     return result.data || {}
   },
@@ -297,7 +297,7 @@ export const dataApi = {
       ? `${API_BASE}/status?trader_id=${traderId}`
       : `${API_BASE}/status`
     const result = await httpClient.request<SystemStatus>(url, { silent })
-    if (!result.success) throw new Error('Failed to fetch system status')
+    if (!result.success) throw new Error('获取系统状态失败')
     return result.data!
   },
 
@@ -306,7 +306,7 @@ export const dataApi = {
       ? `${API_BASE}/account?trader_id=${traderId}`
       : `${API_BASE}/account`
     const result = await httpClient.request<AccountInfo>(url, { silent })
-    if (!result.success) throw new Error('Failed to fetch account info')
+    if (!result.success) throw new Error('获取账户信息失败')
     return result.data!
   },
 
@@ -315,7 +315,7 @@ export const dataApi = {
       ? `${API_BASE}/positions?trader_id=${traderId}`
       : `${API_BASE}/positions`
     const result = await httpClient.request<Position[]>(url, { silent })
-    if (!result.success) throw new Error('Failed to fetch positions')
+    if (!result.success) throw new Error('获取持仓失败')
     return result.data!
   },
 
@@ -324,7 +324,7 @@ export const dataApi = {
       ? `${API_BASE}/decisions?trader_id=${traderId}`
       : `${API_BASE}/decisions`
     const result = await httpClient.get<DecisionRecord[]>(url)
-    if (!result.success) throw new Error('Failed to fetch decision logs')
+    if (!result.success) throw new Error('获取决策记录失败')
     return result.data!
   },
 
@@ -343,7 +343,7 @@ export const dataApi = {
       `${API_BASE}/decisions/latest?${params}`,
       { silent }
     )
-    if (!result.success) throw new Error('Failed to fetch latest decisions')
+    if (!result.success) throw new Error('获取最新决策失败')
     return result.data!
   },
 
@@ -355,7 +355,7 @@ export const dataApi = {
       ? `${API_BASE}/statistics?trader_id=${traderId}`
       : `${API_BASE}/statistics`
     const result = await httpClient.request<Statistics>(url, { silent })
-    if (!result.success) throw new Error('Failed to fetch statistics')
+    if (!result.success) throw new Error('获取统计数据失败')
     return result.data!
   },
 
@@ -367,7 +367,7 @@ export const dataApi = {
       ? `${API_BASE}/statistics/full?trader_id=${traderId}`
       : `${API_BASE}/statistics/full`
     const result = await httpClient.request<TraderFullStats>(url, { silent })
-    if (!result.success) throw new Error('Failed to fetch full statistics')
+    if (!result.success) throw new Error('获取完整统计数据失败')
     return result.data!
   },
 
@@ -388,7 +388,7 @@ export const dataApi = {
       `${API_BASE}/klines?${params}`,
       { silent }
     )
-    if (!result.success) throw new Error('Failed to fetch klines')
+    if (!result.success) throw new Error('获取 K 线数据失败')
     return result.data!
   },
 
@@ -405,7 +405,7 @@ export const dataApi = {
       `${API_BASE}/vergex/flow-markets?${params}`,
       { silent }
     )
-    if (!result.success) throw new Error('Failed to fetch flow markets')
+    if (!result.success) throw new Error('获取流量市场数据失败')
     return result.data!
   },
 
@@ -418,7 +418,7 @@ export const dataApi = {
       { silent }
     )
     if (!result.success)
-      throw new Error('Failed to fetch direction leaderboard')
+      throw new Error('获取方向排行榜失败')
     return {
       items: (result.data?.items || []).slice(0, limit).map((item) => ({
         rank: item.rank,
@@ -437,7 +437,7 @@ export const dataApi = {
       ? `${API_BASE}/equity-history?trader_id=${traderId}`
       : `${API_BASE}/equity-history`
     const result = await httpClient.request<any[]>(url, { silent })
-    if (!result.success) throw new Error('Failed to fetch equity history')
+    if (!result.success) throw new Error('获取权益历史失败')
     return result.data!
   },
 
@@ -449,13 +449,13 @@ export const dataApi = {
       `${API_BASE}/equity-history-batch`,
       { trader_ids: traderIds, hours: hours || 0 }
     )
-    if (!result.success) throw new Error('Failed to fetch batch equity history')
+    if (!result.success) throw new Error('获取批量权益历史失败')
     return result.data!
   },
 
   async getTopTraders(): Promise<any[]> {
     const result = await httpClient.get<any[]>(`${API_BASE}/top-traders`)
-    if (!result.success) throw new Error('Failed to fetch top traders')
+    if (!result.success) throw new Error('获取排行榜失败')
     return result.data!
   },
 
@@ -463,7 +463,7 @@ export const dataApi = {
     const result = await httpClient.get<any>(
       `${API_BASE}/traders/${traderId}/public-config`
     )
-    if (!result.success) throw new Error('Failed to fetch public trader config')
+    if (!result.success) throw new Error('获取公开配置失败')
     return result.data!
   },
 
@@ -471,7 +471,7 @@ export const dataApi = {
     const result = await httpClient.get<CompetitionData>(
       `${API_BASE}/competition`
     )
-    if (!result.success) throw new Error('Failed to fetch competition data')
+    if (!result.success) throw new Error('获取竞赛数据失败')
     return result.data!
   },
 
@@ -484,7 +484,7 @@ export const dataApi = {
       `${API_BASE}/positions/history?trader_id=${traderId}&limit=${limit}`,
       { silent }
     )
-    if (!result.success) throw new Error('Failed to fetch position history')
+    if (!result.success) throw new Error('获取持仓历史失败')
     return result.data!
   },
 }

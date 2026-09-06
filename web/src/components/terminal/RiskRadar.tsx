@@ -188,7 +188,7 @@ export function RiskRadar({ positions, account, config, fullStats }: RiskRadarPr
     <div style={{ fontFamily: 'var(--tm-mono)' }}>
       {/* header */}
       <div style={{ display: 'flex', alignItems: 'baseline', gap: 8, marginBottom: 1 }}>
-        <span className="tm-px" style={{ fontSize: 11 }}>Risk radar</span>
+        <span className="tm-px" style={{ fontSize: 11 }}>风险雷达</span>
         <span
           className="tm-sc"
           style={{ marginLeft: 'auto', color: m.totalNotional > 0 ? 'var(--tm-up)' : 'var(--tm-muted)' }}

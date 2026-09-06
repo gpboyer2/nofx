@@ -112,7 +112,7 @@ export function ExecutionLog({ decisions, height = 440 }: ExecutionLogProps) {
     <div style={{ fontFamily: 'var(--tm-mono)' }}>
       {/* header */}
       <div style={{ display: 'flex', alignItems: 'baseline', gap: 8, marginBottom: 2 }}>
-        <span className="tm-px" style={{ fontSize: 11 }}>Execution log</span>
+        <span className="tm-px" style={{ fontSize: 11 }}>执行日志</span>
         <span
           className="tm-sc"
           style={{ marginLeft: 'auto', color: cycles.length ? 'var(--tm-up)' : 'var(--tm-muted)' }}

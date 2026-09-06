@@ -379,7 +379,7 @@ export function TraderConfigModal({
                   </div>
                   <p className="text-sm text-nofx-text-muted mb-2">
                     {selectedStrategy.description ||
-                      (language === 'zh' ? 'No description' : 'No description')}
+                      (language === 'zh' ? '暂无描述' : 'No description')}
                   </p>
                   {selectedStrategy.config.strategy_type === 'grid_trading' &&
                   selectedStrategy.config.grid_config ? (

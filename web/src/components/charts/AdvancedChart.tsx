@@ -156,7 +156,7 @@ export function AdvancedChart({
       const result = await httpClient.request(klineUrl, { silent: true })
 
       if (!result.success || !result.data) {
-        throw new Error('Failed to fetch kline data')
+        throw new Error('获取 K 线数据失败')
       }
 
       // Convert data format
@@ -736,7 +736,7 @@ export function AdvancedChart({
         setLoading(false)
       } catch (err: any) {
         console.error('[AdvancedChart] Error loading data:', err)
-        setError(err.message || 'Failed to load chart data')
+        setError(err.message || '加载图表数据失败')
         setLoading(false)
       }
     }
@@ -1011,7 +1011,7 @@ export function AdvancedChart({
             }}
             title={t('advancedChart.orderMarkers', language)}
           >
-            <span>B/S</span>
+            <span>买/卖</span>
           </button>
         </div>
       </div>

@@ -881,7 +881,7 @@ export function StrategyStudioPage() {
         setHasChanges(false)
       } catch (err) {
         notify.error(
-          err instanceof Error ? err.message : 'Failed to load strategies'
+          err instanceof Error ? err.message : text(language, '加载策略失败', 'Failed to load strategies')
         )
       } finally {
         setLoading(false)
@@ -898,7 +898,7 @@ export function StrategyStudioPage() {
       setSymbols(result.symbols || [])
     } catch (err) {
       setSymbolsError(
-        err instanceof Error ? err.message : 'Symbol list unavailable'
+        err instanceof Error ? err.message : text(language, '交易对列表不可用', 'Symbol list unavailable')
       )
     } finally {
       setSymbolsLoading(false)
@@ -916,7 +916,7 @@ export function StrategyStudioPage() {
       setListMode('claw402')
     } catch (err) {
       setSignalsError(
-        err instanceof Error ? err.message : 'Claw402.ai board unavailable'
+        err instanceof Error ? err.message : text(language, 'Claw402.ai 看板不可用', 'Claw402.ai board unavailable')
       )
     } finally {
       setSignalsLoading(false)
@@ -1104,7 +1104,7 @@ export function StrategyStudioPage() {
       setHasChanges(false)
     } catch (err) {
       notify.error(
-        err instanceof Error ? err.message : 'Failed to create strategy'
+        err instanceof Error ? err.message : text(language, '创建策略失败', 'Failed to create strategy')
       )
     }
   }
@@ -1137,7 +1137,7 @@ export function StrategyStudioPage() {
           }),
         }
       )
-      if (!response.ok) throw new Error('Failed to save strategy')
+      if (!response.ok) throw new Error(text(language, '保存策略失败', 'Failed to save strategy'))
       if (activateAfter) {
         await api.activateStrategy(selectedStrategy.id)
       }
@@ -1147,15 +1147,15 @@ export function StrategyStudioPage() {
           (activateAfter
             ? text(
                 language,
-                'Strategy saved and activated',
+                '策略已保存并激活',
                 'Strategy saved and activated'
               )
-            : text(language, 'Strategy saved', 'Strategy saved'))
+            : text(language, '策略已保存', 'Strategy saved'))
       )
       await loadStrategies(selectedStrategy.id)
     } catch (err) {
       notify.error(
-        err instanceof Error ? err.message : 'Failed to save strategy'
+        err instanceof Error ? err.message : text(language, '保存策略失败', 'Failed to save strategy')
       )
     } finally {
       setSaving(false)
@@ -1241,7 +1241,7 @@ export function StrategyStudioPage() {
       if (outcome.warning) {
         notify.warning(outcome.warning)
       }
-      notify.success('NOFX Autopilot started')
+      notify.success(text(language, 'NOFX Autopilot 已启动', 'NOFX Autopilot started'))
       setHasChanges(false)
       await loadStrategies(selectedStrategy.id)
       navigate(buildDashboardPath(outcome.traderId))
@@ -1254,11 +1254,11 @@ export function StrategyStudioPage() {
     if (!selectedStrategy) return
     try {
       await api.activateStrategy(selectedStrategy.id)
-      notify.success(text(language, 'Strategy activated', 'Strategy activated'))
+      notify.success(text(language, '策略已激活', 'Strategy activated'))
       await loadStrategies(selectedStrategy.id)
     } catch (err) {
       notify.error(
-        err instanceof Error ? err.message : 'Failed to activate strategy'
+        err instanceof Error ? err.message : text(language, '激活策略失败', 'Failed to activate strategy')
       )
     }
   }
@@ -1266,21 +1266,21 @@ export function StrategyStudioPage() {
   const deleteStrategy = async () => {
     if (!selectedStrategy || selectedStrategy.is_active) return
     const ok = await confirmToast(
-      text(language, 'Delete this strategy?', 'Delete this strategy?'),
+      text(language, '确定删除此策略？', 'Delete this strategy?'),
       {
-        title: text(language, 'Confirm delete', 'Confirm delete'),
-        okText: text(language, 'Delete', 'Delete'),
-        cancelText: text(language, 'Cancel', 'Cancel'),
+        title: text(language, '确认删除', 'Confirm delete'),
+        okText: text(language, '删除', 'Delete'),
+        cancelText: text(language, '取消', 'Cancel'),
       }
     )
     if (!ok) return
     try {
       await api.deleteStrategy(selectedStrategy.id)
-      notify.success(text(language, 'Strategy deleted', 'Strategy deleted'))
+      notify.success(text(language, '策略已删除', 'Strategy deleted'))
       await loadStrategies()
     } catch (err) {
       notify.error(
-        err instanceof Error ? err.message : 'Failed to delete strategy'
+        err instanceof Error ? err.message : text(language, '删除策略失败', 'Failed to delete strategy')
       )
     }
   }
@@ -1390,7 +1390,7 @@ export function StrategyStudioPage() {
         <div className="flex items-center justify-between gap-4">
           <div>
             <h1 className="text-xl font-semibold text-nofx-text">
-              {text(language, 'NOFX Autopilot', 'NOFX Autopilot')}
+              {text(language, 'NOFX 自动驾驶', 'NOFX Autopilot')}
             </h1>
             <p className="mt-1 text-sm text-nofx-text-muted">
               {text(
@@ -1411,7 +1411,7 @@ export function StrategyStudioPage() {
             ) : (
               <Bot className="h-4 w-4" />
             )}
-            {text(language, 'Launch Autopilot', 'Launch Autopilot')}
+            {text(language, '启动自动驾驶', 'Launch Autopilot')}
           </button>
         </div>
       </div>
@@ -1419,7 +1419,7 @@ export function StrategyStudioPage() {
       <div className="grid min-h-[calc(100vh-137px)] grid-cols-1">
         <aside className="hidden border-r border-[rgba(26,24,19,0.14)] bg-nofx-bg-deeper p-3">
           <div className="mb-2 px-2 text-xs font-medium uppercase tracking-wide text-nofx-text-muted">
-            {text(language, 'My strategies', 'My strategies')}
+            {text(language, '我的策略', 'My strategies')}
           </div>
           <div className="space-y-2">
             {strategies.map((strategy) => (
@@ -1443,7 +1443,7 @@ export function StrategyStudioPage() {
                   </span>
                   {strategy.is_active ? (
                     <span className="rounded bg-nofx-success/15 px-1.5 py-0.5 text-[10px] text-nofx-success">
-                      {text(language, 'Active', 'Active')}
+                      {text(language, '激活', 'Active')}
                     </span>
                   ) : null}
                 </div>
@@ -1492,7 +1492,7 @@ export function StrategyStudioPage() {
                     />
                     {hasChanges ? (
                       <div className="mt-2 text-xs text-nofx-gold">
-                        {text(language, 'Unsaved changes', 'Unsaved changes')}
+                        {text(language, '未保存的更改', 'Unsaved changes')}
                       </div>
                     ) : null}
                   </div>
@@ -1508,7 +1508,7 @@ export function StrategyStudioPage() {
                       ) : (
                         <Check className="h-4 w-4" />
                       )}
-                      {text(language, 'Save and use', 'Save and use')}
+                      {text(language, '保存并使用', 'Save and use')}
                     </button>
                     <button
                       type="button"
@@ -1521,7 +1521,7 @@ export function StrategyStudioPage() {
                       ) : (
                         <Save className="h-4 w-4" />
                       )}
-                      {text(language, 'Save', 'Save')}
+                      {text(language, '保存', 'Save')}
                     </button>
                     {!selectedStrategy.is_active ? (
                       <button
@@ -1530,7 +1530,7 @@ export function StrategyStudioPage() {
                         className="inline-flex items-center gap-2 rounded-lg border border-nofx-success/30 bg-nofx-success/10 px-3 py-2 text-sm text-nofx-success hover:bg-nofx-success/15"
                       >
                         <Check className="h-4 w-4" />
-                        {text(language, 'Activate only', 'Activate only')}
+                        {text(language, '仅激活', 'Activate only')}
                       </button>
                     ) : null}
                     {!selectedStrategy.is_active ? (
@@ -1540,7 +1540,7 @@ export function StrategyStudioPage() {
                         className="inline-flex items-center gap-2 rounded-lg border border-nofx-danger/25 bg-nofx-danger/10 px-3 py-2 text-sm text-nofx-danger hover:bg-nofx-danger/15"
                       >
                         <Trash2 className="h-4 w-4" />
-                        {text(language, 'Delete', 'Delete')}
+                        {text(language, '删除', 'Delete')}
                       </button>
                     ) : null}
                   </div>
@@ -1552,10 +1552,10 @@ export function StrategyStudioPage() {
                   <div>
                     <div className="flex items-center gap-2 text-sm font-semibold text-nofx-text">
                       <Sparkles className="h-4 w-4 text-nofx-gold" />
-                      Signal Board
+                      {text(language, '信号看板', 'Signal Board')}
                     </div>
                     <div className="mt-1 text-xs text-nofx-text-muted">
-                      Live direction board · direction history · liquidation map
+                      {text(language, '实时方向看板 · 方向历史 · 清算图', 'Live direction board · direction history · liquidation map')}
                     </div>
                   </div>
                   <div className="flex flex-wrap gap-2">
@@ -1577,8 +1577,8 @@ export function StrategyStudioPage() {
                     >
                       <Sparkles className="h-3.5 w-3.5" />
                       {signals.length === 0
-                        ? 'Load Claw402 board'
-                        : 'Claw402 board'}
+                        ? text(language, '加载 Claw402 看板', 'Load Claw402 board')
+                        : text(language, 'Claw402 看板', 'Claw402 board')}
                     </button>
                     <button
                       type="button"
@@ -1593,7 +1593,7 @@ export function StrategyStudioPage() {
                       <RefreshCw
                         className={`h-3.5 w-3.5 ${symbolsLoading ? 'animate-spin' : ''}`}
                       />
-                      Symbol pool
+                      {text(language, '交易对池', 'Symbol pool')}
                     </button>
                     <button
                       type="button"
@@ -1606,7 +1606,7 @@ export function StrategyStudioPage() {
                       <RefreshCw
                         className={`h-3.5 w-3.5 ${signalsLoading ? 'animate-spin' : ''}`}
                       />
-                      Refresh
+                      {text(language, '刷新', 'Refresh')}
                     </button>
                     {selectedSymbols.length > 0 ? (
                       <button
@@ -1619,7 +1619,7 @@ export function StrategyStudioPage() {
                         }
                         className="hidden rounded-lg border border-[rgba(26,24,19,0.14)] px-3 py-2 text-xs text-nofx-text-muted hover:text-nofx-text"
                       >
-                        Clear selected
+                        {text(language, '清空已选', 'Clear selected')}
                       </button>
                     ) : null}
                   </div>
@@ -1653,7 +1653,7 @@ export function StrategyStudioPage() {
                             : 'border-[rgba(26,24,19,0.14)] bg-nofx-bg-deeper text-nofx-text-muted hover:text-nofx-text'
                         }`}
                       >
-                        {option.en}
+                        {language === 'zh' ? option.zh : option.en}
                         {count > 0 ? (
                           <span className="ml-2 opacity-70">{count}</span>
                         ) : null}
@@ -1683,16 +1683,14 @@ export function StrategyStudioPage() {
                   >
                     <div className="flex items-center justify-between gap-3">
                       <div className="text-sm font-semibold text-nofx-text">
-                        Follow Claw402.ai board dynamically
+                        {text(language, '动态跟随 Claw402.ai 看板', 'Follow Claw402.ai board dynamically')}
                       </div>
                       {selectedSymbols.length === 0 ? (
                         <Check className="h-4 w-4 text-nofx-success" />
                       ) : null}
                     </div>
                     <div className="mt-2 text-xs text-nofx-text-muted">
-                      At runtime, trade the current range Top{' '}
-                      {coinSource.vergex_limit || 5}; the board refreshes each
-                      cycle.
+                      {text(language, `运行时交易当前范围 Top ${coinSource.vergex_limit || 5}；每个周期刷新看板。`, `At runtime, trade the current range Top ${coinSource.vergex_limit || 5}; the board refreshes each cycle.`)}
                     </div>
                   </button>
 
@@ -1712,7 +1710,7 @@ export function StrategyStudioPage() {
                   >
                     <div className="flex items-center justify-between gap-3">
                       <div className="text-sm font-semibold text-nofx-text">
-                        Pinned universe
+                        {text(language, '固定交易对', 'Pinned universe')}
                       </div>
                       {selectedSymbols.length > 0 ? (
                         <Check className="h-4 w-4 text-nofx-gold" />
@@ -1720,8 +1718,8 @@ export function StrategyStudioPage() {
                     </div>
                     <div className="mt-2 text-xs text-nofx-text-muted">
                       {selectedSymbols.length > 0
-                        ? `${selectedSymbols.length} symbols fixed; trade only these.`
-                        : 'Autopilot uses the live Claw402 board by default.'}
+                        ? text(language, `已固定 ${selectedSymbols.length} 个交易对；仅交易这些。`, `${selectedSymbols.length} symbols fixed; trade only these.`)
+                        : text(language, 'Autopilot 默认使用实时 Claw402 看板。', 'Autopilot uses the live Claw402 board by default.')}
                     </div>
                   </button>
                 </div>
@@ -1729,8 +1727,8 @@ export function StrategyStudioPage() {
                 <div className="hidden mb-4 flex-wrap items-center gap-3">
                   <span className="text-sm text-nofx-text-muted">
                     {selectedSymbols.length > 0
-                      ? `${selectedSymbols.length} selected`
-                      : `Without manual picks, runtime uses Claw402.ai Top ${coinSource.vergex_limit || 5} in this range`}
+                      ? text(language, `已选 ${selectedSymbols.length} 个`, `${selectedSymbols.length} selected`)
+                      : text(language, `未手动选择时，运行时使用 Claw402.ai 此范围内 Top ${coinSource.vergex_limit || 5}`, `Without manual picks, runtime uses Claw402.ai Top ${coinSource.vergex_limit || 5} in this range`)}
                   </span>
                   {selectedSymbols.length === 0 ? (
                     <select
@@ -1744,7 +1742,7 @@ export function StrategyStudioPage() {
                     >
                       {topNOptions.map((value) => (
                         <option key={value} value={value}>
-                          Top {value}
+                          {text(language, `Top ${value}`, `Top ${value}`)}
                         </option>
                       ))}
                     </select>
@@ -1768,7 +1766,7 @@ export function StrategyStudioPage() {
                     className="mb-4 inline-flex items-center gap-2 rounded-lg border border-nofx-gold/30 bg-nofx-gold/10 px-4 py-3 text-sm font-semibold text-nofx-gold hover:bg-nofx-gold/15"
                   >
                     <Sparkles className="h-4 w-4" />
-                    Load Signal Board
+                    {text(language, '加载信号看板', 'Load Signal Board')}
                   </button>
                 ) : null}
 
@@ -1821,7 +1819,7 @@ export function StrategyStudioPage() {
                               </span>
                             </div>
                             <div className="mt-4 flex items-center justify-between gap-3 border-t border-[rgba(26,24,19,0.14)] pt-3 text-[11px] uppercase tracking-wide text-nofx-text-muted">
-                              <span>{categoryLabel(item.category, 'en')}</span>
+                              <span>{categoryLabel(item.category, language)}</span>
                               <span>{signalMarketType(item)}</span>
                             </div>
                           </div>
@@ -1853,12 +1851,12 @@ export function StrategyStudioPage() {
                               </span>
                             </div>
                             <div className="mt-2 flex items-center justify-between gap-2 text-[11px] text-nofx-text-muted">
-                              <span>{categoryLabel(item.category, 'en')}</span>
+                              <span>{categoryLabel(item.category, language)}</span>
                               <span>
                                 {signal?.bias ||
                                   (item.mark_price
                                     ? `$${item.mark_price.toFixed(2)}`
-                                    : 'ready')}
+                                    : text(language, '就绪', 'ready'))}
                               </span>
                             </div>
                           </button>
@@ -1884,7 +1882,7 @@ export function StrategyStudioPage() {
                                   #{detailSignal.rank || '-'}
                                 </span>
                                 <span className="rounded-md bg-nofx-bg-deeper px-2 py-1 text-xs text-nofx-text-muted">
-                                  {categoryLabel(detailSignal.category, 'en')}
+                                  {categoryLabel(detailSignal.category, language)}
                                 </span>
                               </div>
                               <div className="mt-2 flex flex-wrap gap-2 font-mono text-xs text-nofx-text-muted">
@@ -1894,7 +1892,7 @@ export function StrategyStudioPage() {
                                   {strategySymbolForSignal(detailSignal)}
                                 </span>
                                 <span>·</span>
-                                <span>mainnet</span>
+                                <span>{text(language, '主网', 'mainnet')}</span>
                                 <span>·</span>
                                 <span>±{detailLiqBand}% band</span>
                               </div>
@@ -1916,14 +1914,14 @@ export function StrategyStudioPage() {
                                     detailLoading ? 'animate-spin' : ''
                                   }`}
                                 />
-                                Refresh
+                                {text(language, '刷新', 'Refresh')}
                               </button>
                             </div>
                           </div>
                           {detailLoading ? (
                             <div className="mt-3 inline-flex items-center gap-2 text-xs text-nofx-text-muted">
                               <Loader2 className="h-3.5 w-3.5 animate-spin" />
-                              Loading direction history and heatmap...
+                              {text(language, '正在加载方向历史和热力图\u2026', 'Loading direction history and heatmap...')}
                             </div>
                           ) : null}
                           {detailError ? (
@@ -1941,8 +1939,7 @@ export function StrategyStudioPage() {
                       </>
                     ) : (
                       <div className="rounded-lg border border-[rgba(26,24,19,0.14)] bg-nofx-bg-deeper px-4 py-4 text-sm text-nofx-text-muted">
-                        NOFX Autopilot follows the Claw402 direction board and
-                        uses liquidation structure and raw candles as context.
+                        {text(language, 'NOFX Autopilot 跟随 Claw402 方向看板，并使用清算结构和原始 K 线作为上下文。', 'NOFX Autopilot follows the Claw402 direction board and uses liquidation structure and raw candles as context.')}
                       </div>
                     )}
                   </div>
@@ -1952,7 +1949,7 @@ export function StrategyStudioPage() {
                 signals.length > 0 &&
                 visibleSignalItems.length === 0 ? (
                   <div className="rounded-lg border border-[rgba(26,24,19,0.14)] bg-nofx-bg-deeper px-3 py-3 text-sm text-nofx-text-muted">
-                    No Claw402 markets available.
+                    {text(language, '暂无可用 Claw402 市场。', 'No Claw402 markets available.')}
                   </div>
                 ) : null}
 
@@ -1960,18 +1957,18 @@ export function StrategyStudioPage() {
                 visibleSymbols.length === 0 &&
                 !symbolsLoading ? (
                   <div className="rounded-lg border border-[rgba(26,24,19,0.14)] bg-nofx-bg-deeper px-3 py-3 text-sm text-nofx-text-muted">
-                    No markets available.
+                    {text(language, '暂无可用市场。', 'No markets available.')}
                   </div>
                 ) : null}
               </section>
 
               <details className="hidden rounded-lg border border-[rgba(26,24,19,0.14)] bg-nofx-bg-deeper p-4">
                 <summary className="cursor-pointer text-sm font-semibold text-nofx-text">
-                  {text(language, 'Advanced settings', 'Advanced settings')}
+                  {text(language, '高级设置', 'Advanced settings')}
                 </summary>
                 <div className="mt-4 rounded-lg border border-[rgba(26,24,19,0.14)] bg-nofx-bg-lighter p-4">
                   <div className="mb-3 text-sm font-semibold text-nofx-text">
-                    {text(language, 'Trading style', 'Trading style')}
+                    {text(language, '交易风格', 'Trading style')}
                   </div>
                   <div className="flex flex-wrap gap-2">
                     {profileOptions.map((profile) => (
@@ -1994,12 +1991,12 @@ export function StrategyStudioPage() {
                   <div className="rounded-lg border border-[rgba(26,24,19,0.14)] bg-nofx-bg-lighter p-4">
                     <div className="mb-4 flex items-center gap-2 text-sm font-semibold text-nofx-text">
                       <Sparkles className="h-4 w-4 text-nofx-gold" />
-                      {text(language, 'Raw candles', 'Raw candles')}
+                      {text(language, '原始K线', 'Raw candles')}
                     </div>
                     <div className="space-y-4">
                       <div>
                         <div className="mb-2 text-xs text-nofx-text-muted">
-                          {text(language, 'Timeframe', 'Timeframe')}
+                          {text(language, '时间周期', 'Timeframe')}
                         </div>
                         <div className="flex flex-wrap gap-2">
                           {timeframeOptions.map((timeframe) => (
@@ -2021,7 +2018,7 @@ export function StrategyStudioPage() {
                       </div>
                       <div>
                         <div className="mb-2 text-xs text-nofx-text-muted">
-                          {text(language, 'Bars', 'Bars')}
+                          {text(language, 'K线数量', 'Bars')}
                         </div>
                         <div className="flex flex-wrap gap-2">
                           {barCountOptions.map((count) => (
@@ -2055,7 +2052,7 @@ export function StrategyStudioPage() {
                     <div className="grid gap-4 sm:grid-cols-3">
                       <label className="space-y-2">
                         <span className="text-xs text-nofx-text-muted">
-                          {text(language, 'Max positions', 'Max positions')}
+                          {text(language, '最大持仓数', 'Max positions')}
                         </span>
                         <select
                           value={risk.max_positions}
@@ -2075,7 +2072,7 @@ export function StrategyStudioPage() {
                       </label>
                       <label className="space-y-2">
                         <span className="text-xs text-nofx-text-muted">
-                          {text(language, 'Leverage', 'Leverage')}
+                          {text(language, '杠杆', 'Leverage')}
                         </span>
                         <select
                           value={risk.altcoin_max_leverage}
@@ -2121,7 +2118,7 @@ export function StrategyStudioPage() {
 
                 <div className="mt-4 rounded-lg border border-[rgba(26,24,19,0.14)] bg-nofx-bg-lighter p-4">
                   <div className="mb-2 text-sm font-semibold text-nofx-text">
-                    {text(language, 'Strategy note', 'Strategy note')}
+                    {text(language, '策略备注', 'Strategy note')}
                   </div>
                   <textarea
                     value={aiConfig.custom_prompt || ''}
@@ -2146,7 +2143,7 @@ export function StrategyStudioPage() {
                 className="inline-flex items-center gap-2 rounded-lg bg-nofx-gold px-4 py-2 text-sm font-semibold text-nofx-bg hover:bg-nofx-gold-highlight"
               >
                 <Plus className="h-4 w-4" />
-                {text(language, 'Initialize Autopilot', 'Initialize Autopilot')}
+                {text(language, '初始化自动驾驶', 'Initialize Autopilot')}
               </button>
             </div>
           )}

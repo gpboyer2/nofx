@@ -232,7 +232,7 @@ export function OrderBook({ symbol, markPrice, demo = false }: OrderBookProps) {
   return (
     <div style={{ fontFamily: 'var(--tm-mono)' }}>
       <div style={{ display: 'flex', alignItems: 'baseline', gap: 8, marginBottom: 6 }}>
-        <span className="tm-px" style={{ fontSize: 11 }}>Order book</span>
+        <span className="tm-px" style={{ fontSize: 11 }}>委托簿</span>
         <span className="tm-sc">L2 · {coin || base || '—'}</span>
         <span
           className="tm-sc"

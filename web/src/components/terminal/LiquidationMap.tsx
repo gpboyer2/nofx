@@ -198,7 +198,7 @@ export function LiquidationMap({ symbol, marketType = 'hip3_perp', height = 460,
   return (
     <div style={{ fontFamily: 'var(--tm-mono)' }}>
       <div style={{ display: 'flex', alignItems: 'baseline', gap: 8, marginBottom: 3 }}>
-        <span className="tm-px" style={{ fontSize: 11 }}>Cost / Liq map</span>
+        <span className="tm-px" style={{ fontSize: 11 }}>成本 / 清算价图</span>
         <span className="tm-sc">{view.dispSymbol}</span>
         <span className="tm-sc" style={{ marginLeft: 'auto', color: view.rows.length ? 'var(--tm-up)' : 'var(--tm-muted)' }}>
           {view.rows.length ? '● live' : isLoading ? '○ sync' : '○ —'}

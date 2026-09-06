@@ -726,12 +726,12 @@ export function AITradersPage({ onTraderSelect }: AITradersPageProps) {
               <h1 className="text-2xl md:text-3xl font-bold font-mono tracking-tight text-nofx-text flex items-center gap-3 uppercase">
                 {t('aiTraders', language)}
                 <span className="text-xs font-mono font-normal px-2 py-0.5 rounded bg-nofx-gold/10 text-nofx-gold border border-nofx-gold/20 tracking-wider">
-                  {traders?.length || 0} ACTIVE_NODES
+                  {traders?.length || 0} 个活跃节点
                 </span>
               </h1>
               <p className="text-xs font-mono text-nofx-text-muted uppercase tracking-widest mt-1 ml-1 flex items-center gap-2">
                 <span className="w-2 h-2 rounded-full bg-nofx-success animate-pulse"></span>
-                SYSTEM_READY
+                系统就绪
               </p>
             </div>
           </div>
@@ -743,7 +743,7 @@ export function AITradersPage({ onTraderSelect }: AITradersPageProps) {
             >
               <div className="flex items-center gap-2">
                 <Plus className="w-3 h-3" />
-                <span>MODELS_CONFIG</span>
+                <span>模型配置</span>
               </div>
             </button>
 
@@ -753,7 +753,7 @@ export function AITradersPage({ onTraderSelect }: AITradersPageProps) {
             >
               <div className="flex items-center gap-2">
                 <Plus className="w-3 h-3" />
-                <span>EXCHANGE_KEYS</span>
+                <span>交易所密钥</span>
               </div>
             </button>
 
@@ -763,7 +763,7 @@ export function AITradersPage({ onTraderSelect }: AITradersPageProps) {
             >
               <div className="flex items-center gap-2">
                 <MessageCircle className="w-3 h-3" />
-                <span>TELEGRAM_BOT</span>
+                <span>Telegram 机器人</span>
               </div>
             </button>
 

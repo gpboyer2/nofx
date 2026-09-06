@@ -105,32 +105,32 @@ export async function resolveLaunchExchange(): Promise<
     return {
       exchange: null,
       reason:
-        'No Hyperliquid account is connected. Connect Hyperliquid and authorize the NOFX agent first.',
+        '尚未连接 Hyperliquid 账户。请先连接 Hyperliquid 并授权 NOFX agent。',
     }
   }
   if (!hyperliquid.enabled) {
     return {
       exchange: null,
-      reason: 'The Hyperliquid account is disabled. Enable it first.',
+      reason: 'Hyperliquid 账户已停用。请先启用。',
     }
   }
   if (!exchangeHasKey(hyperliquid)) {
     return {
       exchange: null,
       reason:
-        'The Hyperliquid agent key is missing. Reconnect Hyperliquid and save the agent wallet.',
+        'Hyperliquid agent 密钥缺失。请重新连接 Hyperliquid 并保存 agent 钱包。',
     }
   }
   if (!hyperliquid.hyperliquidBuilderApproved) {
     return {
       exchange: null,
       reason:
-        'Hyperliquid builder authorization is not complete. Finish wallet authorization first.',
+        'Hyperliquid builder 授权未完成。请先完成钱包授权。',
     }
   }
   return {
     exchange: null,
-    reason:
-      'The Hyperliquid wallet address is missing. Reconnect Hyperliquid first.',
+      reason:
+        'Hyperliquid 钱包地址缺失。请重新连接 Hyperliquid。',
   }
 }

@@ -53,7 +53,7 @@ export function FAQLayout() {
               </div>
               <div>
                 <h1 className="font-mono text-2xl font-bold tracking-tight text-nofx-text md:text-3xl">
-                  FAQ
+                  常见问题
                 </h1>
                 <p className="mt-1 font-mono text-xs uppercase tracking-[0.14em] text-nofx-text-muted">
                   {totalItems} 个答案 · 钱包 · 启动 · 交易 · 自托管

@@ -335,7 +335,7 @@ export function MetricTooltip({
         }}
         className={`p-0.5 rounded-full transition-colors hover:bg-[rgba(26,24,19,0.06)] ${className}`}
         style={{ color: '#8A8478' }}
-        aria-label={`Info about ${name}`}
+        aria-label={`${name} 的说明`}
       >
         <HelpCircle size={size} />
       </button>
