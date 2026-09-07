@@ -569,7 +569,9 @@ func BuildGridContextFromMarketData(mktData *market.Data, config *store.GridStra
 		// Market data
 		PriceChange1h: mktData.PriceChange1h,
 		PriceChange4h: mktData.PriceChange4h,
-		FundingRate:   mktData.FundingRate,
+	}
+	if mktData.Funding != nil {
+		ctx.FundingRate = mktData.Funding.Rate
 	}
 
 	// Extract indicators from timeframe data

@@ -739,6 +739,15 @@ func (e *StrategyEngine) writeAvailableIndicators(sb *strings.Builder, zh bool) 
 	if indicators.EnableFundingRate {
 		sb.WriteString("- " + label("Funding rate", "Funding rate") + "\n")
 	}
+	if indicators.EnableTakerFlow {
+		sb.WriteString("- " + label("5-minute taker buy/sell flow", "5-minute taker buy/sell flow") + "\n")
+	}
+	if indicators.EnableLongShortRatio {
+		sb.WriteString("- " + label("Binance top-trader account and position long/short ratios", "Binance top-trader account and position long/short ratios") + "\n")
+	}
+	if indicators.EnableOrderBook {
+		sb.WriteString("- " + label("Binance order-book spread, imbalance, depth and estimated slippage", "Binance order-book spread, imbalance, depth and estimated slippage") + "\n")
+	}
 	if len(e.config.CoinSource.StaticCoins) > 0 || e.config.CoinSource.UseAI500 || e.config.CoinSource.UseOITop {
 		sb.WriteString("- " + label("AI500 / OI_Top filter tags (if available)", "AI500 / OI_Top filter tags (if available)") + "\n")
 	}
@@ -1074,17 +1083,40 @@ func (e *StrategyEngine) formatMarketData(data *market.Data) string {
 
 	sb.WriteString("\n\n")
 
-	if indicators.EnableOI || indicators.EnableFundingRate {
-		sb.WriteString(fmt.Sprintf("Additional data for %s:\n\n", data.Symbol))
+	if indicators.EnableOI || indicators.EnableFundingRate || indicators.EnableTakerFlow || indicators.EnableLongShortRatio || indicators.EnableOrderBook {
+		sb.WriteString(fmt.Sprintf("Binance futures context for %s:\n", data.Symbol))
 
 		if indicators.EnableOI && data.OpenInterest != nil {
-			sb.WriteString(fmt.Sprintf("Open Interest: Latest: %.2f Average: %.2f\n\n",
-				data.OpenInterest.Latest, data.OpenInterest.Average))
+			sb.WriteString(fmt.Sprintf("- OI: %.2f contracts / %.2f USD | 15m %+.2f%% | 1h %+.2f%% | 4h %+.2f%% | source %s\n",
+				data.OpenInterest.Latest, data.OpenInterest.LatestUSD, data.OpenInterest.Change15mPct,
+				data.OpenInterest.Change1hPct, data.OpenInterest.Change4hPct, formatMarketTimestamp(data.OpenInterest.Timestamp)))
 		}
 
-		if indicators.EnableFundingRate {
-			sb.WriteString(fmt.Sprintf("Funding Rate: %.2e\n\n", data.FundingRate))
+		if indicators.EnableFundingRate && data.Funding != nil {
+			sb.WriteString(fmt.Sprintf("- Funding: %+.4f%% | mark %.4f | next settlement %s | source %s\n",
+				data.Funding.Rate*100, data.Funding.MarkPrice, formatMarketTimestamp(data.Funding.NextFundingTime), formatMarketTimestamp(data.Funding.Timestamp)))
 		}
+		if indicators.EnableTakerFlow && data.TakerFlow != nil {
+			sb.WriteString(fmt.Sprintf("- 5m taker flow: buy/sell %.4f | buy %.2f | sell %.2f | source %s\n",
+				data.TakerFlow.BuySellRatio, data.TakerFlow.BuyVolume, data.TakerFlow.SellVolume, formatMarketTimestamp(data.TakerFlow.Timestamp)))
+		}
+		if indicators.EnableLongShortRatio && data.LongShortRatio != nil {
+			sb.WriteString(fmt.Sprintf("- Top traders: accounts L/S %.4f (long %.2f%%, short %.2f%%) | positions L/S %.4f (long %.2f%%, short %.2f%%) | source %s\n",
+				data.LongShortRatio.AccountLongShortRatio, data.LongShortRatio.AccountLongAccountPct, data.LongShortRatio.AccountShortAccountPct,
+				data.LongShortRatio.PositionLongShortRatio, data.LongShortRatio.PositionLongAccountPct, data.LongShortRatio.PositionShortAccountPct,
+				formatMarketTimestamp(data.LongShortRatio.Timestamp)))
+		}
+		if indicators.EnableOrderBook && data.OrderBook != nil {
+			sb.WriteString(fmt.Sprintf("- Order book: %d levels/side | spread %.3f bps | imbalance %+.4f | bid/ask depth %.2f/%.2f USD | %.2f USD buy/sell slippage %.3f/%.3f bps (depth sufficient %t/%t) | source %s\n",
+				data.OrderBook.Depth, data.OrderBook.SpreadBps, data.OrderBook.Imbalance, data.OrderBook.BidNotionalUSD,
+				data.OrderBook.AskNotionalUSD, data.OrderBook.ReferenceNotionalUSD, data.OrderBook.EstimatedBuySlippageBps,
+				data.OrderBook.EstimatedSellSlippageBps, data.OrderBook.BuyDepthSufficient, data.OrderBook.SellDepthSufficient,
+				formatMarketTimestamp(data.OrderBook.Timestamp)))
+		}
+		for _, warning := range data.DerivativeWarnings {
+			sb.WriteString("- unavailable: " + warning + "\n")
+		}
+		sb.WriteString("\n")
 	}
 
 	if len(data.TimeframeData) > 0 {
@@ -1320,6 +1352,14 @@ func formatFlowValue(v float64) string {
 		return fmt.Sprintf("%s%.2fK", sign, v/1e3)
 	}
 	return fmt.Sprintf("%s%.2f", sign, v)
+}
+
+// formatMarketTimestamp renders a millisecond source timestamp for the model.
+func formatMarketTimestamp(timestamp int64) string {
+	if timestamp <= 0 {
+		return "unavailable"
+	}
+	return time.UnixMilli(timestamp).UTC().Format("2006-01-02 15:04:05 UTC")
 }
 
 func formatFloatSlice(values []float64) string {

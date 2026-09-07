@@ -4,17 +4,21 @@ import "time"
 
 // Data market data structure
 type Data struct {
-	Symbol            string
-	CurrentPrice      float64
-	PriceChange1h     float64 // 1-hour price change percentage
-	PriceChange4h     float64 // 4-hour price change percentage
-	CurrentEMA20      float64
-	CurrentMACD       float64
-	CurrentRSI7       float64
-	OpenInterest      *OIData
-	FundingRate       float64
-	IntradaySeries    *IntradayData
-	LongerTermContext *LongerTermData
+	Symbol             string
+	CurrentPrice       float64
+	PriceChange1h      float64 // 1-hour price change percentage
+	PriceChange4h      float64 // 4-hour price change percentage
+	CurrentEMA20       float64
+	CurrentMACD        float64
+	CurrentRSI7        float64
+	OpenInterest       *OIData
+	Funding            *FundingData
+	TakerFlow          *TakerFlowData
+	LongShortRatio     *LongShortRatioData
+	OrderBook          *OrderBookData
+	DerivativeWarnings []string
+	IntradaySeries     *IntradayData
+	LongerTermContext  *LongerTermData
 	// Multi-timeframe data (new)
 	TimeframeData map[string]*TimeframeSeriesData `json:"timeframe_data,omitempty"`
 }
@@ -49,8 +53,64 @@ type TimeframeSeriesData struct {
 
 // OIData Open Interest data
 type OIData struct {
-	Latest  float64
-	Average float64
+	Latest       float64
+	LatestUSD    float64
+	Change15mPct float64
+	Change1hPct  float64
+	Change4hPct  float64
+	Timestamp    int64
+}
+
+// FundingData describes the current perpetual funding state.
+type FundingData struct {
+	Rate            float64
+	MarkPrice       float64
+	NextFundingTime int64
+	Timestamp       int64
+}
+
+// TakerFlowData describes recent aggressive buy and sell futures volume.
+type TakerFlowData struct {
+	BuySellRatio float64
+	BuyVolume    float64
+	SellVolume   float64
+	Timestamp    int64
+}
+
+// LongShortRatioData describes Binance top-trader account and position ratios.
+type LongShortRatioData struct {
+	AccountLongShortRatio   float64
+	AccountLongAccountPct   float64
+	AccountShortAccountPct  float64
+	PositionLongShortRatio  float64
+	PositionLongAccountPct  float64
+	PositionShortAccountPct float64
+	Timestamp               int64
+}
+
+// OrderBookData is a compact execution-quality summary of the top Binance book.
+type OrderBookData struct {
+	Depth                    int
+	SpreadBps                float64
+	BidNotionalUSD           float64
+	AskNotionalUSD           float64
+	Imbalance                float64
+	ReferenceNotionalUSD     float64
+	EstimatedBuySlippageBps  float64
+	EstimatedSellSlippageBps float64
+	BuyDepthSufficient       bool
+	SellDepthSufficient      bool
+	Timestamp                int64
+}
+
+// DerivativesOptions selects Binance futures context fetched for one symbol.
+type DerivativesOptions struct {
+	IncludeOpenInterest   bool
+	IncludeFundingRate    bool
+	IncludeTakerFlow      bool
+	IncludeLongShortRatio bool
+	IncludeOrderBook      bool
+	ReferenceNotionalUSD  float64
 }
 
 // IntradayData intraday data (3-minute interval)
@@ -231,11 +291,11 @@ const (
 type GridDirection string
 
 const (
-	GridDirectionNeutral   GridDirection = "neutral"     // 50% buy + 50% sell
-	GridDirectionLong      GridDirection = "long"        // 100% buy
-	GridDirectionShort     GridDirection = "short"       // 100% sell
-	GridDirectionLongBias  GridDirection = "long_bias"   // 70% buy + 30% sell (default)
-	GridDirectionShortBias GridDirection = "short_bias"  // 30% buy + 70% sell (default)
+	GridDirectionNeutral   GridDirection = "neutral"    // 50% buy + 50% sell
+	GridDirectionLong      GridDirection = "long"       // 100% buy
+	GridDirectionShort     GridDirection = "short"      // 100% sell
+	GridDirectionLongBias  GridDirection = "long_bias"  // 70% buy + 30% sell (default)
+	GridDirectionShortBias GridDirection = "short_bias" // 30% buy + 70% sell (default)
 )
 
 // GetBuySellRatio returns the buy and sell ratio for this direction

@@ -155,6 +155,9 @@ export interface IndicatorConfig {
   enable_volume: boolean
   enable_oi: boolean
   enable_funding_rate: boolean
+  enable_taker_flow?: boolean
+  enable_long_short_ratio?: boolean
+  enable_order_book?: boolean
   ema_periods?: number[]
   rsi_periods?: number[]
   atr_periods?: number[]

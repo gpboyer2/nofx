@@ -119,13 +119,10 @@ func GetFullDecisionWithStrategy(ctx *Context, mcpClient mcp.AIClient, engine *S
 	}
 
 	// 5. Parse AI response
-	decision, err := parseFullDecisionResponse(
+	decision, err := ParseFullDecisionResponse(
 		aiResponse,
-		ctx.Account.TotalEquity,
-		riskConfig.BTCETHMaxLeverage,
-		riskConfig.AltcoinMaxLeverage,
-		riskConfig.BTCETHMaxPositionValueRatio,
-		riskConfig.AltcoinMaxPositionValueRatio,
+		ctx.Account,
+		riskConfig,
 		engine.usesVergexSignalPrompt(),
 	)
 
@@ -200,10 +197,21 @@ func fetchMarketDataWithStrategy(ctx *Context, engine *StrategyEngine) error {
 	}
 
 	logger.Infof("📊 Strategy timeframes: %v, Primary: %s, Kline count: %d", timeframes, primaryTimeframe, klineCount)
+	derivativesFor := func(symbol string) market.DerivativesOptions {
+		return market.DerivativesOptions{
+			// Current OI is always required by the Binance liquidity filter below.
+			IncludeOpenInterest:   true,
+			IncludeFundingRate:    config.Indicators.EnableFundingRate,
+			IncludeTakerFlow:      config.Indicators.EnableTakerFlow,
+			IncludeLongShortRatio: config.Indicators.EnableLongShortRatio,
+			IncludeOrderBook:      config.Indicators.EnableOrderBook,
+			ReferenceNotionalUSD:  OrderBookReferenceNotional(symbol, ctx.Account.TotalEquity, config.RiskControl),
+		}
+	}
 
 	// 1. First fetch data for position coins (must fetch)
 	for _, pos := range ctx.Positions {
-		data, err := market.GetWithTimeframes(pos.Symbol, timeframes, primaryTimeframe, klineCount)
+		data, err := market.GetWithTimeframesOptions(pos.Symbol, timeframes, primaryTimeframe, klineCount, derivativesFor(pos.Symbol))
 		if err != nil {
 			logger.Infof("⚠️  Failed to fetch market data for position %s: %v", pos.Symbol, err)
 			continue
@@ -224,7 +232,7 @@ func fetchMarketDataWithStrategy(ctx *Context, engine *StrategyEngine) error {
 			continue
 		}
 
-		data, err := market.GetWithTimeframes(coin.Symbol, timeframes, primaryTimeframe, klineCount)
+		data, err := market.GetWithTimeframesOptions(coin.Symbol, timeframes, primaryTimeframe, klineCount, derivativesFor(coin.Symbol))
 		if err != nil {
 			logger.Infof("⚠️  Failed to fetch market data for %s: %v", coin.Symbol, err)
 			continue
@@ -233,8 +241,8 @@ func fetchMarketDataWithStrategy(ctx *Context, engine *StrategyEngine) error {
 		// Liquidity filter (skip for xyz dex assets - they don't have OI data from Binance)
 		isExistingPosition := positionSymbols[coin.Symbol]
 		isXyzAsset := market.IsXyzDexAsset(coin.Symbol)
-		if !isExistingPosition && !isXyzAsset && data.OpenInterest != nil && data.CurrentPrice > 0 {
-			oiValue := data.OpenInterest.Latest * data.CurrentPrice
+		if !isExistingPosition && !isXyzAsset && data.OpenInterest != nil {
+			oiValue := data.OpenInterest.LatestUSD
 			oiValueInMillions := oiValue / 1_000_000
 			if oiValueInMillions < minOIThresholdMillions {
 				logger.Infof("⚠️  %s OI value too low (%.2fM USD < %.1fM), skipping coin",
@@ -248,6 +256,30 @@ func fetchMarketDataWithStrategy(ctx *Context, engine *StrategyEngine) error {
 
 	logger.Infof("📊 Successfully fetched multi-timeframe market data for %d coins", len(ctx.MarketDataMap))
 	return nil
+}
+
+// OrderBookReferenceNotional returns the largest position that both the
+// per-position notional cap and the total margin cap would permit.
+func OrderBookReferenceNotional(symbol string, equity float64, risk store.RiskControlConfig) float64 {
+	if equity <= 0 {
+		return 0
+	}
+	positionRatio := risk.AltcoinMaxPositionValueRatio
+	leverage := risk.AltcoinMaxLeverage
+	upperSymbol := strings.ToUpper(market.Normalize(symbol))
+	if upperSymbol == "BTCUSDT" || upperSymbol == "ETHUSDT" {
+		positionRatio = risk.BTCETHMaxPositionValueRatio
+		leverage = risk.BTCETHMaxLeverage
+	}
+	positionCap := equity * positionRatio
+	marginCap := equity * risk.MaxMarginUsage * float64(leverage)
+	if positionCap <= 0 {
+		return marginCap
+	}
+	if marginCap <= 0 || positionCap < marginCap {
+		return positionCap
+	}
+	return marginCap
 }
 
 func pruneCandidateCoinsWithoutMarketData(ctx *Context) {
@@ -269,7 +301,8 @@ func pruneCandidateCoinsWithoutMarketData(ctx *Context) {
 // AI Response Parsing
 // ============================================================================
 
-func parseFullDecisionResponse(aiResponse string, accountEquity float64, btcEthLeverage, altcoinLeverage int, btcEthPosRatio, altcoinPosRatio float64, signalManagedExit bool) (*FullDecision, error) {
+// ParseFullDecisionResponse parses and code-validates a model response without executing it.
+func ParseFullDecisionResponse(aiResponse string, account AccountInfo, riskControl store.RiskControlConfig, signalManagedExit bool) (*FullDecision, error) {
 	cotTrace := extractCoTTrace(aiResponse)
 
 	decisions, err := extractDecisions(aiResponse)
@@ -280,7 +313,7 @@ func parseFullDecisionResponse(aiResponse string, accountEquity float64, btcEthL
 		}, fmt.Errorf("failed to extract decisions: %w", err)
 	}
 
-	if err := validateDecisions(decisions, accountEquity, btcEthLeverage, altcoinLeverage, btcEthPosRatio, altcoinPosRatio, signalManagedExit); err != nil {
+	if err := validateDecisions(decisions, account, riskControl, signalManagedExit); err != nil {
 		return &FullDecision{
 			CoTTrace:  cotTrace,
 			Decisions: decisions,

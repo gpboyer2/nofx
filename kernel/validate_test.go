@@ -1,8 +1,21 @@
 package kernel
 
 import (
+	"nofx/store"
 	"testing"
 )
+
+// riskConfigForValidation builds the exact limits exercised by decision validation tests.
+func riskConfigForValidation(btcEthLeverage, altcoinLeverage int, btcEthRatio, altcoinRatio float64) store.RiskControlConfig {
+	return store.RiskControlConfig{
+		BTCETHMaxLeverage:            btcEthLeverage,
+		AltcoinMaxLeverage:           altcoinLeverage,
+		BTCETHMaxPositionValueRatio:  btcEthRatio,
+		AltcoinMaxPositionValueRatio: altcoinRatio,
+		MinPositionSize:              12,
+		MinRiskRewardRatio:           3,
+	}
+}
 
 // TestLeverageFallback tests automatic correction when leverage exceeds limit
 func TestLeverageFallback(t *testing.T) {
@@ -84,7 +97,11 @@ func TestLeverageFallback(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			// Use default position value ratios for testing (10x for BTC/ETH, 1.5x for altcoins)
-			err := validateDecision(&tt.decision, tt.accountEquity, tt.btcEthLeverage, tt.altcoinLeverage, 10.0, 1.5)
+			err := validateDecision(
+				&tt.decision,
+				AccountInfo{TotalEquity: tt.accountEquity},
+				riskConfigForValidation(tt.btcEthLeverage, tt.altcoinLeverage, 10, 1.5),
+			)
 
 			// Check error status
 			if (err != nil) != tt.wantError {
@@ -110,7 +127,7 @@ func TestClaw402XyzAllowsFullTenXNotional(t *testing.T) {
 		TakeProfit:      120,
 	}
 
-	if err := validateDecision(&decision, 30.68, 10, 10, 10.0, 10.0); err != nil {
+	if err := validateDecision(&decision, AccountInfo{TotalEquity: 30.68}, riskConfigForValidation(10, 10, 10, 10)); err != nil {
 		t.Fatalf("xyz TradeFi Claw402 full 10x notional should pass validation: %v", err)
 	}
 }
@@ -125,7 +142,7 @@ func TestSignalManagedDecisionAllowsZeroTakeProfitWithProtectiveStop(t *testing.
 		TakeProfit:      0,
 	}
 
-	if err := validateDecisionForMode(&decision, 30, 10, 10, 10.0, 10.0, true); err != nil {
+	if err := validateDecisionForMode(&decision, AccountInfo{TotalEquity: 30}, riskConfigForValidation(10, 10, 10, 10), true); err != nil {
 		t.Fatalf("signal-managed open with a protective stop should pass validation: %v", err)
 	}
 }
@@ -140,7 +157,7 @@ func TestSignalManagedDecisionStillRequiresProtectiveStop(t *testing.T) {
 		TakeProfit:      0,
 	}
 
-	if err := validateDecisionForMode(&decision, 30, 10, 10, 10.0, 10.0, true); err == nil {
+	if err := validateDecisionForMode(&decision, AccountInfo{TotalEquity: 30}, riskConfigForValidation(10, 10, 10, 10), true); err == nil {
 		t.Fatal("signal-managed open without a protective stop should fail validation")
 	}
 }
@@ -155,8 +172,72 @@ func TestFixedExitDecisionStillRequiresTakeProfit(t *testing.T) {
 		TakeProfit:      0,
 	}
 
-	if err := validateDecision(&decision, 30, 10, 10, 10.0, 10.0); err == nil {
+	if err := validateDecision(&decision, AccountInfo{TotalEquity: 30}, riskConfigForValidation(10, 10, 10, 10)); err == nil {
 		t.Fatal("ordinary fixed-exit strategy should still reject zero take profit")
+	}
+}
+
+// TestConfiguredBTCMinimumAllowsSmallAccountTrading guards against restoring
+// the former hard-coded 60 USDT BTC/ETH minimum, which contradicted strategy limits.
+func TestConfiguredBTCMinimumAllowsSmallAccountTrading(t *testing.T) {
+	decision := Decision{
+		Symbol:          "BTCUSDT",
+		Action:          "open_long",
+		Leverage:        2,
+		PositionSizeUSD: 40,
+		StopLoss:        90,
+		TakeProfit:      150,
+		Confidence:      80,
+	}
+	risk := riskConfigForValidation(2, 2, 0.5, 0.5)
+	risk.MinPositionSize = 10
+	risk.MinConfidence = 80
+	risk.MaxMarginUsage = 0.2
+
+	if err := validateDecision(&decision, AccountInfo{TotalEquity: 100}, risk); err != nil {
+		t.Fatalf("configured 40 USDT BTC position should pass: %v", err)
+	}
+}
+
+// TestConfiguredConfidenceIsEnforced ensures prompt confidence is also a code gate.
+func TestConfiguredConfidenceIsEnforced(t *testing.T) {
+	decision := Decision{
+		Symbol:          "BTCUSDT",
+		Action:          "open_long",
+		Leverage:        2,
+		PositionSizeUSD: 40,
+		StopLoss:        90,
+		TakeProfit:      150,
+		Confidence:      79,
+	}
+	risk := riskConfigForValidation(2, 2, 0.5, 0.5)
+	risk.MinPositionSize = 10
+	risk.MinConfidence = 80
+	risk.MaxMarginUsage = 0.2
+
+	if err := validateDecision(&decision, AccountInfo{TotalEquity: 100}, risk); err == nil || !contains(err.Error(), "confidence too low") {
+		t.Fatalf("expected confidence gate, got %v", err)
+	}
+}
+
+// TestConfiguredMarginUsageIsEnforced ensures an AI cannot exceed the margin budget.
+func TestConfiguredMarginUsageIsEnforced(t *testing.T) {
+	decision := Decision{
+		Symbol:          "BTCUSDT",
+		Action:          "open_long",
+		Leverage:        2,
+		PositionSizeUSD: 50,
+		StopLoss:        90,
+		TakeProfit:      150,
+		Confidence:      80,
+	}
+	risk := riskConfigForValidation(2, 2, 0.5, 0.5)
+	risk.MinPositionSize = 10
+	risk.MinConfidence = 80
+	risk.MaxMarginUsage = 0.2
+
+	if err := validateDecision(&decision, AccountInfo{TotalEquity: 100}, risk); err == nil || !contains(err.Error(), "position margin") {
+		t.Fatalf("expected margin usage gate, got %v", err)
 	}
 }
 

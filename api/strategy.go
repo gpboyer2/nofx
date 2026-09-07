@@ -587,9 +587,9 @@ func (s *Server) handleStrategyTestRun(c *gin.Context) {
 	if err != nil {
 		logger.Errorf("[API Error] Failed to get candidate coins: %v", err)
 		c.JSON(http.StatusInternalServerError, gin.H{
-				"error":       "获取候选币种失败",
-				"ai_response": "",
-			})
+			"error":       "获取候选币种失败",
+			"ai_response": "",
+		})
 		return
 	}
 
@@ -622,7 +622,14 @@ func (s *Server) handleStrategyTestRun(c *gin.Context) {
 	// Get real market data (using multiple timeframes)
 	marketDataMap := make(map[string]*market.Data)
 	for _, coin := range candidates {
-		data, err := market.GetWithTimeframes(coin.Symbol, timeframes, primaryTimeframe, klineCount)
+		data, err := market.GetWithTimeframesOptions(coin.Symbol, timeframes, primaryTimeframe, klineCount, market.DerivativesOptions{
+			IncludeOpenInterest:   true,
+			IncludeFundingRate:    req.Config.Indicators.EnableFundingRate,
+			IncludeTakerFlow:      req.Config.Indicators.EnableTakerFlow,
+			IncludeLongShortRatio: req.Config.Indicators.EnableLongShortRatio,
+			IncludeOrderBook:      req.Config.Indicators.EnableOrderBook,
+			ReferenceNotionalUSD:  kernel.OrderBookReferenceNotional(coin.Symbol, 1000, req.Config.RiskControl),
+		})
 		if err != nil {
 			// If getting data for a coin fails, log but continue
 			fmt.Printf("⚠️  Failed to get market data for %s: %v\n", coin.Symbol, err)
@@ -696,15 +703,35 @@ func (s *Server) handleStrategyTestRun(c *gin.Context) {
 			})
 			return
 		}
+		parsed, parseErr := kernel.ParseFullDecisionResponse(
+			aiResponse,
+			testContext.Account,
+			req.Config.RiskControl,
+			req.Config.CoinSource.SourceType == "vergex_signal",
+		)
+		if parseErr != nil {
+			c.JSON(http.StatusOK, gin.H{
+				"system_prompt":   systemPrompt,
+				"user_prompt":     userPrompt,
+				"candidate_count": len(candidates),
+				"candidates":      candidates,
+				"prompt_variant":  req.PromptVariant,
+				"ai_response":     aiResponse,
+				"parse_error":     parseErr.Error(),
+				"note":            "AI 调用成功，但响应未通过正式交易解析器",
+			})
+			return
+		}
 
 		c.JSON(http.StatusOK, gin.H{
-			"system_prompt":   systemPrompt,
-			"user_prompt":     userPrompt,
-			"candidate_count": len(candidates),
-			"candidates":      candidates,
-			"prompt_variant":  req.PromptVariant,
-			"ai_response":     aiResponse,
-				"note":            "✅ 真实 AI 测试运行成功",
+			"system_prompt":    systemPrompt,
+			"user_prompt":      userPrompt,
+			"candidate_count":  len(candidates),
+			"candidates":       candidates,
+			"prompt_variant":   req.PromptVariant,
+			"ai_response":      aiResponse,
+			"parsed_decisions": parsed.Decisions,
+			"note":             "✅ 真实 AI 测试运行成功",
 		})
 		return
 	}

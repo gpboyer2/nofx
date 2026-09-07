@@ -886,14 +886,17 @@ type IndicatorConfig struct {
 	// raw kline data (OHLCV) - always enabled, required for AI analysis
 	EnableRawKlines bool `json:"enable_raw_klines"`
 	// technical indicator switches
-	EnableEMA         bool `json:"enable_ema"`
-	EnableMACD        bool `json:"enable_macd"`
-	EnableRSI         bool `json:"enable_rsi"`
-	EnableATR         bool `json:"enable_atr"`
-	EnableBOLL        bool `json:"enable_boll"` // Bollinger Bands
-	EnableVolume      bool `json:"enable_volume"`
-	EnableOI          bool `json:"enable_oi"`           // open interest
-	EnableFundingRate bool `json:"enable_funding_rate"` // funding rate
+	EnableEMA            bool `json:"enable_ema"`
+	EnableMACD           bool `json:"enable_macd"`
+	EnableRSI            bool `json:"enable_rsi"`
+	EnableATR            bool `json:"enable_atr"`
+	EnableBOLL           bool `json:"enable_boll"` // Bollinger Bands
+	EnableVolume         bool `json:"enable_volume"`
+	EnableOI             bool `json:"enable_oi"`               // open interest
+	EnableFundingRate    bool `json:"enable_funding_rate"`     // funding rate
+	EnableTakerFlow      bool `json:"enable_taker_flow"`       // aggressive buy/sell volume
+	EnableLongShortRatio bool `json:"enable_long_short_ratio"` // Binance top-trader ratios
+	EnableOrderBook      bool `json:"enable_order_book"`       // compact Binance depth summary
 	// EMA period configuration
 	EMAPeriods []int `json:"ema_periods,omitempty"` // default [20, 50]
 	// RSI period configuration
@@ -962,9 +965,9 @@ type RiskControlConfig struct {
 	// Max number of coins held simultaneously (CODE ENFORCED)
 	MaxPositions int `json:"max_positions"`
 
-	// BTC/ETH exchange leverage for opening positions (AI guided)
+	// BTC/ETH exchange leverage for opening positions (CODE ENFORCED)
 	BTCETHMaxLeverage int `json:"btc_eth_max_leverage"`
-	// Altcoin exchange leverage for opening positions (AI guided)
+	// Altcoin exchange leverage for opening positions (CODE ENFORCED)
 	AltcoinMaxLeverage int `json:"altcoin_max_leverage"`
 
 	// BTC/ETH single position max value = equity × this ratio (CODE ENFORCED, default: 5)
@@ -977,9 +980,9 @@ type RiskControlConfig struct {
 	// Min position size in USDT (CODE ENFORCED)
 	MinPositionSize float64 `json:"min_position_size"`
 
-	// Min take_profit / stop_loss ratio (AI guided)
+	// Min take_profit / stop_loss ratio (CODE ENFORCED)
 	MinRiskRewardRatio float64 `json:"min_risk_reward_ratio"`
-	// Min AI confidence to open position (AI guided)
+	// Min AI confidence to open position (CODE ENFORCED)
 	MinConfidence int `json:"min_confidence"`
 }
 

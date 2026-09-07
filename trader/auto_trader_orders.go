@@ -53,7 +53,7 @@ func (at *AutoTrader) executeOpenLongWithRecord(decision *kernel.Decision, actio
 	logger.Infof("  📈 Open long: %s", decision.Symbol)
 
 	// ⚠️ Get current positions for multiple checks
-	positions, err := at.trader.GetPositions()
+	positions, err := getFreshPositions(at.trader)
 	if err != nil {
 		return fmt.Errorf("failed to get positions: %w", err)
 	}
@@ -76,6 +76,9 @@ func (at *AutoTrader) executeOpenLongWithRecord(decision *kernel.Decision, actio
 		return fmt.Errorf("failed to get market data for %s: %w", decision.Symbol, err)
 	}
 	if err := validateProtectionPrices(decision.Action, marketData.CurrentPrice, decision.StopLoss, decision.TakeProfit, at.usesSignalManagedExit()); err != nil {
+		return err
+	}
+	if err := at.enforceRiskRewardRatio(decision.Action, marketData.CurrentPrice, decision.StopLoss, decision.TakeProfit); err != nil {
 		return err
 	}
 
@@ -118,6 +121,9 @@ func (at *AutoTrader) executeOpenLongWithRecord(decision *kernel.Decision, actio
 			actualPositionSize, maxAffordablePositionSize, adjustedSize)
 		actualPositionSize = adjustedSize
 		decision.PositionSizeUSD = actualPositionSize
+	}
+	if err := at.enforceMaxMarginUsage(decision.PositionSizeUSD, decision.Leverage, equity, positions); err != nil {
+		return err
 	}
 
 	// [CODE ENFORCED] Minimum position size check
@@ -177,7 +183,7 @@ func (at *AutoTrader) executeOpenShortWithRecord(decision *kernel.Decision, acti
 	logger.Infof("  📉 Open short: %s", decision.Symbol)
 
 	// ⚠️ Get current positions for multiple checks
-	positions, err := at.trader.GetPositions()
+	positions, err := getFreshPositions(at.trader)
 	if err != nil {
 		return fmt.Errorf("failed to get positions: %w", err)
 	}
@@ -200,6 +206,9 @@ func (at *AutoTrader) executeOpenShortWithRecord(decision *kernel.Decision, acti
 		return fmt.Errorf("failed to get market data for %s: %w", decision.Symbol, err)
 	}
 	if err := validateProtectionPrices(decision.Action, marketData.CurrentPrice, decision.StopLoss, decision.TakeProfit, at.usesSignalManagedExit()); err != nil {
+		return err
+	}
+	if err := at.enforceRiskRewardRatio(decision.Action, marketData.CurrentPrice, decision.StopLoss, decision.TakeProfit); err != nil {
 		return err
 	}
 
@@ -242,6 +251,9 @@ func (at *AutoTrader) executeOpenShortWithRecord(decision *kernel.Decision, acti
 			actualPositionSize, maxAffordablePositionSize, adjustedSize)
 		actualPositionSize = adjustedSize
 		decision.PositionSizeUSD = actualPositionSize
+	}
+	if err := at.enforceMaxMarginUsage(decision.PositionSizeUSD, decision.Leverage, equity, positions); err != nil {
+		return err
 	}
 
 	// [CODE ENFORCED] Minimum position size check

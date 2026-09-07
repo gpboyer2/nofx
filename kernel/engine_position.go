@@ -4,26 +4,27 @@ import (
 	"fmt"
 	"nofx/logger"
 	"nofx/market"
+	"nofx/store"
 )
 
 // ============================================================================
 // Decision Validation
 // ============================================================================
 
-func validateDecisions(decisions []Decision, accountEquity float64, btcEthLeverage, altcoinLeverage int, btcEthPosRatio, altcoinPosRatio float64, signalManagedExit bool) error {
+func validateDecisions(decisions []Decision, account AccountInfo, riskControl store.RiskControlConfig, signalManagedExit bool) error {
 	for i := range decisions {
-		if err := validateDecisionForMode(&decisions[i], accountEquity, btcEthLeverage, altcoinLeverage, btcEthPosRatio, altcoinPosRatio, signalManagedExit); err != nil {
+		if err := validateDecisionForMode(&decisions[i], account, riskControl, signalManagedExit); err != nil {
 			return fmt.Errorf("decision #%d validation failed: %w", i+1, err)
 		}
 	}
 	return nil
 }
 
-func validateDecision(d *Decision, accountEquity float64, btcEthLeverage, altcoinLeverage int, btcEthPosRatio, altcoinPosRatio float64) error {
-	return validateDecisionForMode(d, accountEquity, btcEthLeverage, altcoinLeverage, btcEthPosRatio, altcoinPosRatio, false)
+func validateDecision(d *Decision, account AccountInfo, riskControl store.RiskControlConfig) error {
+	return validateDecisionForMode(d, account, riskControl, false)
 }
 
-func validateDecisionForMode(d *Decision, accountEquity float64, btcEthLeverage, altcoinLeverage int, btcEthPosRatio, altcoinPosRatio float64, signalManagedExit bool) error {
+func validateDecisionForMode(d *Decision, account AccountInfo, riskControl store.RiskControlConfig, signalManagedExit bool) error {
 	validActions := map[string]bool{
 		"open_long":   true,
 		"open_short":  true,
@@ -45,14 +46,14 @@ func validateDecisionForMode(d *Decision, accountEquity float64, btcEthLeverage,
 		//     and the user's quick-trade flow shows them at the higher cap,
 		//     so the validator must match.
 		//   - Everything else is altcoin (1x equity by default).
-		maxLeverage := altcoinLeverage
-		posRatio := altcoinPosRatio
-		maxPositionValue := accountEquity * posRatio
+		maxLeverage := riskControl.AltcoinMaxLeverage
+		posRatio := riskControl.AltcoinMaxPositionValueRatio
+		maxPositionValue := account.TotalEquity * posRatio
 		isMajor := d.Symbol == "BTCUSDT" || d.Symbol == "ETHUSDT" || market.IsXyzDexAsset(d.Symbol)
 		if isMajor {
-			maxLeverage = btcEthLeverage
-			posRatio = btcEthPosRatio
-			maxPositionValue = accountEquity * posRatio
+			maxLeverage = riskControl.BTCETHMaxLeverage
+			posRatio = riskControl.BTCETHMaxPositionValueRatio
+			maxPositionValue = account.TotalEquity * posRatio
 		}
 
 		if d.Leverage <= 0 {
@@ -67,17 +68,12 @@ func validateDecisionForMode(d *Decision, accountEquity float64, btcEthLeverage,
 			return fmt.Errorf("position size must be greater than 0: %.2f", d.PositionSizeUSD)
 		}
 
-		const minPositionSizeGeneral = 12.0
-		const minPositionSizeBTCETH = 60.0
-
-		if d.Symbol == "BTCUSDT" || d.Symbol == "ETHUSDT" {
-			if d.PositionSizeUSD < minPositionSizeBTCETH {
-				return fmt.Errorf("%s opening amount too small (%.2f USDT), must be ≥%.2f USDT", d.Symbol, d.PositionSizeUSD, minPositionSizeBTCETH)
-			}
-		} else {
-			if d.PositionSizeUSD < minPositionSizeGeneral {
-				return fmt.Errorf("opening amount too small (%.2f USDT), must be ≥%.2f USDT", d.PositionSizeUSD, minPositionSizeGeneral)
-			}
+		minPositionSize := riskControl.MinPositionSize
+		if minPositionSize <= 0 {
+			minPositionSize = 12
+		}
+		if d.PositionSizeUSD < minPositionSize {
+			return fmt.Errorf("%s opening amount too small (%.2f USDT), must be ≥%.2f USDT", d.Symbol, d.PositionSizeUSD, minPositionSize)
 		}
 
 		tolerance := maxPositionValue * 0.01
@@ -89,6 +85,20 @@ func validateDecisionForMode(d *Decision, accountEquity float64, btcEthLeverage,
 				return fmt.Errorf("%s position value cannot exceed %.0f USDT (%.1fx account equity), actual: %.0f", d.Symbol, maxPositionValue, posRatio, d.PositionSizeUSD)
 			default:
 				return fmt.Errorf("altcoin single coin position value cannot exceed %.0f USDT (%.1fx account equity), actual: %.0f", maxPositionValue, posRatio, d.PositionSizeUSD)
+			}
+		}
+
+		minConfidence := riskControl.MinConfidence
+		if minConfidence > 0 && d.Confidence < minConfidence {
+			return fmt.Errorf("confidence too low (%d), must be ≥%d", d.Confidence, minConfidence)
+		}
+
+		maxMarginUsage := riskControl.MaxMarginUsage
+		if maxMarginUsage > 0 && account.TotalEquity > 0 {
+			requiredMargin := d.PositionSizeUSD / float64(d.Leverage)
+			maxMargin := account.TotalEquity * maxMarginUsage
+			if requiredMargin > maxMargin+maxMargin*0.01 {
+				return fmt.Errorf("position margin %.2f USDT exceeds %.0f%% limit (%.2f USDT)", requiredMargin, maxMarginUsage*100, maxMargin)
 			}
 		}
 		if d.StopLoss <= 0 {
@@ -136,9 +146,13 @@ func validateDecisionForMode(d *Decision, accountEquity float64, btcEthLeverage,
 			}
 		}
 
-		if riskRewardRatio < 3.0 {
-			return fmt.Errorf("risk/reward ratio too low (%.2f:1), must be ≥3.0:1 [risk: %.2f%% reward: %.2f%%] [stop loss: %.2f take profit: %.2f]",
-				riskRewardRatio, riskPercent, rewardPercent, d.StopLoss, d.TakeProfit)
+		minRiskRewardRatio := riskControl.MinRiskRewardRatio
+		if minRiskRewardRatio <= 0 {
+			minRiskRewardRatio = 3
+		}
+		if riskRewardRatio < minRiskRewardRatio {
+			return fmt.Errorf("risk/reward ratio too low (%.2f:1), must be ≥%.1f:1 [risk: %.2f%% reward: %.2f%%] [stop loss: %.2f take profit: %.2f]",
+				riskRewardRatio, minRiskRewardRatio, riskPercent, rewardPercent, d.StopLoss, d.TakeProfit)
 		}
 	}
 

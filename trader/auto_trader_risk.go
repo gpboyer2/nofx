@@ -2,6 +2,7 @@ package trader
 
 import (
 	"fmt"
+	"math"
 	"nofx/kernel"
 	"nofx/logger"
 	"nofx/market"
@@ -336,6 +337,81 @@ func (at *AutoTrader) enforceMinPositionSize(positionSizeUSD float64) error {
 
 	if positionSizeUSD < minSize {
 		return fmt.Errorf("❌ [RISK CONTROL] Position %.2f USDT below minimum (%.2f USDT)", positionSizeUSD, minSize)
+	}
+	return nil
+}
+
+// enforceRiskRewardRatio validates the configured reward/risk threshold against
+// the current market price immediately before exchange execution. Model-output
+// validation cannot substitute for this check because the entry price moves.
+func (at *AutoTrader) enforceRiskRewardRatio(action string, marketPrice, stopLoss, takeProfit float64) error {
+	if at.config.StrategyConfig == nil || at.usesSignalManagedExit() {
+		return nil
+	}
+	minRatio := at.config.StrategyConfig.RiskControl.MinRiskRewardRatio
+	if minRatio <= 0 {
+		minRatio = 3
+	}
+
+	risk := 0.0
+	reward := 0.0
+	switch action {
+	case "open_long":
+		risk = marketPrice - stopLoss
+		reward = takeProfit - marketPrice
+	case "open_short":
+		risk = stopLoss - marketPrice
+		reward = marketPrice - takeProfit
+	default:
+		return fmt.Errorf("[RISK CONTROL] Unsupported open action %q", action)
+	}
+	if marketPrice <= 0 || risk <= 0 || reward <= 0 {
+		return fmt.Errorf("[RISK CONTROL] Invalid market, stop-loss, or take-profit prices")
+	}
+	ratio := reward / risk
+	if ratio < minRatio {
+		return fmt.Errorf("[RISK CONTROL] Reward/risk ratio %.2f:1 is below %.2f:1", ratio, minRatio)
+	}
+	return nil
+}
+
+// enforceMaxMarginUsage blocks an opening order when the existing positions
+// plus the proposed order would exceed the strategy's total margin budget.
+// This check runs immediately before exchange execution with fresh position
+// data; it must not be replaced by a prompt-only instruction to the model.
+func (at *AutoTrader) enforceMaxMarginUsage(positionSizeUSD float64, leverage int, equity float64, positions []map[string]interface{}) error {
+	if at.config.StrategyConfig == nil {
+		return nil
+	}
+	maxMarginUsage := at.config.StrategyConfig.RiskControl.MaxMarginUsage
+	if maxMarginUsage <= 0 || equity <= 0 {
+		return nil
+	}
+	if leverage <= 0 {
+		return fmt.Errorf("❌ [RISK CONTROL] Leverage must be greater than zero")
+	}
+
+	currentMargin := 0.0
+	for _, position := range positions {
+		quantity, quantityOK := position["positionAmt"].(float64)
+		markPrice, priceOK := position["markPrice"].(float64)
+		positionLeverage, leverageOK := position["leverage"].(float64)
+		if !quantityOK || !priceOK || !leverageOK || positionLeverage <= 0 {
+			continue
+		}
+		currentMargin += math.Abs(quantity) * markPrice / positionLeverage
+	}
+
+	proposedMargin := positionSizeUSD / float64(leverage)
+	maxMargin := equity * maxMarginUsage
+	if currentMargin+proposedMargin > maxMargin+maxMargin*0.01 {
+		return fmt.Errorf(
+			"❌ [RISK CONTROL] Margin %.2f + %.2f USDT exceeds %.0f%% limit (%.2f USDT)",
+			currentMargin,
+			proposedMargin,
+			maxMarginUsage*100,
+			maxMargin,
+		)
 	}
 	return nil
 }
