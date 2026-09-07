@@ -9,7 +9,7 @@ const traderPresets = [
     // ... (rest of agents array remains, but I can't skip lines in replacement content easily without context. Wait, let's just replace the top section)
     // Actually, I'll use multi_replace for targeted cleanup.
     class: '美国股票',
-    desc: "大盘股动量突破交易策略。",
+    desc: '大盘股动量突破交易策略。',
     apy: '142%',
     winRate: '68%',
     risk: 'HIGH',
@@ -21,7 +21,7 @@ const traderPresets = [
   {
     name: 'BETA-X',
     class: '宏观外汇',
-    desc: "外汇趋势与宏观市场配置策略。",
+    desc: '外汇趋势与宏观市场配置策略。',
     apy: '89%',
     winRate: '55%',
     risk: 'MED',
@@ -33,7 +33,7 @@ const traderPresets = [
   {
     name: 'GAMMA-RAY',
     class: 'PRE_IPO',
-    desc: "私募市场动量篮子引擎策略。",
+    desc: '私募市场动量篮子引擎策略。',
     apy: '24%',
     winRate: '99%',
     risk: 'LOW',
@@ -73,10 +73,7 @@ export default function AgentGrid() {
               <Crosshair className="w-4 h-4" /> 资产类别选择
             </div>
             <h2 className="text-4xl md:text-5xl font-black text-nofx-text uppercase tracking-tighter">
-              专业{' '}
-              <span className="text-nofx-gold">
-                交易员
-              </span>
+              专业 <span className="text-nofx-gold">交易员</span>
             </h2>
           </div>
           <div className="font-mono text-right text-xs text-nofx-text-muted max-w-xs">

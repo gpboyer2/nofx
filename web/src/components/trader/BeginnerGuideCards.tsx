@@ -49,9 +49,7 @@ export function BeginnerGuideCards({
       icon: Landmark,
       title: '2. 添加交易所',
       desc: '连接交易所，让 AI 能够实际下单交易。',
-      meta: exchangeReady
-        ? '已就绪'
-        : 'Binance / OKX / Bybit / Hyperliquid',
+      meta: exchangeReady ? '已就绪' : 'Binance / OKX / Bybit / Hyperliquid',
       ready: exchangeReady,
       actionLabel: exchangeReady ? '管理' : '配置',
       onAction: onOpenExchange,
@@ -130,7 +128,9 @@ export function BeginnerGuideCards({
               <p className="mt-2 min-h-[72px] text-sm leading-6 text-nofx-text-muted">
                 {card.desc}
               </p>
-              <div className="mt-3 text-xs text-nofx-text-muted">{card.meta}</div>
+              <div className="mt-3 text-xs text-nofx-text-muted">
+                {card.meta}
+              </div>
 
               <button
                 type="button"

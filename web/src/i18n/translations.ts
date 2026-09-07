@@ -676,61 +676,21 @@ export const translations = {
 
     // ===== GETTING STARTED =====
 
-
-
-
-
-
     // ===== INSTALLATION =====
-
-
-
-
-
 
     // ===== CONFIGURATION =====
 
-
-
-
-
-
     // ===== TRADING =====
-
-
-
-
-
-
-
 
     // ===== TECHNICAL ISSUES =====
 
-
-
-
-
-
-
-
     // ===== SECURITY =====
-
-
-
 
     // ===== FEATURES =====
 
-
-
     // ===== AI MODELS =====
 
-
-
-
     // ===== CONTRIBUTING =====
-
-
-
 
     // Web Crypto Environment Check
     environmentCheck: {
@@ -976,7 +936,8 @@ export const translations = {
     },
 
     // Landing Page - Hero Section
-    heroMarquee: 'NOFX AI TRADING • AUTOMATED WEALTH • DECENTRALIZED INTELLIGENCE • PUNK ETHOS •',
+    heroMarquee:
+      'NOFX AI TRADING • AUTOMATED WEALTH • DECENTRALIZED INTELLIGENCE • PUNK ETHOS •',
     heroSubtitle:
       'Autonomous trading agents. High-frequency execution. Institutional-grade strategies for the DEGENERATES.',
     heroStartBtn: 'Start Trading',
@@ -986,7 +947,8 @@ export const translations = {
     // Landing Page - Brand Features
     brandFeatureTitle: 'Core Protocol',
     brandFeatureSubtitle: 'Specs',
-    brandFeatureDesc: 'Next generation infrastructure for algorithmic dominance.',
+    brandFeatureDesc:
+      'Next generation infrastructure for algorithmic dominance.',
     featureAiDrivenTitle: 'AI DRIVEN',
     featureAiDrivenDesc:
       'Powered by advanced LLMs (Claude, GPT-4, DeepSeek) to analyze market sentiment and technicals in real-time.',
@@ -1078,8 +1040,7 @@ export const translations = {
       positionClosed: 'Position closed successfully',
       closeFailed: 'Failed to close position',
       closeAll: 'Close All',
-      confirmCloseAllPositions:
-        'Market-close ALL {count} open positions?',
+      confirmCloseAllPositions: 'Market-close ALL {count} open positions?',
       allPositionsClosed: 'All positions closed',
       closeAllPartial: '{failed} of {count} positions failed to close',
       hideAddress: 'Hide address',
@@ -1333,17 +1294,23 @@ export const translations = {
       'terminal.cycle': 'cycle',
 
       // TerminalDashboard — wallet banner
-      'terminal.aiWalletEmpty': 'AI fee wallet is out of USDC — decisions are failing.',
-      'terminal.aiWalletLow': 'AI fee wallet is low ({balance} USDC) — top up soon.',
-      'terminal.safeMode': 'Safe mode: AI failed repeatedly, no new positions are being opened.',
-      'terminal.depositWallet': 'Deposit Base USDC to the Claw402 wallet, the trader recovers automatically.',
+      'terminal.aiWalletEmpty':
+        'AI fee wallet is out of USDC — decisions are failing.',
+      'terminal.aiWalletLow':
+        'AI fee wallet is low ({balance} USDC) — top up soon.',
+      'terminal.safeMode':
+        'Safe mode: AI failed repeatedly, no new positions are being opened.',
+      'terminal.depositWallet':
+        'Deposit Base USDC to the Claw402 wallet, the trader recovers automatically.',
       'terminal.aiLiveTitle': 'Your AI is live.',
-      'terminal.aiLiveHint': 'It reads the whole market before acting — the first decision usually lands within a minute or two and will appear in the Execution Log below. You can stop it anytime from the Config page.',
+      'terminal.aiLiveHint':
+        'It reads the whole market before acting — the first decision usually lands within a minute or two and will appear in the Execution Log below. You can stop it anytime from the Config page.',
 
       // TerminalDashboard — orchestration
       'terminal.orchestration': 'orchestration',
       'terminal.orchestrationTitle': 'Orchestration topology',
-      'terminal.orchestrationSubtitle': 'Orchestration topology · net inflow → signal → execute → hold',
+      'terminal.orchestrationSubtitle':
+        'Orchestration topology · net inflow → signal → execute → hold',
       'terminal.flow': 'FLOW',
       'terminal.signal': 'SIGNAL',
       'terminal.decision': 'DECISION',
@@ -1424,10 +1391,12 @@ export const translations = {
       'terminal.positionsLabel': '{n} positions',
       'terminal.liqLevels': '{n} liq levels',
       'terminal.loadingHeatmap': 'Loading cost/liquidation map…',
-      'terminal.noHeatmap': 'No cost/liq heatmap for {symbol} (crypto / main-dex markets have none).',
+      'terminal.noHeatmap':
+        'No cost/liq heatmap for {symbol} (crypto / main-dex markets have none).',
       'terminal.costLine': 'Cost line',
       'terminal.liq': 'liq',
-      'terminal.costLiqHint': 'Cost/liq heatmap unavailable for crypto majors on Hyperliquid main-DEX.',
+      'terminal.costLiqHint':
+        'Cost/liq heatmap unavailable for crypto majors on Hyperliquid main-DEX.',
 
       // KlineChart
       'terminal.market': 'MARKET',
@@ -1449,7 +1418,8 @@ export const translations = {
       'terminal.executionLog': 'Execution log',
       'terminal.nCyc': '{n} cyc',
       'terminal.dash': '—',
-      'terminal.execLogSubtitle': 'Execution log · AI decisions & fills per cycle',
+      'terminal.execLogSubtitle':
+        'Execution log · AI decisions & fills per cycle',
       'terminal.ok': 'ok',
       'terminal.throttle': 'throttle',
       'terminal.risk': 'risk',
@@ -1497,8 +1467,10 @@ export const translations = {
       'terminal.nTradesWinRate': '{n} trades · {win}% win',
       'terminal.feesLabel': 'fees',
       'terminal.lastNClosed': 'last {sample} closed',
-      'terminal.edgeConcentratesLong': 'edge concentrates in holds ≥ 1h ({longHolds} vs {shortHolds} under 1h)',
-      'terminal.edgeConcentratesShort': 'short holds outperform on this sample ({shortHolds} vs {longHolds} ≥ 1h)',
+      'terminal.edgeConcentratesLong':
+        'edge concentrates in holds ≥ 1h ({longHolds} vs {shortHolds} under 1h)',
+      'terminal.edgeConcentratesShort':
+        'short holds outperform on this sample ({shortHolds} vs {longHolds} ≥ 1h)',
     },
   },
   zh: {
@@ -2122,61 +2094,21 @@ export const translations = {
 
     // ===== 入门指南 =====
 
-
-
-
-
-
     // ===== 安装部署 =====
-
-
-
-
-
 
     // ===== 配置设置 =====
 
-
-
-
-
-
     // ===== 交易相关 =====
-
-
-
-
-
-
-
 
     // ===== 技术问题 =====
 
-
-
-
-
-
-
-
     // ===== 安全相关 =====
-
-
-
 
     // ===== 功能介绍 =====
 
-
-
     // ===== AI 模型 =====
 
-
-
-
     // ===== 参与贡献 =====
-
-
-
 
     // Web Crypto Environment Check
     environmentCheck: {
@@ -2413,8 +2345,7 @@ export const translations = {
 
     // 落地页 - Hero Section
     heroMarquee: 'NOFX AI 交易 • 自动化财富 • 去中心化智能 • PUNK 精神 •',
-    heroSubtitle:
-      '自主交易智能体。高频执行。机构级策略，为风险爱好者而生。',
+    heroSubtitle: '自主交易智能体。高频执行。机构级策略，为风险爱好者而生。',
     heroStartBtn: '开始交易',
     heroSourceBtn: '源代码',
     heroSystemOnline: '系统在线',
@@ -2430,14 +2361,12 @@ export const translations = {
     featureAutonomousDesc:
       '全自动交易循环。从数据获取到订单执行，无需人工干预。',
     featureSocialTitle: '社交交易',
-    featureSocialDesc:
-      '关注并复制 AI 交易员。专为后人类经济时代构建的社交层。',
+    featureSocialDesc: '关注并复制 AI 交易员。专为后人类经济时代构建的社交层。',
     featureNonCustodialTitle: '自管资产',
     featureNonCustodialDesc:
       '你的资金，你的私钥。通过 API Key 或去中心化钱包连接。我们不触碰你的资产。',
     featureHighFreqTitle: '高频交易',
-    featureHighFreqDesc:
-      '事件驱动架构，每秒可处理数千个市场信号。',
+    featureHighFreqDesc: '事件驱动架构，每秒可处理数千个市场信号。',
     featureOpenSourceTitle: '开源代码',
     featureOpenSourceDesc:
       '可审计的代码库，社区驱动的策略。在我们的核心之上构建你自己的交易员。',
@@ -2754,16 +2683,20 @@ export const translations = {
 
       // TerminalDashboard — wallet banner
       'terminal.aiWalletEmpty': 'AI 手续费钱包已无 USDC — 决策失败。',
-      'terminal.aiWalletLow': 'AI 手续费钱包余额不足（{balance} USDC）— 请尽快充值。',
+      'terminal.aiWalletLow':
+        'AI 手续费钱包余额不足（{balance} USDC）— 请尽快充值。',
       'terminal.safeMode': '安全模式：AI 多次失败，不再开新仓。',
-      'terminal.depositWallet': '向 Claw402 钱包充值 Base 链 USDC，交易员将自动恢复。',
+      'terminal.depositWallet':
+        '向 Claw402 钱包充值 Base 链 USDC，交易员将自动恢复。',
       'terminal.aiLiveTitle': 'AI 已上线。',
-      'terminal.aiLiveHint': '它先读取全市场再行动 — 首轮决策通常在一至两分钟内出现在下方执行日志中，可随时在配置页面停止。',
+      'terminal.aiLiveHint':
+        '它先读取全市场再行动 — 首轮决策通常在一至两分钟内出现在下方执行日志中，可随时在配置页面停止。',
 
       // TerminalDashboard — orchestration
       'terminal.orchestration': '编排',
       'terminal.orchestrationTitle': '编排拓扑',
-      'terminal.orchestrationSubtitle': '编排拓扑 · 资金流入 → 信号 → 执行 → 持仓',
+      'terminal.orchestrationSubtitle':
+        '编排拓扑 · 资金流入 → 信号 → 执行 → 持仓',
       'terminal.flow': '资金流',
       'terminal.signal': '信号',
       'terminal.decision': '决策',
@@ -2844,10 +2777,12 @@ export const translations = {
       'terminal.positionsLabel': '{n} 个持仓',
       'terminal.liqLevels': '{n} 个清算位',
       'terminal.loadingHeatmap': '正在加载成本/清算图…',
-      'terminal.noHeatmap': '{symbol} 暂无成本/清算热力图（加密币/主 DEX 市场无此数据）。',
+      'terminal.noHeatmap':
+        '{symbol} 暂无成本/清算热力图（加密币/主 DEX 市场无此数据）。',
       'terminal.costLine': '成本线',
       'terminal.liq': '清算',
-      'terminal.costLiqHint': 'Hyperliquid 主 DEX 上的大盘加密币无成本/清算热力图。',
+      'terminal.costLiqHint':
+        'Hyperliquid 主 DEX 上的大盘加密币无成本/清算热力图。',
 
       // KlineChart
       'terminal.market': '市场',
@@ -2917,8 +2852,10 @@ export const translations = {
       'terminal.nTradesWinRate': '{n} 笔 · {win}% 胜率',
       'terminal.feesLabel': '手续费',
       'terminal.lastNClosed': '最近 {sample} 笔已平仓 · ',
-      'terminal.edgeConcentratesLong': '优势集中在持仓 ≥ 1h（长 {longHolds} / 短 {shortHolds}）',
-      'terminal.edgeConcentratesShort': '短持仓在此样本中表现更佳（短 {shortHolds} / 长 {longHolds}）',
+      'terminal.edgeConcentratesLong':
+        '优势集中在持仓 ≥ 1h（长 {longHolds} / 短 {shortHolds}）',
+      'terminal.edgeConcentratesShort':
+        '短持仓在此样本中表现更佳（短 {shortHolds} / 长 {longHolds}）',
     },
   },
   id: {
@@ -3903,7 +3840,8 @@ export const translations = {
       otherApiEntry: 'Penyedia API Lain',
       otherApiEntryDesc:
         'Gunakan API key Anda sendiri untuk OpenAI, Claude, Gemini, DeepSeek, dan lainnya.',
-      payPerCall: 'Bayar sesuai pemakaian USDC · Semua Model AI · Tanpa API Key',
+      payPerCall:
+        'Bayar sesuai pemakaian USDC · Semua Model AI · Tanpa API Key',
       recommended: 'Terbaik',
       allModelsClaw:
         'Bayar per panggilan dengan USDC — mendukung semua model AI utama',
@@ -4081,17 +4019,23 @@ export const translations = {
       'terminal.cycle': 'siklus',
 
       // TerminalDashboard — wallet banner
-      'terminal.aiWalletEmpty': 'Dompet biaya AI kehabisan USDC — keputusan gagal.',
-      'terminal.aiWalletLow': 'Dompet biaya AI rendah ({balance} USDC) — segera isi ulang.',
-      'terminal.safeMode': 'Mode aman: AI gagal berulang kali, tidak ada posisi baru yang dibuka.',
-      'terminal.depositWallet': 'Setor USDC Base ke dompet Claw402, trader akan pulih secara otomatis.',
+      'terminal.aiWalletEmpty':
+        'Dompet biaya AI kehabisan USDC — keputusan gagal.',
+      'terminal.aiWalletLow':
+        'Dompet biaya AI rendah ({balance} USDC) — segera isi ulang.',
+      'terminal.safeMode':
+        'Mode aman: AI gagal berulang kali, tidak ada posisi baru yang dibuka.',
+      'terminal.depositWallet':
+        'Setor USDC Base ke dompet Claw402, trader akan pulih secara otomatis.',
       'terminal.aiLiveTitle': 'AI Anda sedang live.',
-      'terminal.aiLiveHint': 'AI membaca seluruh pasar sebelum bertindak — keputusan pertama biasanya muncul dalam satu hingga dua menit di Log Eksekusi di bawah. Anda bisa menghentikannya kapan saja dari halaman Konfigurasi.',
+      'terminal.aiLiveHint':
+        'AI membaca seluruh pasar sebelum bertindak — keputusan pertama biasanya muncul dalam satu hingga dua menit di Log Eksekusi di bawah. Anda bisa menghentikannya kapan saja dari halaman Konfigurasi.',
 
       // TerminalDashboard — orchestration
       'terminal.orchestration': 'orkestrasi',
       'terminal.orchestrationTitle': 'Topologi orkestrasi',
-      'terminal.orchestrationSubtitle': 'Topologi orkestrasi · arus masuk → sinyal → eksekusi → hold',
+      'terminal.orchestrationSubtitle':
+        'Topologi orkestrasi · arus masuk → sinyal → eksekusi → hold',
       'terminal.flow': 'ARUS',
       'terminal.signal': 'SINYAL',
       'terminal.decision': 'KEPUTUSAN',
@@ -4125,7 +4069,8 @@ export const translations = {
 
       // TerminalDashboard — market net inflow
       'terminal.marketNetInflow': 'Arus masuk bersih pasar',
-      'terminal.marketNetInflowSub': 'Arus masuk bersih pasar · {window} · Vergex',
+      'terminal.marketNetInflowSub':
+        'Arus masuk bersih pasar · {window} · Vergex',
       'terminal.nMarkets': '{n} pasar',
 
       // TerminalDashboard — by symbol history
@@ -4172,10 +4117,12 @@ export const translations = {
       'terminal.positionsLabel': '{n} posisi',
       'terminal.liqLevels': '{n} level likuidasi',
       'terminal.loadingHeatmap': 'Memuat peta biaya/likuidasi…',
-      'terminal.noHeatmap': 'Belum ada peta biaya/likuidasi untuk {symbol} (pasar kripto/DEX utama tidak punya).',
+      'terminal.noHeatmap':
+        'Belum ada peta biaya/likuidasi untuk {symbol} (pasar kripto/DEX utama tidak punya).',
       'terminal.costLine': 'Garis biaya',
       'terminal.liq': 'likuidasi',
-      'terminal.costLiqHint': 'Peta biaya/likuidasi tidak tersedia untuk kripto besar di Hyperliquid DEX utama.',
+      'terminal.costLiqHint':
+        'Peta biaya/likuidasi tidak tersedia untuk kripto besar di Hyperliquid DEX utama.',
 
       // KlineChart
       'terminal.market': 'PASAR',
@@ -4186,7 +4133,8 @@ export const translations = {
       'terminal.loadingMarket': 'Memuat pasar…',
 
       // FlowMarkets
-      'terminal.noNetFlowData': 'Tidak ada data arus masuk (claw402 perlu pembayaran).',
+      'terminal.noNetFlowData':
+        'Tidak ada data arus masuk (claw402 perlu pembayaran).',
       'terminal.colSymbolUpper': 'SIMBOL',
       'terminal.colNet': '{win} NET',
       'terminal.colBuySell': 'BELI/JUAL',
@@ -4197,7 +4145,8 @@ export const translations = {
       'terminal.executionLog': 'Log eksekusi',
       'terminal.nCyc': '{n} siklus',
       'terminal.dash': '—',
-      'terminal.execLogSubtitle': 'Log eksekusi · keputusan & fill AI per siklus',
+      'terminal.execLogSubtitle':
+        'Log eksekusi · keputusan & fill AI per siklus',
       'terminal.ok': 'ok',
       'terminal.throttle': 'throttle',
       'terminal.risk': 'risiko',
@@ -4245,8 +4194,10 @@ export const translations = {
       'terminal.nTradesWinRate': '{n} transaksi · {win}% menang',
       'terminal.feesLabel': 'biaya',
       'terminal.lastNClosed': '{sample} transaksi terakhir · ',
-      'terminal.edgeConcentratesLong': 'edge terkonsentrasi pada tahan ≥ 1j ({longHolds} vs {shortHolds} di bawah 1j)',
-      'terminal.edgeConcentratesShort': 'tahan pendek mengungguli dalam sample ini ({shortHolds} vs {longHolds} ≥ 1j)',
+      'terminal.edgeConcentratesLong':
+        'edge terkonsentrasi pada tahan ≥ 1j ({longHolds} vs {shortHolds} di bawah 1j)',
+      'terminal.edgeConcentratesShort':
+        'tahan pendek mengungguli dalam sample ini ({shortHolds} vs {longHolds} ≥ 1j)',
     },
   },
 }

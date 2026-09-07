@@ -30,9 +30,7 @@ export function OnboardingModeSelector({
 
   return (
     <div className="space-y-2">
-      <div className="text-xs font-medium text-nofx-text-muted">
-        使用体验
-      </div>
+      <div className="text-xs font-medium text-nofx-text-muted">使用体验</div>
       <div className="grid grid-cols-1 gap-2">
         {options.map((option) => {
           const selected = option.id === mode

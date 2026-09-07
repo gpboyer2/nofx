@@ -99,9 +99,7 @@ export function SettingsPage() {
       refreshModelConfigs().catch(() => toast.error('加载 AI 模型失败'))
     }
     if (activeTab === 'exchanges') {
-      refreshExchangeConfigs().catch(() =>
-        toast.error('加载交易所失败')
-      )
+      refreshExchangeConfigs().catch(() => toast.error('加载交易所失败'))
     }
   }, [activeTab])
 
@@ -128,9 +126,7 @@ export function SettingsPage() {
       toast.success('密码更新成功')
       setNewPassword('')
     } catch (err) {
-      toast.error(
-        err instanceof Error ? err.message : '更新密码失败'
-      )
+      toast.error(err instanceof Error ? err.message : '更新密码失败')
     } finally {
       setChangingPassword(false)
     }
@@ -255,7 +251,7 @@ export function SettingsPage() {
   ) => {
     try {
       if (exchangeType === 'hyperliquid') {
-          toast.error('Hyperliquid 必须通过钱包授权连接，不支持手动输入密钥。')
+        toast.error('Hyperliquid 必须通过钱包授权连接，不支持手动输入密钥。')
         return
       }
       if (exchangeId) {
@@ -364,7 +360,9 @@ export function SettingsPage() {
             <div className="space-y-6">
               <div>
                 <p className="text-xs text-nofx-text-muted mb-1">邮箱</p>
-                <p className="text-sm text-nofx-text font-medium">{user?.email}</p>
+                <p className="text-sm text-nofx-text font-medium">
+                  {user?.email}
+                </p>
               </div>
 
               <div className="border-t border-[rgba(26,24,19,0.14)] pt-6">
@@ -561,11 +559,11 @@ export function SettingsPage() {
                               <div className="flex flex-wrap items-center gap-2 mt-2 text-xs">
                                 {accountState.status === 'ok' ? (
                                   <>
-                        <span className="rounded-full bg-nofx-success/10 px-2 py-0.5 font-mono text-nofx-success">
-                          余额{' '}
-                          {accountState.display_balance ||
-                            `${accountState.total_equity?.toFixed(2) ?? '--'} ${accountState.asset || ''}`}
-                        </span>
+                                    <span className="rounded-full bg-nofx-success/10 px-2 py-0.5 font-mono text-nofx-success">
+                                      余额{' '}
+                                      {accountState.display_balance ||
+                                        `${accountState.total_equity?.toFixed(2) ?? '--'} ${accountState.asset || ''}`}
+                                    </span>
                                     {typeof accountState.available_balance ===
                                       'number' && (
                                       <span className="text-nofx-text-muted">
@@ -604,7 +602,7 @@ export function SettingsPage() {
           {activeTab === 'telegram' && (
             <div className="space-y-4">
               <p className="text-sm text-nofx-text-muted">
-                  连接 Telegram 机器人以接收交易通知并与您的交易员互动。
+                连接 Telegram 机器人以接收交易通知并与您的交易员互动。
               </p>
               <button
                 onClick={() => setShowTelegramModal(true)}

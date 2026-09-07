@@ -34,11 +34,7 @@ export function BeginnerOnboardingPage() {
       setData(result)
       setBeginnerWalletAddress(result.address)
     } catch (err) {
-      setError(
-        err instanceof Error
-          ? err.message
-          : '无法创建新手钱包'
-      )
+      setError(err instanceof Error ? err.message : '无法创建新手钱包')
     } finally {
       if (showLoading) {
         setLoading(false)
@@ -151,7 +147,8 @@ export function BeginnerOnboardingPage() {
                   : 'text-[13px] tracking-[0.12em] lg:whitespace-nowrap'
               }`}
             >
-              Claw402 + DeepSeek <span className="mx-2 text-nofx-text-muted">·</span>
+              Claw402 + DeepSeek{' '}
+              <span className="mx-2 text-nofx-text-muted">·</span>
               {'按次付费'}
             </div>
           </div>
@@ -195,17 +192,16 @@ export function BeginnerOnboardingPage() {
                       </button>
                     </div>
 
-                      <div className="mt-4 text-sm text-nofx-text-muted">
+                    <div className="mt-4 text-sm text-nofx-text-muted">
                       5–10 美元通常可用很长时间 · 充值后余额会自动更新
                     </div>
 
                     {/* the wall every true beginner hits: where does USDC come from? */}
                     <div className="mt-5 rounded-2xl border border-nofx-gold/20 bg-nofx-gold/10 px-5 py-4 text-left text-[13px] leading-6 text-nofx-text">
-                      <div className="mb-1 font-semibold">
-                        还没有 USDC？
-                      </div>
-                      在 Binance、OKX 或 Coinbase 购买 USDC，然后提款到上面的地址 — 交易所询问时选择{' '}
-                      <b>Base network</b>。通常约一分钟到账。请只发送 Base 链上的 USDC。
+                      <div className="mb-1 font-semibold">还没有 USDC？</div>在
+                      Binance、OKX 或 Coinbase 购买 USDC，然后提款到上面的地址 —
+                      交易所询问时选择 <b>Base network</b>
+                      。通常约一分钟到账。请只发送 Base 链上的 USDC。
                     </div>
                   </div>
                 </section>
@@ -223,9 +219,7 @@ export function BeginnerOnboardingPage() {
                         </div>
                         <button
                           type="button"
-                          onClick={() =>
-                            copyText(data.address, '地址')
-                          }
+                          onClick={() => copyText(data.address, '地址')}
                           className="inline-flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl border border-[rgba(26,24,19,0.14)] bg-nofx-text/5 text-nofx-text transition hover:border-[rgba(26,24,19,0.24)] hover:bg-nofx-text/10 hover:text-nofx-text"
                           aria-label="复制地址"
                         >
@@ -237,9 +231,7 @@ export function BeginnerOnboardingPage() {
                     <div className="pt-1">
                       <div className="mb-3 flex items-center gap-2 text-sm font-medium text-nofx-gold">
                         <Shield className="h-4 w-4" />
-                        <span>
-                          {'私钥，请立即备份'}
-                        </span>
+                        <span>{'私钥，请立即备份'}</span>
                       </div>
                       <div className="flex items-stretch gap-3">
                         <div className="min-w-0 flex-1 rounded-[24px] border border-nofx-gold/20 bg-nofx-gold/10 px-5 py-3 font-mono text-[13px] leading-6 text-nofx-text">
@@ -250,12 +242,7 @@ export function BeginnerOnboardingPage() {
                         <div className="flex shrink-0 flex-col justify-end">
                           <button
                             type="button"
-                            onClick={() =>
-                              copyText(
-                                data.private_key,
-                                '私钥'
-                              )
-                            }
+                            onClick={() => copyText(data.private_key, '私钥')}
                             className="inline-flex h-14 w-14 items-center justify-center rounded-2xl border border-nofx-gold/20 bg-nofx-gold/10 text-nofx-gold transition hover:bg-nofx-gold/15"
                             aria-label="复制私钥"
                           >

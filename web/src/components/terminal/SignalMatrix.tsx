@@ -119,9 +119,7 @@ export function SignalMatrix({
         <Swatch c="var(--tm-up)" label="看涨" />
         <Swatch c="var(--tm-dn)" label="看跌" />
         <Swatch c="var(--tm-muted)" label="中性" />
-        {onSelect && (
-          <span style={{ color: 'var(--tm-red)' }}>点击切换 ▸</span>
-        )}
+        {onSelect && <span style={{ color: 'var(--tm-red)' }}>点击切换 ▸</span>}
         <span style={{ marginLeft: 'auto' }}>{view.cells.length} 个信号</span>
       </div>
 

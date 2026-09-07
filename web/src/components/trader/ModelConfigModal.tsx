@@ -54,7 +54,9 @@ export function ModelConfigModal({
   // model name, has_api_key); the template from supportedModels only describes
   // the provider. When editing, the configured entry must win — both can share
   // the same id (e.g. "claw402").
-  const configuredModel = configuredModels?.find((m) => m.id === selectedModelId)
+  const configuredModel = configuredModels?.find(
+    (m) => m.id === selectedModelId
+  )
   const templateModel = allModels?.find((m) => m.id === selectedModelId)
   const selectedModel = editingModelId
     ? configuredModel || templateModel
@@ -425,7 +427,8 @@ function Claw402ConfigForm({
   // Editing with a stored key: allow saving (e.g. switching model) without
   // re-entering the private key, as long as the field is left blank.
   const canSubmit =
-    isKeyValid || (Boolean(editingModelId) && Boolean(hasExistingKey) && !apiKey)
+    isKeyValid ||
+    (Boolean(editingModelId) && Boolean(hasExistingKey) && !apiKey)
 
   // Truncate address for display
 
@@ -546,20 +549,18 @@ function Claw402ConfigForm({
           {t('modelConfig.allModelsClaw', language)}
         </div>
         <div className="flex items-center justify-center gap-3 mt-3 flex-wrap">
-          {['GPT', 'Claude', 'DeepSeek', 'GLM'].map(
-            (name) => (
-              <span
-                key={name}
-                className="text-[11px] px-2 py-0.5 rounded-full"
-                style={{
-                  background: 'rgba(26,24,19,0.06)',
-                  color: '#8A8478',
-                }}
-              >
-                {name}
-              </span>
-            )
-          )}
+          {['GPT', 'Claude', 'DeepSeek', 'GLM'].map((name) => (
+            <span
+              key={name}
+              className="text-[11px] px-2 py-0.5 rounded-full"
+              style={{
+                background: 'rgba(26,24,19,0.06)',
+                color: '#8A8478',
+              }}
+            >
+              {name}
+            </span>
+          ))}
         </div>
       </div>
 
@@ -800,7 +801,13 @@ function Claw402ConfigForm({
                     cursor: 'pointer',
                   }}
                 >
-                  {copiedAddr ? (language === 'zh' ? '✅ 已复制' : '✅ Copied') : (language === 'zh' ? '📋 复制密钥' : '📋 Copy Key')}
+                  {copiedAddr
+                    ? language === 'zh'
+                      ? '✅ 已复制'
+                      : '✅ Copied'
+                    : language === 'zh'
+                      ? '📋 复制密钥'
+                      : '📋 Copy Key'}
                 </button>
               </div>
               <div
@@ -994,7 +1001,13 @@ function Claw402ConfigForm({
                             cursor: 'pointer',
                           }}
                         >
-                          {copiedAddr ? (language === 'zh' ? '✅ 已复制' : '✅ Copied') : (language === 'zh' ? '📋 复制地址' : '📋 Copy Address')}
+                          {copiedAddr
+                            ? language === 'zh'
+                              ? '✅ 已复制'
+                              : '✅ Copied'
+                            : language === 'zh'
+                              ? '📋 复制地址'
+                              : '📋 Copy Address'}
                         </button>
                       </div>
                     </div>
@@ -1253,10 +1266,16 @@ function StandardProviderConfigForm({
             color: '#2E8B57',
           }}
         >
-          {language === 'zh' ? '当前模型密钥状态：' : 'Current model key status:'}{' '}
           {language === 'zh'
-            ? (selectedModel.has_api_key ? 'API Key 已配置' : 'API Key 未配置')
-            : (selectedModel.has_api_key ? 'API Key configured' : 'API Key not configured')}
+            ? '当前模型密钥状态：'
+            : 'Current model key status:'}{' '}
+          {language === 'zh'
+            ? selectedModel.has_api_key
+              ? 'API Key 已配置'
+              : 'API Key 未配置'
+            : selectedModel.has_api_key
+              ? 'API Key configured'
+              : 'API Key not configured'}
         </div>
       )}
 
@@ -1287,7 +1306,9 @@ function StandardProviderConfigForm({
           onChange={(e) => onApiKeyChange(e.target.value)}
           placeholder={
             editingModelId && selectedModel.has_api_key
-              ? (language === 'zh' ? '已保存，重新输入以替换' : 'Saved. Re-enter to replace.')
+              ? language === 'zh'
+                ? '已保存，重新输入以替换'
+                : 'Saved. Re-enter to replace.'
               : t('enterAPIKey', language)
           }
           className="w-full px-4 py-3 rounded-xl"
@@ -1302,38 +1323,38 @@ function StandardProviderConfigForm({
 
       {/* Custom Base URL */}
       <div className="space-y-2">
-          <label
-            className="flex items-center gap-2 text-sm font-semibold"
-            style={{ color: '#1A1813' }}
+        <label
+          className="flex items-center gap-2 text-sm font-semibold"
+          style={{ color: '#1A1813' }}
+        >
+          <svg
+            className="w-4 h-4"
+            style={{ color: '#E0483B' }}
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
           >
-            <svg
-              className="w-4 h-4"
-              style={{ color: '#E0483B' }}
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"
-              />
-            </svg>
-            {t('customBaseURL', language)}
-          </label>
-          <input
-            type="url"
-            value={baseUrl}
-            onChange={(e) => onBaseUrlChange(e.target.value)}
-            placeholder={t('customBaseURLPlaceholder', language)}
-            className="w-full px-4 py-3 rounded-xl"
-            style={{
-              background: '#F1ECE2',
-              border: '1px solid rgba(26,24,19,0.14)',
-              color: '#1A1813',
-            }}
-          />
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={2}
+              d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"
+            />
+          </svg>
+          {t('customBaseURL', language)}
+        </label>
+        <input
+          type="url"
+          value={baseUrl}
+          onChange={(e) => onBaseUrlChange(e.target.value)}
+          placeholder={t('customBaseURLPlaceholder', language)}
+          className="w-full px-4 py-3 rounded-xl"
+          style={{
+            background: '#F1ECE2',
+            border: '1px solid rgba(26,24,19,0.14)',
+            color: '#1A1813',
+          }}
+        />
         <div className="text-xs" style={{ color: '#8A8478' }}>
           {t('leaveBlankForDefault', language)}
         </div>
@@ -1341,38 +1362,38 @@ function StandardProviderConfigForm({
 
       {/* Custom Model Name */}
       <div className="space-y-2">
-          <label
-            className="flex items-center gap-2 text-sm font-semibold"
-            style={{ color: '#1A1813' }}
+        <label
+          className="flex items-center gap-2 text-sm font-semibold"
+          style={{ color: '#1A1813' }}
+        >
+          <svg
+            className="w-4 h-4"
+            style={{ color: '#E0483B' }}
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
           >
-            <svg
-              className="w-4 h-4"
-              style={{ color: '#E0483B' }}
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z"
-              />
-            </svg>
-            {t('customModelName', language)}
-          </label>
-          <input
-            type="text"
-            value={modelName}
-            onChange={(e) => onModelNameChange(e.target.value)}
-            placeholder={t('customModelNamePlaceholder', language)}
-            className="w-full px-4 py-3 rounded-xl"
-            style={{
-              background: '#F1ECE2',
-              border: '1px solid rgba(26,24,19,0.14)',
-              color: '#1A1813',
-            }}
-          />
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={2}
+              d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z"
+            />
+          </svg>
+          {t('customModelName', language)}
+        </label>
+        <input
+          type="text"
+          value={modelName}
+          onChange={(e) => onModelNameChange(e.target.value)}
+          placeholder={t('customModelNamePlaceholder', language)}
+          className="w-full px-4 py-3 rounded-xl"
+          style={{
+            background: '#F1ECE2',
+            border: '1px solid rgba(26,24,19,0.14)',
+            color: '#1A1813',
+          }}
+        />
         <div className="text-xs" style={{ color: '#8A8478' }}>
           {t('leaveBlankForDefaultModel', language)}
         </div>
@@ -1416,8 +1437,7 @@ function StandardProviderConfigForm({
           type="submit"
           disabled={
             !selectedModel ||
-            (!apiKey.trim() &&
-              !(editingModelId && selectedModel.has_api_key))
+            (!apiKey.trim() && !(editingModelId && selectedModel.has_api_key))
           }
           className="flex-1 flex items-center justify-center gap-2 px-4 py-3 rounded-xl text-sm font-bold transition-all hover:scale-[1.02] disabled:opacity-50 disabled:cursor-not-allowed"
           style={{ background: '#E0483B', color: '#fff' }}

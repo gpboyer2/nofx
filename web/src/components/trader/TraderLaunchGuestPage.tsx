@@ -15,8 +15,7 @@ import { ROUTES } from '../../router/paths'
 const setupSteps = [
   {
     title: '创建你的 NOFX 账户',
-    detail:
-      '你的账户集中保存 Autopilot 配置、钱包授权状态和交易面板。',
+    detail: '你的账户集中保存 Autopilot 配置、钱包授权状态和交易面板。',
     icon: KeyRound,
     action: '创建账户',
     to: ROUTES.register,
@@ -69,7 +68,8 @@ export function TraderLaunchGuestPage() {
               一个策略，四步配置，然后开始交易。
             </h1>
             <p className="mt-5 max-w-2xl text-base leading-7 text-nofx-text-muted">
-              NOFX 运行单一的 Claw402 驱动策略：看板、各市场详情、清算结构、K 线、执行。无需选择策略，也无需手动挑选交易标的。
+              NOFX 运行单一的 Claw402 驱动策略：看板、各市场详情、清算结构、K
+              线、执行。无需选择策略，也无需手动挑选交易标的。
             </p>
             <div className="mt-7 flex flex-col gap-3 sm:flex-row">
               <Link
@@ -164,7 +164,8 @@ export function TraderLaunchGuestPage() {
               还没有交易钱包？
             </div>
             <p className="mt-3 text-sm leading-6 text-nofx-text-muted">
-              NOFX 不需要你的主钱包私钥。安装或解锁一个 EVM 钱包，用 USDC 为 Hyperliquid 充值，登录后再授权 NOFX Agent。
+              NOFX 不需要你的主钱包私钥。安装或解锁一个 EVM 钱包，用 USDC 为
+              Hyperliquid 充值，登录后再授权 NOFX Agent。
             </p>
           </div>
           <div className="grid gap-3 lg:grid-cols-3">

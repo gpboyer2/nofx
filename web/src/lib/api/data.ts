@@ -231,8 +231,7 @@ export const dataApi = {
     const result = await httpClient.get<VergexDirectionLeaderboardResponse>(
       `${API_BASE}/vergex/direction-change/leaderboard`
     )
-    if (!result.success)
-      throw new Error('获取方向排行榜失败')
+    if (!result.success) throw new Error(result.message || '获取方向排行榜失败')
     const items = (result.data?.items || []).slice(0, limit).map((item) => ({
       rank: item.rank,
       symbol: item.symbol,
@@ -252,8 +251,7 @@ export const dataApi = {
       `${API_BASE}/vergex/direction-change/current?${query}`,
       { timeout: 90000 }
     )
-    if (!result.success)
-      throw new Error(result.message || '获取当前方向失败')
+    if (!result.success) throw new Error(result.message || '获取当前方向失败')
     return result.data!
   },
 
@@ -273,8 +271,7 @@ export const dataApi = {
       `${API_BASE}/vergex/direction-change/history?${query}`,
       { timeout: 90000 }
     )
-    if (!result.success)
-      throw new Error(result.message || '获取方向历史失败')
+    if (!result.success) throw new Error(result.message || '获取方向历史失败')
     return result.data || { items: [] }
   },
 
@@ -286,9 +283,7 @@ export const dataApi = {
       { timeout: 90000 }
     )
     if (!result.success)
-      throw new Error(
-        result.message || '获取成本/清算热力图失败'
-      )
+      throw new Error(result.message || '获取成本/清算热力图失败')
     return result.data || {}
   },
 
@@ -405,7 +400,8 @@ export const dataApi = {
       `${API_BASE}/vergex/flow-markets?${params}`,
       { silent }
     )
-    if (!result.success) throw new Error('获取流量市场数据失败')
+    if (!result.success)
+      throw new Error(result.message || '获取流量市场数据失败')
     return result.data!
   },
 
@@ -417,8 +413,7 @@ export const dataApi = {
       `${API_BASE}/vergex/direction-change/leaderboard`,
       { silent }
     )
-    if (!result.success)
-      throw new Error('获取方向排行榜失败')
+    if (!result.success) throw new Error(result.message || '获取方向排行榜失败')
     return {
       items: (result.data?.items || []).slice(0, limit).map((item) => ({
         rank: item.rank,

@@ -124,13 +124,11 @@ export async function resolveLaunchExchange(): Promise<
   if (!hyperliquid.hyperliquidBuilderApproved) {
     return {
       exchange: null,
-      reason:
-        'Hyperliquid builder 授权未完成。请先完成钱包授权。',
+      reason: 'Hyperliquid builder 授权未完成。请先完成钱包授权。',
     }
   }
   return {
     exchange: null,
-      reason:
-        'Hyperliquid 钱包地址缺失。请重新连接 Hyperliquid。',
+    reason: 'Hyperliquid 钱包地址缺失。请重新连接 Hyperliquid。',
   }
 }

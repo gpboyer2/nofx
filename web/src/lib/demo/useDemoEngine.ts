@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useState } from 'react'
 import type {
   AccountInfo,
   Position,
@@ -477,25 +477,26 @@ function build(S: SimState): DemoDataset {
 }
 
 export function useDemoEngine(active: boolean): DemoDataset | null {
-  const ref = useRef<SimState | null>(null)
-  const [, tick] = useState(0)
+  // Sim snapshot lives in state, not a ref: build() reads it during render and
+  // refs must not be accessed there (react-compiler rule). step() mutates the
+  // sim object in place; each tick publishes a fresh shallow copy so the new
+  // top-level identity triggers the re-render while nested data stays current.
+  const [sim, setSim] = useState<SimState | null>(null)
 
   useEffect(() => {
     if (!active) {
-      ref.current = null
+      setSim(null)
       return
     }
-    ref.current = initState()
-    tick((n) => n + 1)
+    const state = initState()
+    setSim(state)
     const id = setInterval(() => {
-      if (ref.current) {
-        step(ref.current)
-        tick((n) => n + 1)
-      }
+      step(state)
+      setSim({ ...state })
     }, TICK_MS)
     return () => clearInterval(id)
   }, [active])
 
-  if (!active || !ref.current) return null
-  return build(ref.current)
+  if (!active || !sim) return null
+  return build(sim)
 }

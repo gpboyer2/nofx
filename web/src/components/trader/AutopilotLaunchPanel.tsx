@@ -281,7 +281,7 @@ export function AutopilotLaunchPanel({
         'AI 每次思考都会支付少量手续费。从 Binance、OKX、Coinbase 或任意钱包，向该地址转入价值 $1 以上的 USDC（Base 网络）。这笔钱和你的交易资金是分开的。',
       status: feeReady ? 'ready' : 'action',
       meta: feeWalletAddress
-            ? `${shortAddress(feeWalletAddress)} · ${formatUSDC(feeWalletBalance)} USDC${
+        ? `${shortAddress(feeWalletAddress)} · ${formatUSDC(feeWalletBalance)} USDC${
             feeReady ? '' : ` · 需要 ≥ ${minAIFeeUSDC} USDC`
           }`
         : '只需 1 分钟——我们帮你创建钱包',
@@ -407,7 +407,7 @@ export function AutopilotLaunchPanel({
           rel="noreferrer"
           className="inline-flex items-center justify-center gap-2 rounded-lg bg-nofx-gold px-4 py-3 text-sm font-bold text-white hover:bg-nofx-accent"
         >
-           在 Hyperliquid 充值 USDC
+          在 Hyperliquid 充值 USDC
           <ExternalLink className="h-4 w-4" />
         </a>
       )
@@ -462,8 +462,8 @@ export function AutopilotLaunchPanel({
                 几分钟内启动 NOFX Autopilot
               </h2>
               <p className="mt-2 max-w-2xl text-sm leading-6 text-nofx-text-muted">
-                四个小步骤，总计约 $13。无需 API Key，无需配置文件
-                —— AI 替你交易，随时可以停止。
+                四个小步骤，总计约 $13。无需 API Key，无需配置文件 —— AI
+                替你交易，随时可以停止。
               </p>
             </div>
             <div className="flex flex-wrap gap-2">
@@ -541,7 +541,8 @@ export function AutopilotLaunchPanel({
                 {shortAddress(hyperliquidExchange?.hyperliquidWalletAddr)}
               </div>
               <p className="mt-3 text-xs leading-5 text-nofx-text-muted">
-                资金始终留在你的 Hyperliquid 账户中。NOFX 仅存储自动化执行所需的授权 Agent 密钥。
+                资金始终留在你的 Hyperliquid 账户中。NOFX
+                仅存储自动化执行所需的授权 Agent 密钥。
               </p>
             </div>
           ) : (

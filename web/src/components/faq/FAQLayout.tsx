@@ -28,7 +28,8 @@ export function FAQLayout() {
   }, [searchTerm])
 
   const totalItems = useMemo(
-    () => faqCategories.reduce((sum, category) => sum + category.items.length, 0),
+    () =>
+      faqCategories.reduce((sum, category) => sum + category.items.length, 0),
     []
   )
 
@@ -116,7 +117,7 @@ export function FAQLayout() {
               rel="noopener noreferrer"
               className="rounded-lg border border-[rgba(26,24,19,0.14)] bg-nofx-bg-deeper px-5 py-2.5 font-mono text-xs font-bold uppercase tracking-[0.12em] text-nofx-text hover:border-nofx-gold/40"
             >
-               GitHub
+              GitHub
             </a>
             <a
               href="https://t.me/nofx_dev_community"

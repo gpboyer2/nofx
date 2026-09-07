@@ -77,7 +77,11 @@ export function RegisterPage() {
     }
 
     if (betaMode && !betaCode.trim()) {
-      setError(language === 'zh' ? ZH.betaCodeRequired : 'A beta code is required to register during the closed beta')
+      setError(
+        language === 'zh'
+          ? ZH.betaCodeRequired
+          : 'A beta code is required to register during the closed beta'
+      )
       return
     }
 
@@ -115,7 +119,9 @@ export function RegisterPage() {
       const errorMsg =
         e instanceof Error
           ? e.message
-          : language === 'zh' ? '注册失败，服务器错误' : 'Registration failed due to server error'
+          : language === 'zh'
+            ? '注册失败，服务器错误'
+            : 'Registration failed due to server error'
       const lowerMsg = errorMsg.toLowerCase()
       if (
         lowerMsg.includes('whitelist') ||
@@ -146,7 +152,7 @@ export function RegisterPage() {
             className="flex items-center gap-2 text-nofx-text-muted hover:text-nofx-text transition-colors group px-3 py-1.5 rounded border border-transparent hover:border-[rgba(26,24,19,0.14)] bg-nofx-bg-deeper backdrop-blur-sm"
           >
             <div className="w-2 h-2 rounded-full bg-nofx-danger group-hover:animate-pulse"></div>
-              <span className="text-xs font-mono uppercase tracking-widest">
+            <span className="text-xs font-mono uppercase tracking-widest">
               {language === 'zh' ? ZH.abortReg : '< ABORT_REGISTRATION'}
             </span>
           </button>
@@ -163,7 +169,9 @@ export function RegisterPage() {
             </div>
           </div>
           <h1 className="text-3xl font-bold tracking-tighter text-nofx-text uppercase mb-2">
-            <span className="text-nofx-gold">{language === 'zh' ? ZH.createAccount : 'CREATE YOUR ACCOUNT'}</span>
+            <span className="text-nofx-gold">
+              {language === 'zh' ? ZH.createAccount : 'CREATE YOUR ACCOUNT'}
+            </span>
           </h1>
           <p className="text-nofx-text-muted text-sm">
             {language === 'zh'
@@ -193,12 +201,24 @@ export function RegisterPage() {
               <div className="flex gap-2">
                 <span className="text-nofx-success">➜</span>
                 <span>
-                  {language === 'zh' ? ZH.systemCheckReady : 'System Check: '} <span className="text-nofx-success">{language === 'zh' ? '就绪' : 'READY'}</span>
+                  {language === 'zh' ? ZH.systemCheckReady : 'System Check: '}{' '}
+                  <span className="text-nofx-success">
+                    {language === 'zh' ? '就绪' : 'READY'}
+                  </span>
                 </span>
               </div>
               <div className="flex gap-2">
                 <span className="text-nofx-success">➜</span>
-                <span>{language === 'zh' ? '模式：' : 'Mode: '}{betaMode ? (language === 'zh' ? ZH.closedBetaCA1 : 'CLOSED_BETA CA1') : (language === 'zh' ? ZH.publicMode : 'PUBLIC')}</span>
+                <span>
+                  {language === 'zh' ? '模式：' : 'Mode: '}
+                  {betaMode
+                    ? language === 'zh'
+                      ? ZH.closedBetaCA1
+                      : 'CLOSED_BETA CA1'
+                    : language === 'zh'
+                      ? ZH.publicMode
+                      : 'PUBLIC'}
+                </span>
               </div>
             </div>
 
@@ -274,7 +294,9 @@ export function RegisterPage() {
               <div className="bg-nofx-bg-deeper p-3 rounded border border-[rgba(26,24,19,0.14)]">
                 <div className="text-[10px] uppercase tracking-wider text-nofx-text-muted mb-2 font-bold flex items-center gap-2">
                   <div className="w-1 h-1 rounded-full bg-nofx-text-muted"></div>
-                  {language === 'zh' ? ZH.passwordStrengthProtocol : 'Password Strength Protocol'}
+                  {language === 'zh'
+                    ? ZH.passwordStrengthProtocol
+                    : 'Password Strength Protocol'}
                 </div>
                 <div className="text-xs font-mono text-nofx-text-muted">
                   <PasswordChecklist
@@ -307,7 +329,9 @@ export function RegisterPage() {
               {betaMode && (
                 <div>
                   <label className="block text-xs uppercase tracking-wider text-nofx-gold mb-1.5 ml-1 font-bold">
-                    {language === 'zh' ? ZH.priorityAccessCode : 'Priority Access Code'}
+                    {language === 'zh'
+                      ? ZH.priorityAccessCode
+                      : 'Priority Access Code'}
                   </label>
                   <input
                     type="text"
@@ -323,7 +347,10 @@ export function RegisterPage() {
                     required={betaMode}
                   />
                   <p className="text-[10px] text-nofx-text-muted font-mono mt-1 ml-1">
-                    * {language === 'zh' ? ZH.caseSensitiveAlphanumeric : 'CASE SENSITIVE ALPHANUMERIC'}
+                    *{' '}
+                    {language === 'zh'
+                      ? ZH.caseSensitiveAlphanumeric
+                      : 'CASE SENSITIVE ALPHANUMERIC'}
                   </p>
                 </div>
               )}
@@ -342,10 +369,14 @@ export function RegisterPage() {
                 className="w-full bg-nofx-gold text-nofx-bg font-bold py-3 px-4 rounded text-sm tracking-wide uppercase hover:bg-nofx-gold-highlight transition-all transform active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed font-mono flex items-center justify-center gap-2 group mt-4"
               >
                 {loading ? (
-                  <span className="animate-pulse">{language === 'zh' ? ZH.initializing : 'INITIALIZING...'}</span>
+                  <span className="animate-pulse">
+                    {language === 'zh' ? ZH.initializing : 'INITIALIZING...'}
+                  </span>
                 ) : (
                   <>
-                    <span>{language === 'zh' ? ZH.createAccount : 'CREATE_ACCOUNT'}</span>
+                    <span>
+                      {language === 'zh' ? ZH.createAccount : 'CREATE_ACCOUNT'}
+                    </span>
                     <span className="group-hover:translate-x-1 transition-transform">
                       -&gt;
                     </span>
@@ -356,8 +387,12 @@ export function RegisterPage() {
           </div>
 
           <div className="bg-nofx-bg-deeper p-3 flex justify-between items-center text-[10px] font-mono text-nofx-text-muted border-t border-[rgba(26,24,19,0.14)]">
-            <div>{language === 'zh' ? ZH.encryption : 'ENCRYPTION: AES-256'}</div>
-            <div>{language === 'zh' ? ZH.secureRegistry : 'SECURE_REGISTRY'}</div>
+            <div>
+              {language === 'zh' ? ZH.encryption : 'ENCRYPTION: AES-256'}
+            </div>
+            <div>
+              {language === 'zh' ? ZH.secureRegistry : 'SECURE_REGISTRY'}
+            </div>
           </div>
         </div>
 
@@ -375,7 +410,11 @@ export function RegisterPage() {
             onClick={() => navigate('/')}
             className="text-[10px] text-nofx-text-muted hover:text-nofx-danger transition-colors uppercase tracking-widest hover:underline decoration-nofx-danger/30 font-mono"
           >
-            [ {language === 'zh' ? ZH.abortRegReturnHome : 'ABORT_REGISTRATION_RETURN_HOME'} ]
+            [{' '}
+            {language === 'zh'
+              ? ZH.abortRegReturnHome
+              : 'ABORT_REGISTRATION_RETURN_HOME'}{' '}
+            ]
           </button>
         </div>
       </div>
