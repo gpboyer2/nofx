@@ -26,7 +26,9 @@ import (
 const (
 	// X402MaxPaymentRetries is the number of retries for 5xx/expired-402 errors
 	// on the payment-signed request. Payment is re-signed on 402 (no double-charge).
-	X402MaxPaymentRetries = 5
+	// Capped at 3: retrying past that against an unfunded wallet only deepens the
+	// upstream "payment_retry_suppressed" penalty instead of fixing anything.
+	X402MaxPaymentRetries = 3
 
 	// X402RetryBaseWait is the base wait between payment retry attempts.
 	X402RetryBaseWait = 3 * time.Second
